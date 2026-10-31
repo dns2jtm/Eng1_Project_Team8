@@ -1,0 +1,106 @@
+@startuml class
+title Goose Patrol - Class Diagram (v1, A1)
+hide empty members
+skinparam classAttributeIconSize 0
+
+enum GameState {
+  PAUSED
+  RUNNING
+  WON
+  LOST
+}
+
+class GameWorld {
+  - state : GameState
+  + update(delta : Float)
+  + togglePause()
+  + useSelectedItem()
+}
+
+class GameTimer {
+  - remainingSeconds : Float
+  + tick(delta : Float)
+  + isExpired() : Boolean
+}
+
+class GameStats {
+  - itemsUsed : Integer
+  - eventsTriggered : Integer
+  + recordItemUsed()
+  + recordEventTriggered()
+}
+
+class GameMap {
+  + isWalkable(x : Float, y : Float) : Boolean
+}
+
+abstract class Entity {
+  - x : Float
+  - y : Float
+}
+
+class Player {
+  - speed : Float
+  + move(dx : Float, dy : Float)
+
+}
+
+class Goose {
+  - hunger : Integer
+  - distracted : Boolean
+  + chase(target : Player, delta : Float)
+  + feed(amount : Integer)
+  + scare(seconds : Float)
+}
+
+class Inventory {
+  - selectedIndex : Integer
+  + add(item : Item)
+  + remove(item : Item)
+  + selected() : Item
+}
+
+abstract class Item {
+  - name : String
+  - range : Float
+  + {abstract} applyTo(goose : Goose)
+}
+class FoodItem <<example>> {
+  - foodValue : Integer
+  + applyTo(goose : Goose)
+}
+class ScareItem <<example>> {
+  - scareSeconds : Float
+  + applyTo(goose : Goose)
+}
+
+abstract class HiddenEvent {
+  - triggered : Boolean
+  - radius : Float
+  + isTriggeredBy(player : Player) : Boolean
+  + {abstract} apply(world : GameWorld)
+}
+class PositiveEvent <<example>> {
+  + apply(world : GameWorld)
+}
+class NegativeEvent <<example>> {
+  + apply(world : GameWorld)
+}
+
+Entity <|-- Player
+Entity <|-- Goose
+Item <|-- FoodItem
+Item <|-- ScareItem
+HiddenEvent <|-- PositiveEvent
+HiddenEvent <|-- NegativeEvent
+
+GameWorld *-- "1" GameTimer : timer
+GameWorld *-- "1" GameStats : stats
+GameWorld *-- "1" GameMap : map
+GameWorld *-- "1" Player : player
+GameWorld *-- "*" Goose : geese
+GameWorld *-- "*" HiddenEvent : events
+Player ..> GameMap : checks isWalkable()
+Player *-- "1" Inventory : inventory
+Inventory o-- "*" Item : items
+@enduml

@@ -1,0 +1,39 @@
+@startuml component
+title Goose Patrol - Component Diagram (v1, A1)
+skinparam componentStyle uml2
+
+package "Presentation" {
+  [GameScreen]
+  [Hud]
+  [EndScreen]
+}
+package "Game Logic" {
+  [GameWorld]
+  [GameTimer]
+  [GameStats]
+}
+package "Entities" {
+  [Player]
+  [Goose]
+  [Item]
+  [HiddenEvent]
+  [GameMap]
+}
+package "libGDX (3rd party)" as gdx {
+  [Rendering / Input / Assets] as LIB
+}
+
+[GameScreen] --> [GameWorld] : update(delta)
+[GameScreen] --> [Hud] : draws
+[Hud] ..> [GameTimer] : reads
+[Hud] ..> [GameStats] : reads
+[GameScreen] --> [EndScreen] : on win / lose
+[GameWorld] --> [Player]
+[GameWorld] --> [Goose]
+[GameWorld] --> [HiddenEvent]
+[GameWorld] --> [GameMap]
+[GameWorld] --> [GameTimer]
+[GameWorld] --> [GameStats]
+[Player] --> [Item]
+[GameScreen] ..> LIB
+@enduml

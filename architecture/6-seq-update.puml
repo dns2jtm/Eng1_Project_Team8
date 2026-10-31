@@ -1,0 +1,31 @@
+@startuml seq-update
+title One frame of gameplay (v1) [FR_PAUSE, FR_EVENT_TRIGGER, FR_TIMER_EXPIRE]
+participant "GameScreen" as S
+participant "world : GameWorld" as W
+participant "timer : GameTimer" as T
+participant "goose : Goose" as G
+participant "event : HiddenEvent" as E
+participant "stats : GameStats" as ST
+
+S -> W : update(delta)
+alt state == RUNNING
+  W -> T : tick(delta)
+  loop each goose
+    W -> G : chase(player, delta)
+  end
+  loop each untriggered event
+    W -> E : isTriggeredBy(player)
+    opt true
+      W -> E : apply(world)
+      W -> ST : recordEventTriggered()
+    end
+  end
+  W -> T : isExpired()
+  opt expired
+    W -> W : state = LOST
+  end
+else state == PAUSED
+  W --> S : return (nothing updates)
+end
+S -> S : render world + HUD
+@enduml

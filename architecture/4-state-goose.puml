@@ -1,0 +1,9 @@
+@startuml state-goose
+title Goose - State Machine (v1)
+[*] --> Chasing : spawned\n[FR_GEESE_SPAWN]
+Chasing --> Distracted : item used in range\n[FR_USE_ITEM]
+Distracted --> Chasing : distraction ends
+Distracted --> Dispersed : hunger satisfied\n[FR_GEESE_DISPERSE, A2]
+Chasing --> Dispersed : hunger satisfied
+Dispersed --> [*] : removed from map
+@enduml

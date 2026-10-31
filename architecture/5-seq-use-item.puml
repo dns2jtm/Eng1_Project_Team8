@@ -1,0 +1,25 @@
+@startuml seq-use-item
+title Use an item (v1) [FR_USE_ITEM, FR_ITEM_COUNTER]
+actor Student as U
+participant "GameScreen" as S
+participant "world : GameWorld" as W
+participant "inventory : Inventory" as I
+participant "item : Item" as IT
+participant "goose : Goose" as G
+participant "stats : GameStats" as ST
+
+U -> S : press use-item key
+S -> W : useSelectedItem()
+W -> I : selected()
+I --> W : item
+alt inventory not empty
+  loop for each goose within item.range of player
+    W -> IT : applyTo(goose)
+    IT -> G : feed(amount) / scare(seconds)
+  end
+  W -> I : remove(item)
+  W -> ST : recordItemUsed()
+else inventory empty
+  W --> S : nothing happens
+end
+@enduml
