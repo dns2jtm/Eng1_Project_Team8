@@ -30,7 +30,7 @@ import java.util.Random;
  * {@link #useSelectedItem()} and {@link #togglePause()}, and calls {@link #update(float)} once per frame.</p>
  *
  * <p>The update order follows the "one frame of gameplay" sequence diagram
- * (architecture/6-seq-update.puml).</p>
+ * (architecture/v2/6-seq-update.puml).</p>
  */
 public class GameWorld {
 

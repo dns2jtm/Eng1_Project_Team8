@@ -2,7 +2,7 @@ package com.goosepatrol.logic;
 
 /**
  * Top-level states of a game session, as in the game state machine diagram
- * (architecture/3-state-game.puml).
+ * (architecture/v2/3-state-game.puml).
  */
 public enum GameState {
     /** Nothing updates. The game starts in this state. [FR_START_PAUSED, FR_PAUSE] */

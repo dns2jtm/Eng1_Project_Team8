@@ -1,7 +1,7 @@
 package com.goosepatrol.entity;
 
 /**
- * States of a {@link Goose}, as in the goose state machine diagram (architecture/4-state-goose.puml).
+ * States of a {@link Goose}, as in the goose state machine diagram (architecture/v2/4-state-goose.puml).
  */
 public enum GooseState {
     /** Walking towards the player, demanding food. */

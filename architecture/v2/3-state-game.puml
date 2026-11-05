@@ -1,0 +1,12 @@
+@startuml state-game
+title Goose Patrol - Game State Machine (v2, A1 implementation)
+[*] --> Paused : game launched\n[FR_START_PAUSED]
+Paused --> Running : P / ESC
+Running --> Paused : P / ESC, or window\nloses focus [FR_PAUSE]
+Running --> Lost : timer reaches 0\n[FR_TIMER_EXPIRE]
+Running --> Won : geese dispersed >= 8\n[FR_WIN_CONDITION]
+Running : timer, geese, player, events\nand spawning update every frame
+Paused : nothing updates;\npause overlay shown
+Won --> [*] : EndScreen\n(R starts a new game)
+Lost --> [*] : EndScreen\n(R starts a new game)
+@enduml

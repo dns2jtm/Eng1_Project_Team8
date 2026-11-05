@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Tests for {@link Goose} behaviour and its state machine (architecture/4-state-goose.puml). */
+/** Tests for {@link Goose} behaviour and its state machine (architecture/v2/4-state-goose.puml). */
 class GooseTest {
 
     private final GameMap map = TestMaps.empty();
