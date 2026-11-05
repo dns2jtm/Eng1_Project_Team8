@@ -57,7 +57,7 @@ configure(subprojects) {
 
 subprojects {
   version = "$projectVersion"
-  ext.appName = 'Goose Attack'
+  ext.appName = 'GoosePatrol'
   repositories {
     mavenCentral()
     // You may want to remove the following line if you have errors downloading dependencies.
@@ -67,4 +67,4 @@ subprojects {
   }
 }
 
-eclipse.project.name = 'Goose Attack' + '-parent'
+eclipse.project.name = 'GoosePatrol' + '-parent'
