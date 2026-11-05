@@ -50,7 +50,8 @@ core/      game logic and screens (platform independent)
     screen/  GameScreen, WorldRenderer, Hud, EndScreen
   src/test/java/           JUnit 5 tests (unit tests plus a headless libGDX smoke test)
 lwjgl3/    desktop launcher (LWJGL3 backend)
-architecture/  PlantUML sources and rendered diagrams
+architecture/  UML diagrams: v1 (before implementation), v2 (current), and what changed
+website/   team website (published to GitHub Pages by CI)
 assets/    runtime assets (none needed yet: everything is drawn with shapes)
 .github/   CI and release workflows, pull request template
 ```
@@ -80,6 +81,10 @@ the download quarantine flag with `xattr -d com.apple.quarantine gradlew`.
 - **Releases** (`.github/workflows/release.yml`): push a tag such as `v1.0.0` to publish the JAR as
   a GitHub Release. The latest JAR is always at
   <https://github.com/soham-apte/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar>.
+- **Website** (`.github/workflows/website.yml`): every push to `main` publishes the team website
+  in `website/` to GitHub Pages, together with the architecture diagrams and the latest test and
+  coverage reports: <https://soham-apte.github.io/Eng1_Project_Team8/>. A repository admin must
+  first set *Settings → Pages → Source* to **GitHub Actions** (one-time setup).
 
 ```sh
 git tag v1.0.0
