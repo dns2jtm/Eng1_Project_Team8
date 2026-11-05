@@ -1,0 +1,79 @@
+# Website: publishes the team website (website/) to GitHub Pages on every push to main.
+# Before publishing, it runs the tests and adds the latest JUnit and JaCoCo reports to the site,
+# along with the architecture diagrams, so the published reports always match main.
+#
+# One-time setup by a repository admin: Settings -> Pages -> Build and deployment ->
+# Source: "GitHub Actions".
+# Site URL: https://soham-apte.github.io/Eng1_Project_Team8/
+name: Website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # Publish the reports even if a test fails: the report shows exactly which tests failed.
+      - name: Run tests (generates test and coverage reports)
+        continue-on-error: true
+        run: ./gradlew test --continue --console=plain
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site/architecture _site/testing/tests _site/testing/coverage
+          cp -r website/. _site/
+          cp -r architecture/v1 architecture/v2 _site/architecture/
+          if [ -d core/build/reports/tests/test ]; then
+            cp -r core/build/reports/tests/test/. _site/testing/tests/
+          fi
+          if [ -d core/build/reports/jacoco/test/html ]; then
+            cp -r core/build/reports/jacoco/test/html/. _site/testing/coverage/
+          fi
+          touch _site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

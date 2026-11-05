@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture – Goose Patrol</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="inner">
+    <a class="brand" href="index.html">Goose Patrol<span>ENG1 · Cohort 2 · Team 8</span></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="architecture.html" class="active">Architecture</a>
+      <a href="planning.html">Planning</a>
+      <a href="traceability.html">Traceability</a>
+      <a href="testing.html">Testing &amp; CI</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Architecture</h1>
+  <p class="lead">
+    UML 2 diagrams written in PlantUML. <strong>v2</strong> matches the current implementation;
+    <strong>v1</strong> is the design from before implementation, kept as evidence of how the design evolved.
+  </p>
+  <p>
+    Jump to: <a href="#v2">Current design (v2)</a> · <a href="#v1">Initial design (v1)</a> ·
+    <a href="#evolution">Changes from v1 to v2</a> · <a href="#process">Design process evidence</a> ·
+    <a href="https://github.com/soham-apte/Eng1_Project_Team8/tree/main/architecture">PlantUML sources</a>
+  </p>
+
+  <h2 id="v2">Current design (v2 – Assessment 1 implementation)</h2>
+
+  <h3>Structural diagrams</h3>
+  <figure>
+    <a href="architecture/v2/component.svg"><img src="architecture/v2/component.png" alt="Component diagram v2"></a>
+    <figcaption>Component diagram (v2). Presentation, game logic, entities, items and hidden events, and libGDX.</figcaption>
+  </figure>
+  <figure>
+    <a href="architecture/v2/class.svg"><img src="architecture/v2/class.png" alt="Class diagram v2"></a>
+    <figcaption>Class diagram (v2). Main classes, key attributes and operations, and relationships. Click for the full-size SVG.</figcaption>
+  </figure>
+
+  <h3>Behavioural diagrams</h3>
+  <figure>
+    <img src="architecture/v2/state-game.png" alt="Game state machine v2">
+    <figcaption>Game state machine (v2). FR_START_PAUSED, FR_PAUSE, FR_TIMER_EXPIRE, FR_WIN_CONDITION.</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v2/state-goose.png" alt="Goose state machine v2">
+    <figcaption>Goose state machine (v2). FR_GEESE_SPAWN, FR_USE_ITEM, FR_GEESE_DISPERSE.</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v2/seq-use-item.png" alt="Use item sequence diagram v2">
+    <figcaption>Sequence: using an item (v2). FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE.</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v2/seq-update.png" alt="Frame update sequence diagram v2">
+    <figcaption>Sequence: one frame of gameplay (v2). FR_PAUSE, FR_EVENT_TRIGGER, FR_GEESE_SPAWN, FR_TIMER_EXPIRE.</figcaption>
+  </figure>
+
+  <h2 id="evolution">Changes from v1 to v2</h2>
+  <table>
+    <thead><tr><th>#</th><th>Change</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>GameScreen</code> drawing split into <code>WorldRenderer</code> and <code>Hud</code></td><td>One job per class; <code>GameScreen</code> handles input and the frame loop</td></tr>
+      <tr><td>2</td><td><code>GoosePatrolGame</code> added to switch screens</td><td>libGDX screen management; owns shared rendering resources</td></tr>
+      <tr><td>3</td><td><code>Goose.chase</code> and <code>Player.move</code> take the <code>GameMap</code></td><td>Collision checks without entities holding a map reference</td></tr>
+      <tr><td>4</td><td><code>Entity</code> gained a radius, shared <code>moveBy</code> and per-subclass <code>canOccupy</code></td><td>Circle collision; geese can swim across the lake, the player can't</td></tr>
+      <tr><td>5</td><td><code>Obstacle</code> (buildings, water) added to <code>GameMap</code></td><td>Clear map limits and campus features; easy to add more</td></tr>
+      <tr><td>6</td><td><code>GooseState</code> enum; Distracted split into Eating / Fleeing</td><td>Feeding and scaring behave differently</td></tr>
+      <tr><td>7</td><td><code>HiddenEvent.trigger</code> (template method) calls <code>apply</code></td><td>"Fires only once" enforced in one place</td></tr>
+      <tr><td>8</td><td>Example event classes replaced by <code>PicnicBasketEvent</code> and <code>GooseNestEvent</code></td><td>Concrete Assessment 1 events</td></tr>
+      <tr><td>9</td><td><code>GameStats</code> counts dispersed geese; <code>GameSummary</code> added</td><td>Win condition; end screen doesn't depend on the live world</td></tr>
+      <tr><td>10</td><td>Win condition and dispersal implemented (v1 marked them A2)</td><td>Gives the game a way to win; already in the v1 state machines</td></tr>
+      <tr><td>11</td><td><code>GameConfig</code> for all balance constants</td><td>One place to tune difficulty</td></tr>
+      <tr><td>12</td><td><code>WorldMessage</code> for on-screen feedback</td><td>Players see what items and events did</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="v1">Initial design (v1 – before implementation)</h2>
+  <figure>
+    <img src="architecture/v1/component.png" alt="Component diagram v1">
+    <figcaption>Component diagram (v1)</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v1/class.png" alt="Class diagram v1">
+    <figcaption>Class diagram (v1)</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v1/state-game.png" alt="Game state machine v1">
+    <figcaption>Game state machine (v1)</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v1/state-goose.png" alt="Goose state machine v1">
+    <figcaption>Goose state machine (v1)</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v1/seq-use-item.png" alt="Use item sequence diagram v1">
+    <figcaption>Sequence: using an item (v1)</figcaption>
+  </figure>
+  <figure>
+    <img src="architecture/v1/seq-update.png" alt="Frame update sequence diagram v1">
+    <figcaption>Sequence: one frame of gameplay (v1)</figcaption>
+  </figure>
+
+  <h2 id="process">Design process evidence</h2>
+  <!-- Add photos or scans of CRC cards, whiteboard sketches and any other interim designs here,
+       e.g. <figure><img src="process/crc-cards-week3.jpg" alt="CRC cards"><figcaption>...</figcaption></figure>
+       Put the image files in website/process/. -->
+  <p class="note">CRC cards, sketches and other interim design material will be added here.</p>
+</main>
+
+<footer>
+  Goose Patrol · ENG1 Team 8 · Diagrams: UML 2 in PlantUML, rendered with Graphviz
+</footer>
+</body>
+</html>
