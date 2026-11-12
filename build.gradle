@@ -27,8 +27,13 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
-  java.sourceCompatibility = 21
-  java.targetCompatibility = 21
+  // CR_JAVA: the game must run on Java 17 (University lab machines). `release` also stops
+  // newer JDKs from letting Java 18+ library APIs slip into the code.
+  java.sourceCompatibility = 17
+  java.targetCompatibility = 17
+  tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+  }
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.
