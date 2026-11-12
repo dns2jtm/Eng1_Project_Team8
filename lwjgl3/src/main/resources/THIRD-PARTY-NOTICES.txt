@@ -1,0 +1,39 @@
+Goose Patrol - third-party notices
+==================================
+
+Goose Patrol (ENG1 Team 8) is distributed as a single JAR that bundles the third-party
+software listed below. Each component keeps its own copyright and licence; the full licence
+texts are in the licenses/ folder of this JAR. No third-party art, audio or font assets are
+used beyond the libGDX default font noted below.
+
+Component                          Licence                    Licence text (licenses/...)
+---------------------------------  -------------------------  -------------------------------
+libGDX 1.14.2 (gdx, gdx-backend-   Apache License 2.0         Apache-2.0.txt
+  lwjgl3, gdx-platform natives,
+  gdx-jnigen-loader)
+  https://libgdx.com
+  Window icons (libGDX logo, from the libGDX project template) are part of libGDX.
+
+LWJGL 3.4.3 (lwjgl, glfw, opengl,  BSD 3-Clause               LWJGL-BSD-3-Clause.txt
+  openal, jemalloc, stb bindings)
+  https://www.lwjgl.org
+
+Native libraries shipped inside the LWJGL JARs:
+  GLFW                             zlib/libpng                GLFW-zlib.txt
+  jemalloc                         BSD 2-Clause               jemalloc-BSD-2-Clause.txt
+  stb                              MIT or public domain       stb-MIT-or-PublicDomain.txt
+  OpenAL Soft                      LGPL 2.0 or later          LGPL-2.1.txt
+    Source code: https://github.com/kcat/openal-soft
+
+Audio decoders used by libGDX:
+  JLayer 1.0.1 (gdx fork)          LGPL 2.1                   LGPL-2.1.txt
+    Source code: https://repo1.maven.org/maven2/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx-sources.jar
+  JOrbis 0.0.17                    LGPL 2.0 or later          LGPL-2.1.txt
+    Source code: http://www.jcraft.com/jorbis/
+
+Liberation Sans font (libGDX       SIL Open Font License 1.1  OFL-1.1-LiberationSans.txt
+  default font, lsans-15)
+
+The LGPL-licensed components are unmodified and are loaded as separate libraries at run
+time. You may replace them with other compatible versions; their source code is
+available at the addresses above.

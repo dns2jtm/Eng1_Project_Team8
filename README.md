@@ -118,12 +118,16 @@ another team member must review before merging (see `.github/pull_request_templa
 
 ## Third-party libraries
 
-| Library | Use | Licence |
-| --- | --- | --- |
-| libGDX 1.14 | Game framework | Apache 2.0 |
-| LWJGL 3 | Desktop backend (through libGDX) | BSD 3-Clause |
-| JUnit 5 | Testing (not shipped in the JAR) | EPL 2.0 |
-| construo (Gradle plugin) | Optional native packaging | Apache 2.0 |
+| Library | Use | Licence | In the JAR |
+| --- | --- | --- | --- |
+| libGDX 1.14 | Game framework | Apache 2.0 | Yes |
+| LWJGL 3.4 (with GLFW, jemalloc, stb natives) | Desktop backend (through libGDX) | BSD 3-Clause (natives: zlib, BSD 2-Clause, MIT) | Yes |
+| OpenAL Soft, JLayer, JOrbis | Audio, bundled by libGDX (no sound used yet) | LGPL 2.0+ / 2.1 | Yes |
+| Liberation Sans (libGDX default font) | On-screen text | SIL OFL 1.1 | Yes |
+| JUnit 5, JaCoCo | Testing and coverage | EPL 2.0 | No |
+| Gradle, construo | Build and packaging | Apache 2.0 | No |
 
-No third-party art, audio or font assets are used. The game uses libGDX's built-in default font,
-and the window icons are the libGDX logo from the project template (Apache 2.0).
+The JAR includes `THIRD-PARTY-NOTICES.txt` and the full licence texts (`licenses/`), as these
+licences require (source: `lwjgl3/src/main/resources/`). No third-party art or audio assets are
+used, and the window icons are the libGDX logo from the project template. Any future assets must be
+CC0, CC BY or OFL, and must be added to the notices file (CR_LICENCES).
