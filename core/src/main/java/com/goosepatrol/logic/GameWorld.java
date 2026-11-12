@@ -7,7 +7,9 @@ import com.goosepatrol.entity.Goose;
 import com.goosepatrol.entity.Player;
 import com.goosepatrol.event.GooseNestEvent;
 import com.goosepatrol.event.HiddenEvent;
+import com.goosepatrol.event.LuckyShortcutEvent;
 import com.goosepatrol.event.PicnicBasketEvent;
+import com.goosepatrol.event.SlipperyPathEvent;
 import com.goosepatrol.item.FoodItem;
 import com.goosepatrol.item.Inventory;
 import com.goosepatrol.item.Item;
@@ -57,7 +59,7 @@ public class GameWorld {
 
     /**
      * Creates a world with the default campus map, hidden events and balance values.
-     * There are two hidden events, one positive and one negative, as A1 requires.
+     * There are four hidden events, two positive and two negative; A1 needs at least two.
      * [FR_EVENT_COUNT, FR_EVENT_EFFECT]
      *
      * @param random source of randomness (pass a seeded instance for reproducible sessions)
@@ -65,7 +67,9 @@ public class GameWorld {
     public static GameWorld createDefault(Random random) {
         List<HiddenEvent> events = List.of(
             new PicnicBasketEvent(1200f, 400f),
-            new GooseNestEvent(790f, 380f)
+            new GooseNestEvent(790f, 380f),
+            new LuckyShortcutEvent(620f, 620f),
+            new SlipperyPathEvent(420f, 300f)
         );
         return new GameWorld(GameMap.createCampus(), events, GameConfig.INITIAL_GEESE,
             GameConfig.GEESE_TO_DISPERSE_FOR_WIN, random);

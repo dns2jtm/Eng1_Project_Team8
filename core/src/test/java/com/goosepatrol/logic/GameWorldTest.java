@@ -7,6 +7,7 @@ import com.goosepatrol.entity.Player;
 import com.goosepatrol.event.GooseNestEvent;
 import com.goosepatrol.event.HiddenEvent;
 import com.goosepatrol.event.PicnicBasketEvent;
+import com.goosepatrol.event.SlipperyPathEvent;
 import com.goosepatrol.item.FoodItem;
 import com.goosepatrol.item.Inventory;
 import com.goosepatrol.item.Item;
@@ -293,7 +294,7 @@ class GameWorldTest {
     @DisplayName("FR_EVENT_COUNT: the default map has at least 2 hidden events, positive and negative")
     void defaultWorldHasHiddenEventsThatStartUntriggered() {
         GameWorld world = GameWorld.createDefault(new Random(1));
-        assertEquals(2, world.getEvents().size());
+        assertEquals(4, world.getEvents().size());
         world.getEvents().forEach(e -> assertFalse(e.isTriggered()));
         assertTrue(world.getEvents().stream().anyMatch(HiddenEvent::isPositive));
         assertTrue(world.getEvents().stream().anyMatch(e -> !e.isPositive()));
@@ -318,6 +319,20 @@ class GameWorldTest {
         world.update(0.75f);
         assertEquals(0.75f, world.getTimer().getElapsedSeconds(), 1e-4f);
         assertEquals(GameConfig.GAME_DURATION_SECONDS - 0.75f, world.getTimer().getRemainingSeconds(), 1e-4f);
+    }
+
+    @Test
+    void slipperyPathEndsTheGameEarlyButReportsRealPlayTime() {
+        SlipperyPathEvent slip = new SlipperyPathEvent(500f, 500f);
+        GameWorld world = new GameWorld(TestMaps.empty(), List.of(slip), 0, 100, new Random(3));
+        world.togglePause();
+        world.update(0.1f); // the player starts on the event, so it fires in the first frame
+        assertEquals(GameConfig.GAME_DURATION_SECONDS - SlipperyPathEvent.TIME_PENALTY_SECONDS - 0.1f,
+            world.getTimer().getRemainingSeconds(), 1e-3f);
+        world.update(GameConfig.GAME_DURATION_SECONDS);
+        assertEquals(GameState.LOST, world.getState());
+        assertEquals(GameConfig.GAME_DURATION_SECONDS - SlipperyPathEvent.TIME_PENALTY_SECONDS,
+            world.createSummary().elapsedSeconds(), 0.06f);
     }
 
     // --- Spawning ------------------------------------------------------------------------------

@@ -1,6 +1,8 @@
 package com.goosepatrol.event;
 
+import com.goosepatrol.GameConfig;
 import com.goosepatrol.TestMaps;
+import com.goosepatrol.entity.Goose;
 import com.goosepatrol.entity.Player;
 import com.goosepatrol.item.FoodItem;
 import com.goosepatrol.item.Inventory;
@@ -70,6 +72,35 @@ class HiddenEventTest {
         world.getGeese().forEach(goose -> assertEquals(40f, goose.distanceTo(200f, 200f), 1e-3f));
         assertFalse(event.isPositive());
         assertTrue(event.getMessage().contains("nest"));
+    }
+
+    @Test
+    @DisplayName("FR_EVENT_EFFECT: slippery path takes 15 seconds off the countdown")
+    void slipperyPathRemovesTime() {
+        GameWorld world = emptyWorld();
+        SlipperyPathEvent event = new SlipperyPathEvent(0f, 0f);
+        event.trigger(world);
+        assertEquals(GameConfig.GAME_DURATION_SECONDS - SlipperyPathEvent.TIME_PENALTY_SECONDS,
+            world.getTimer().getRemainingSeconds(), 1e-4f);
+        assertFalse(event.isPositive());
+        assertTrue(event.getMessage().contains("-15"));
+    }
+
+    @Test
+    @DisplayName("FR_EVENT_EFFECT: lucky shortcut makes every goose lose track of the player")
+    void luckyShortcutScaresAllGeese() {
+        GameWorld world = emptyWorld();
+        Goose near = world.spawnGooseAt(510f, 500f);
+        Goose far = world.spawnGooseAt(950f, 950f);
+        LuckyShortcutEvent event = new LuckyShortcutEvent(0f, 0f);
+        event.trigger(world);
+        for (Goose goose : List.of(near, far)) {
+            assertTrue(goose.isFleeing());
+            assertEquals(LuckyShortcutEvent.GEESE_LOSE_TRACK_SECONDS, goose.getDistractionSecondsLeft(), 1e-4f);
+        }
+        assertTrue(event.isPositive());
+        assertEquals(GameConfig.GAME_DURATION_SECONDS, world.getTimer().getRemainingSeconds(),
+            "UR_TIME_LIMIT: the shortcut must not add time");
     }
 
     @Test
