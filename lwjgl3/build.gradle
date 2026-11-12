@@ -61,6 +61,19 @@ run {
   if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
 }
 
+// REVIEW BRANCH ONLY: runs the base game from main (game.GoosePatrol) for side-by-side comparison.
+// Remove once the team has chosen which implementation to keep.
+tasks.register('runBaseGame', JavaExec) {
+  group = 'application'
+  description = 'Runs the base game from main (game.GoosePatrol) for comparison.'
+  mainClass = 'com.goosepatrol.lwjgl3.BaseGameLauncher'
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = rootProject.file('assets').path
+  jvmArgs += "--enable-native-access=ALL-UNNAMED"
+  jvmArgs += "--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED"
+  if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
+}
+
 jar {
 // sets the name of the .jar file this produces to the name of the game or app, with the version after.
   archiveFileName.set("${appName}-${projectVersion}.jar")
