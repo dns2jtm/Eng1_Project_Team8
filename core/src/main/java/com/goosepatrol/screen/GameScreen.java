@@ -15,13 +15,11 @@ import com.goosepatrol.logic.GameWorld;
  * The in-game screen. Reads keyboard input, passes commands to the {@link GameWorld}, advances it
  * once per frame and draws it using {@link WorldRenderer} and {@link Hud}.
  *
- * <p>Controls: WASD / arrow keys to move, SPACE to use the selected item, 1-9 / Q / E to choose an
+ * <p>Controls [FR_PLAYER_MOVE, FR_USE_ITEM, FR_PAUSE]: WASD / arrow keys to move, SPACE to use the selected item, 1-9 / Q / E to choose an
  * item, P / ESC to start, pause and resume.</p>
  */
 public class GameScreen extends ScreenAdapter {
 
-    /** Longest frame time passed to the world, so a stall (e.g. dragging the window) can't cause a big jump. */
-    private static final float MAX_FRAME_DELTA = 0.1f;
     private static final int[] SLOT_KEYS = {
         Input.Keys.NUM_1, Input.Keys.NUM_2, Input.Keys.NUM_3, Input.Keys.NUM_4, Input.Keys.NUM_5,
         Input.Keys.NUM_6, Input.Keys.NUM_7, Input.Keys.NUM_8, Input.Keys.NUM_9
@@ -44,7 +42,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         handleInput();
-        world.update(Math.min(delta, MAX_FRAME_DELTA));
+        world.update(delta); // GameWorld splits long frames into small steps itself
 
         ScreenUtils.clear(0.08f, 0.08f, 0.1f, 1f);
         viewport.apply();

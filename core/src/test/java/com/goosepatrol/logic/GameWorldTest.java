@@ -122,6 +122,7 @@ class GameWorldTest {
     // --- Player movement -----------------------------------------------------------------------
 
     @Test
+    @DisplayName("FR_PLAYER_MOVE: the player moves in the input direction while the game is running")
     void playerMovesOnlyWhileRunning() {
         GameWorld world = runningWorld();
         Player player = world.getPlayer();
@@ -132,6 +133,7 @@ class GameWorldTest {
     }
 
     @Test
+    @DisplayName("FR_GEESE_BLOCK: geese touching the player slow them down")
     void playerIsSlowedWhileMobbedByAChasingGoose() {
         GameWorld world = runningWorld();
         Player player = world.getPlayer();
@@ -143,7 +145,7 @@ class GameWorldTest {
     // --- Starting inventory and using items ----------------------------------------------------
 
     @Test
-    @DisplayName("Starting inventory holds two kinds of item")
+    @DisplayName("FR_INITIAL_INVENTORY: the starting inventory holds two kinds of item")
     void startingInventoryHasTwoItemTypes() {
         Inventory inventory = emptyWorld(1).getPlayer().getInventory();
         assertEquals(GameWorld.STARTING_BREAD + GameWorld.STARTING_WHISTLES, inventory.size());
@@ -260,7 +262,7 @@ class GameWorldTest {
     // --- Hidden events ---------------------------------------------------------------------------
 
     @Test
-    @DisplayName("FR_EVENT_TRIGGER / FR_ITEM_COUNTER: walking into a hidden event triggers it once and counts it")
+    @DisplayName("FR_EVENT_TRIGGER / FR_EVENT_COUNTER: walking into a hidden event triggers it once and counts it")
     void hiddenEventsTriggerOnceAndAreCounted() {
         PicnicBasketEvent picnic = new PicnicBasketEvent(560f, 500f);
         GameWorld world = new GameWorld(TestMaps.empty(), List.of(picnic), 0, 100, new Random(3));
@@ -288,12 +290,34 @@ class GameWorldTest {
     }
 
     @Test
-    void defaultWorldHasTwoHiddenEventsThatStartHidden() {
+    @DisplayName("FR_EVENT_COUNT: the default map has at least 2 hidden events, positive and negative")
+    void defaultWorldHasHiddenEventsThatStartUntriggered() {
         GameWorld world = GameWorld.createDefault(new Random(1));
         assertEquals(2, world.getEvents().size());
         world.getEvents().forEach(e -> assertFalse(e.isTriggered()));
         assertTrue(world.getEvents().stream().anyMatch(HiddenEvent::isPositive));
         assertTrue(world.getEvents().stream().anyMatch(e -> !e.isPositive()));
+    }
+
+    @Test
+    @DisplayName("FR_EVENT_TRIGGER: a long frame is simulated in small steps, so fast movement can't skip an event")
+    void longFrameDoesNotSkipHiddenEvents() {
+        PicnicBasketEvent picnic = new PicnicBasketEvent(560f, 500f);
+        GameWorld world = new GameWorld(TestMaps.empty(), List.of(picnic), 0, 100, new Random(3));
+        world.togglePause();
+        world.setPlayerDirection(1f, 0f);
+        world.update(1f); // one 1-second frame: the player passes straight through the event
+        assertTrue(world.getPlayer().getX() > 560f + picnic.getRadius() + GameConfig.PLAYER_RADIUS);
+        assertTrue(picnic.isTriggered());
+    }
+
+    @Test
+    @DisplayName("QR_TIMER_ACCURACY: a slow frame still advances the timer by the full real time")
+    void slowFrameAdvancesTimerByFullRealTime() {
+        GameWorld world = runningWorld();
+        world.update(0.75f);
+        assertEquals(0.75f, world.getTimer().getElapsedSeconds(), 1e-4f);
+        assertEquals(GameConfig.GAME_DURATION_SECONDS - 0.75f, world.getTimer().getRemainingSeconds(), 1e-4f);
     }
 
     // --- Spawning ------------------------------------------------------------------------------

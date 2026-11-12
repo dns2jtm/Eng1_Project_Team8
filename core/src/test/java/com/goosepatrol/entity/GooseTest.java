@@ -25,6 +25,7 @@ class GooseTest {
     }
 
     @Test
+    @DisplayName("FR_GEESE_SPAWN: geese move towards the player")
     void chasingGooseMovesTowardsPlayerAtGooseSpeed() {
         Goose goose = new Goose(100f, 500f, 2);
         goose.chase(player, map, 1f);
@@ -33,6 +34,7 @@ class GooseTest {
     }
 
     @Test
+    @DisplayName("FR_GEESE_BLOCK: a chasing goose closes in and crowds the player")
     void chasingGooseStopsWhenTouchingPlayer() {
         Goose goose = new Goose(450f, 500f, 2);
         for (int i = 0; i < 100; i++) {

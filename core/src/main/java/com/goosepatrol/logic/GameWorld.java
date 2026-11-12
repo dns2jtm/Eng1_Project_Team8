@@ -57,6 +57,8 @@ public class GameWorld {
 
     /**
      * Creates a world with the default campus map, hidden events and balance values.
+     * There are two hidden events, one positive and one negative, as A1 requires.
+     * [FR_EVENT_COUNT, FR_EVENT_EFFECT]
      *
      * @param random source of randomness (pass a seeded instance for reproducible sessions)
      */
@@ -98,7 +100,7 @@ public class GameWorld {
         }
     }
 
-    /** The starting inventory: two kinds of item, several of each. */
+    /** The starting inventory: two kinds of item, several of each. [FR_INITIAL_INVENTORY] */
     private static Inventory createStartingInventory() {
         Inventory inventory = new Inventory();
         for (int i = 0; i < STARTING_BREAD; i++) {
@@ -115,9 +117,15 @@ public class GameWorld {
     // ------------------------------------------------------------------------------------------
 
     /**
-     * Advances the game by one frame. Does nothing unless the game is {@link GameState#RUNNING}. [FR_PAUSE]
+     * Advances the game by {@code delta} seconds of real time. Does nothing unless the game is
+     * {@link GameState#RUNNING}. [FR_PAUSE, QR_PAUSE_RESPONSE]
      *
-     * @param delta frame time in seconds; must not be negative
+     * <p>The timer is advanced by the exact real frame time, so it follows real time even when a
+     * frame is slow [QR_TIMER_ACCURACY]. Movement, collisions, hidden events and spawning are then
+     * simulated in steps of at most {@link GameConfig#MAX_SIMULATION_STEP_SECONDS}, so they stay
+     * stable and nothing can move far enough in one step to jump over an event or an obstacle.</p>
+     *
+     * @param delta real time since the last frame, in seconds; must not be negative
      */
     public void update(float delta) {
         if (delta < 0f) {
@@ -128,11 +136,21 @@ public class GameWorld {
         }
         timer.tick(delta);
         tickMessage(delta);
+        float remaining = delta;
+        while (remaining > 0f) {
+            float step = Math.min(remaining, GameConfig.MAX_SIMULATION_STEP_SECONDS);
+            simulateStep(step);
+            remaining -= step;
+        }
+        updateEndConditions();
+    }
+
+    /** Simulates one step of movement and interaction, following the frame-update sequence diagram. */
+    private void simulateStep(float delta) {
         updateGeese(delta);
         updatePlayer(delta);
         checkHiddenEvents();
         updateSpawning(delta);
-        updateEndConditions();
     }
 
     private void updateGeese(float delta) {
@@ -170,6 +188,7 @@ public class GameWorld {
         }
     }
 
+    /** Geese touching the player slow them down, then the player moves. [FR_GEESE_BLOCK, FR_PLAYER_MOVE] */
     private void updatePlayer(float delta) {
         boolean mobbed = false;
         for (Goose goose : geese) {
@@ -182,7 +201,7 @@ public class GameWorld {
         player.move(playerDirection.x, playerDirection.y, delta, map);
     }
 
-    /** Fires any hidden event the player has just walked into. [FR_EVENT_TRIGGER] */
+    /** Fires any hidden event the player has just walked into. [FR_EVENT_TRIGGER, FR_EVENT_COUNTER] */
     private void checkHiddenEvents() {
         for (HiddenEvent event : events) {
             if (event.isTriggeredBy(player)) {
@@ -258,7 +277,8 @@ public class GameWorld {
 
     /**
      * Uses the selected inventory item on every goose within its range, then removes the item and
-     * counts it as used. Follows the "use an item" sequence diagram. [FR_USE_ITEM, FR_ITEM_COUNTER]
+     * counts it as used. Follows the "use an item" sequence diagram.
+     * [FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE]
      *
      * @return {@code true} if an item was used; {@code false} if the game isn't running or the
      *         inventory is empty

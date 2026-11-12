@@ -1,8 +1,8 @@
 package com.goosepatrol.logic;
 
 /**
- * Counters shown on the HUD: how many items have been used and how many hidden events triggered
- * [FR_ITEM_COUNTER], plus how many geese have been dispersed (which drives the win condition).
+ * Counters shown on the HUD: items used [FR_ITEM_COUNTER] and hidden events triggered
+ * [FR_EVENT_COUNTER], plus geese dispersed, which drives the win condition [FR_WIN_CONDITION].
  */
 public class GameStats {
 

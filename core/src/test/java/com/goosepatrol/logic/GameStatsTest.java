@@ -1,11 +1,12 @@
 package com.goosepatrol.logic;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/** Tests for {@link GameStats}. Requirement: FR_ITEM_COUNTER. */
+/** Tests for {@link GameStats}. Requirements: FR_ITEM_COUNTER, FR_EVENT_COUNTER. */
 class GameStatsTest {
 
     @Test
@@ -17,6 +18,7 @@ class GameStatsTest {
     }
 
     @Test
+    @DisplayName("FR_ITEM_COUNTER / FR_EVENT_COUNTER: items used and events triggered are counted separately")
     void recordsEachCounterIndependently() {
         GameStats stats = new GameStats();
         stats.recordItemUsed();

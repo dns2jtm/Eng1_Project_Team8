@@ -10,13 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Tests for {@link GameMap} and {@link Obstacle}: the map has clear limits. */
+/** Tests for {@link GameMap} and {@link Obstacle}. Requirements: FR_MAP_BOUNDS, FR_CAMPUS_THEME. */
 class GameMapTest {
 
     private final GameMap map = TestMaps.withBuildingAndWater();
 
     @Test
-    @DisplayName("Map limits: points outside the map are not walkable")
+    @DisplayName("FR_MAP_BOUNDS: points outside the map are not walkable")
     void outsideBoundsIsNotWalkable() {
         assertTrue(map.isWalkable(500f, 100f));
         assertFalse(map.isWalkable(-1f, 100f));
@@ -26,6 +26,7 @@ class GameMapTest {
     }
 
     @Test
+    @DisplayName("FR_MAP_BOUNDS: buildings block the player and geese")
     void buildingsBlockPlayerAndGeese() {
         assertFalse(map.isWalkable(650f, 500f));
         assertFalse(map.canPlayerOccupy(590f, 500f, 14f));
@@ -33,6 +34,7 @@ class GameMapTest {
     }
 
     @Test
+    @DisplayName("FR_MAP_BOUNDS: water blocks the player but geese can swim")
     void waterBlocksPlayerButNotGeese() {
         assertFalse(map.canPlayerOccupy(350f, 500f, 14f));
         assertTrue(map.canGooseOccupy(350f, 500f, 12f));
@@ -77,7 +79,7 @@ class GameMapTest {
     }
 
     @Test
-    @DisplayName("Default campus: player start and every spawn point are valid positions")
+    @DisplayName("FR_CAMPUS_THEME: the campus has at least 5 named locations; start and spawn points are valid")
     void campusMapIsConsistent() {
         GameMap campus = GameMap.createCampus();
         assertEquals(GameConfig.WORLD_WIDTH, campus.getWidth());
@@ -86,6 +88,7 @@ class GameMapTest {
             GameConfig.PLAYER_RADIUS));
         campus.getGooseSpawnPoints().forEach(p ->
             assertTrue(campus.canGooseOccupy(p.x, p.y, GameConfig.GOOSE_RADIUS), "spawn " + p));
+        assertTrue(campus.getObstacles().stream().map(Obstacle::getName).distinct().count() >= 5);
         assertTrue(campus.getObstacles().stream().anyMatch(o -> o.getType() == Obstacle.Type.WATER));
         assertTrue(campus.getObstacles().stream().anyMatch(o -> o.getType() == Obstacle.Type.BUILDING));
     }

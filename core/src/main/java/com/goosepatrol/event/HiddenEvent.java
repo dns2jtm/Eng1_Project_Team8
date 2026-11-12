@@ -6,11 +6,13 @@ import com.goosepatrol.logic.GameWorld;
 import java.util.Objects;
 
 /**
- * An invisible trigger zone on the map. It fires once, the first time the player walks into it,
- * and applies a positive or negative effect to the game world. [FR_EVENT_TRIGGER]
+ * An invisible trigger zone on the map [FR_EVENT_HIDDEN]. It fires the first time the player walks
+ * into it [FR_EVENT_TRIGGER] and applies a positive or negative effect to the game world, at most
+ * once [FR_EVENT_EFFECT].
  *
  * <p>New events are added by subclassing and implementing {@link #apply(GameWorld)},
- * {@link #isPositive()} and {@link #getMessage()}.</p>
+ * {@link #isPositive()} and {@link #getMessage()}, without changing existing event classes.
+ * [QR_EXTENSIBILITY]</p>
  */
 public abstract class HiddenEvent {
 

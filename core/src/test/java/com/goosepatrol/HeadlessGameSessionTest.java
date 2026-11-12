@@ -79,9 +79,9 @@ class HeadlessGameSessionTest {
     }
 
     @Test
-    @DisplayName("Scripted player: wanders campus, pauses and uses items. Session completes consistently")
+    @DisplayName("QR_STABILITY: scripted player wanders campus, pauses and uses items. Session completes without errors")
     void scriptedSessionRunsToCompletion() throws Exception {
-        GameSummary summary = onGdxThread(() -> {
+        GameWorld finished = onGdxThread(() -> {
             GameWorld world = GameWorld.createDefault(new Random(99));
             world.togglePause();
             Random input = new Random(5);
@@ -105,10 +105,11 @@ class HeadlessGameSessionTest {
                 world.update(FRAME);
                 frame++;
             }
-            return world.createSummary();
+            return world;
         });
+        GameSummary summary = finished.createSummary();
         assertTrue(summary.itemsUsed() > 0);
         assertTrue(summary.elapsedSeconds() <= GameConfig.GAME_DURATION_SECONDS + 1e-3f);
-        assertTrue(summary.won() || summary.elapsedSeconds() >= GameConfig.GAME_DURATION_SECONDS - 0.05f);
+        assertTrue(summary.won() || finished.getTimer().isExpired());
     }
 }

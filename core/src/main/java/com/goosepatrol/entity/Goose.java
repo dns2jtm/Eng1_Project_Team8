@@ -4,7 +4,7 @@ import com.goosepatrol.GameConfig;
 
 /**
  * A hungry goose. It chases the player until it is distracted (fed or scared) and leaves once
- * its hunger reaches zero.
+ * its hunger reaches zero. [UR_GEESE_THREAT, FR_GEESE_SPAWN, FR_GEESE_DISPERSE]
  *
  * <p>Behaviour follows the goose state machine: CHASING -> DISTRACTED -> CHASING, and
  * CHASING/DISTRACTED -> DISPERSED once fully fed.</p>
@@ -113,7 +113,7 @@ public class Goose extends Entity {
 
     /**
      * @return {@code true} if this goose is chasing and close enough to crowd the player
-     *         (which slows the player down)
+     *         (which slows the player down) [FR_GEESE_BLOCK]
      */
     public boolean isMobbing(Player player) {
         return state == GooseState.CHASING

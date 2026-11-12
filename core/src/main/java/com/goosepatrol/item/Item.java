@@ -8,7 +8,8 @@ import java.util.Objects;
  * A single-use item the player can use to manage geese. Using an item applies its effect to every
  * goose within {@link #getRange()} of the player, then the item is used up. [FR_USE_ITEM]
  *
- * <p>New item types are added by subclassing and implementing {@link #applyTo(Goose)}.</p>
+ * <p>New item types are added by subclassing and implementing {@link #applyTo(Goose)}, without
+ * changing existing item classes. [QR_EXTENSIBILITY]</p>
  */
 public abstract class Item {
 

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The (simplified) university campus the player moves around in.
+ * The (simplified) university campus the player moves around in. [UR_CAMPUS_MAP, FR_MAP_BOUNDS]
  *
  * <p>The map has hard outer limits and a set of {@link Obstacle}s. Buildings block everyone; the lake
  * blocks the player but not geese. The map also defines where the player starts and where new geese
@@ -51,7 +51,8 @@ public class GameMap {
 
     /**
      * Builds the default campus map used in the game. It doesn't aim to be realistic; it just needs
-     * to look like a campus and have clear limits.
+     * to look like a campus and have clear limits. It has six named university-style locations
+     * (five buildings and a lake). [FR_CAMPUS_THEME]
      */
     public static GameMap createCampus() {
         List<Obstacle> obstacles = List.of(

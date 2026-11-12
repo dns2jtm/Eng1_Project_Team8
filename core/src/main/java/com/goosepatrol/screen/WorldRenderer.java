@@ -106,7 +106,7 @@ public class WorldRenderer {
         }
     }
 
-    /** Hidden events can't be seen until triggered. Afterwards a coloured marker shows where they were. */
+    /** Hidden events can't be seen until triggered. Afterwards a coloured marker shows where they were. [FR_EVENT_HIDDEN] */
     private void drawTriggeredEvents(GameWorld world) {
         for (HiddenEvent event : world.getEvents()) {
             if (event.isTriggered()) {
@@ -116,7 +116,7 @@ public class WorldRenderer {
         }
     }
 
-    /** Shows the range of the selected item, so the player can judge when to use it. */
+    /** Shows the range of the selected item, so the player can judge when to use it. [FR_USE_ITEM] */
     private void drawSelectedItemRange(Player player) {
         Item selected = player.getInventory().selected();
         if (selected != null) {

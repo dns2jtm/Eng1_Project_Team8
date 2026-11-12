@@ -20,9 +20,10 @@ import com.goosepatrol.logic.WorldMessage;
 import java.util.List;
 
 /**
- * Heads-up display drawn over the world: time remaining [FR_TIMER_EXPIRE], item and event counters
- * [FR_ITEM_COUNTER], geese dispersed, the inventory bar, feedback messages, and the pause overlay
- * [FR_START_PAUSED, FR_PAUSE]. Read-only: it never changes the world.
+ * Heads-up display drawn over the world: the countdown [FR_TIMER], items used [FR_ITEM_COUNTER] and
+ * events triggered [FR_EVENT_COUNTER], geese dispersed, the inventory bar [FR_INVENTORY_DISPLAY],
+ * feedback messages, and the start/pause overlay with the controls [FR_START_PAUSED, FR_PAUSE,
+ * QR_LEARNABILITY]. Read-only: it never changes the world.
  */
 public class Hud {
 

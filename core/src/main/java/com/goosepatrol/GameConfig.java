@@ -14,14 +14,20 @@ public final class GameConfig {
     /** Height of the playable world, in world units. */
     public static final float WORLD_HEIGHT = 720f;
 
-    /** Length of a game session: 5 real-world minutes. [FR_TIMER_EXPIRE] */
+    /** Length of a game session: 5 real-world minutes. [FR_TIMER, FR_TIMER_EXPIRE, UR_TIME_LIMIT] */
     public static final float GAME_DURATION_SECONDS = 5 * 60f;
+
+    /**
+     * Longest single simulation step. Real frame time is split into steps no longer than this, so
+     * the timer follows real time [QR_TIMER_ACCURACY] while movement and collisions stay stable.
+     */
+    public static final float MAX_SIMULATION_STEP_SECONDS = 0.05f;
 
     /** Player walking speed in world units per second. */
     public static final float PLAYER_SPEED = 170f;
     /** Collision radius of the player avatar. */
     public static final float PLAYER_RADIUS = 14f;
-    /** Speed multiplier applied while at least one chasing goose is touching the player. */
+    /** Speed multiplier applied while at least one chasing goose is touching the player. [FR_GEESE_BLOCK] */
     public static final float PLAYER_MOBBED_SPEED_MULTIPLIER = 0.45f;
 
     /** Goose chasing speed in world units per second (slower than the player, but they swarm). */
@@ -48,7 +54,7 @@ public final class GameConfig {
     /** New geese never spawn closer than this to the player (unless no spawn point is far enough). */
     public static final float MIN_SPAWN_DISTANCE_FROM_PLAYER = 300f;
 
-    /** Number of geese the player must disperse to win. [FR_WIN_CONDITION] */
+    /** Number of geese the player must disperse to win; to be tuned by play-testing. [FR_WIN_CONDITION, QR_BALANCE] */
     public static final int GEESE_TO_DISPERSE_FOR_WIN = 8;
 
     /** How long feedback messages (item use, hidden events) stay on screen. */

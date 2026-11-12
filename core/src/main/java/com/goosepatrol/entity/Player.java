@@ -6,7 +6,8 @@ import com.goosepatrol.item.Inventory;
 import java.util.Objects;
 
 /**
- * The student avatar controlled by the user. Carries an {@link Inventory} of items for managing geese.
+ * The student avatar controlled by the user [UR_PLAYER_AVATAR, FR_PLAYER_MOVE]. Carries an
+ * {@link Inventory} of items for managing geese.
  */
 public class Player extends Entity {
 
@@ -35,6 +36,7 @@ public class Player extends Entity {
     /**
      * Moves the player in the given direction for one frame. The direction is normalised, so
      * diagonal movement is no faster than straight movement. Obstacles and map edges block movement.
+     * [FR_PLAYER_MOVE, FR_MAP_BOUNDS]
      *
      * @param dirX  horizontal input (-1 left .. 1 right)
      * @param dirY  vertical input (-1 down .. 1 up)
@@ -50,7 +52,7 @@ public class Player extends Entity {
         moveBy(dirX / length * distance, dirY / length * distance, map);
     }
 
-    /** @return the walking speed after the "mobbed by geese" slow-down, if it applies */
+    /** @return the walking speed after the "mobbed by geese" slow-down, if it applies [FR_GEESE_BLOCK] */
     public float getCurrentSpeed() {
         return mobbed ? speed * GameConfig.PLAYER_MOBBED_SPEED_MULTIPLIER : speed;
     }

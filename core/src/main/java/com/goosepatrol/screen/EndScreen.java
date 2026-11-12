@@ -16,7 +16,8 @@ import com.goosepatrol.logic.GameSummary;
 import com.goosepatrol.logic.GameTimer;
 
 /**
- * Results screen shown when a session ends (won or lost). Press R to play again or ESC to quit.
+ * Results screen shown when a session ends, showing the result and statistics. Press R to play
+ * again or ESC to quit. [FR_END_SCREEN; the score part is A2]
  */
 public class EndScreen extends ScreenAdapter {
 

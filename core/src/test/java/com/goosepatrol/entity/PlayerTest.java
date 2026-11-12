@@ -3,18 +3,20 @@ package com.goosepatrol.entity;
 import com.goosepatrol.GameConfig;
 import com.goosepatrol.TestMaps;
 import com.goosepatrol.item.Inventory;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Tests for {@link Player} movement. */
+/** Tests for {@link Player} movement. Requirements: FR_PLAYER_MOVE, FR_MAP_BOUNDS, FR_GEESE_BLOCK. */
 class PlayerTest {
 
     private static final float DELTA = 0.1f;
 
     @Test
+    @DisplayName("FR_PLAYER_MOVE: the player moves at the configured speed")
     void movesAtConfiguredSpeed() {
         Player player = new Player(500f, 500f, 100f, new Inventory());
         player.move(1f, 0f, DELTA, TestMaps.empty());
@@ -23,6 +25,7 @@ class PlayerTest {
     }
 
     @Test
+    @DisplayName("FR_PLAYER_MOVE: the player can move in all directions; diagonal is not faster")
     void diagonalMovementIsNotFaster() {
         Player player = new Player(500f, 500f, 100f, new Inventory());
         player.move(1f, 1f, DELTA, TestMaps.empty());
@@ -39,6 +42,7 @@ class PlayerTest {
     }
 
     @Test
+    @DisplayName("FR_MAP_BOUNDS: buildings block the player, who slides along them")
     void isBlockedByBuildingsAndSlidesAlongThem() {
         GameMap map = TestMaps.withBuildingAndWater();
         Player player = new Player(580f, 500f, 100f, new Inventory());
@@ -48,6 +52,7 @@ class PlayerTest {
     }
 
     @Test
+    @DisplayName("FR_MAP_BOUNDS: water and the map edges block the player")
     void isBlockedByWaterAndMapEdges() {
         GameMap map = TestMaps.withBuildingAndWater();
         Player nearWater = new Player(420f, 500f, 100f, new Inventory());
@@ -60,6 +65,7 @@ class PlayerTest {
     }
 
     @Test
+    @DisplayName("FR_GEESE_BLOCK: being mobbed by geese slows the player")
     void beingMobbedSlowsThePlayer() {
         Player player = new Player(500f, 500f, 100f, new Inventory());
         player.setMobbed(true);

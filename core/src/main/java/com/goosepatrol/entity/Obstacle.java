@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * An axis-aligned rectangular area of the campus that blocks movement, such as a building or the lake.
- * Immutable.
+ * Immutable. [FR_MAP_BOUNDS]
  */
 public final class Obstacle {
 

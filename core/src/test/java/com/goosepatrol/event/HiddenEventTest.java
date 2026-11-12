@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Tests for {@link HiddenEvent} and the two concrete events. Requirement: FR_EVENT_TRIGGER. */
+/** Tests for {@link HiddenEvent} and the concrete events. Requirements: FR_EVENT_TRIGGER, FR_EVENT_EFFECT. */
 class HiddenEventTest {
 
     private static GameWorld emptyWorld() {
@@ -36,7 +36,7 @@ class HiddenEventTest {
     }
 
     @Test
-    @DisplayName("FR_EVENT_TRIGGER: an event triggers only once")
+    @DisplayName("FR_EVENT_EFFECT: an event triggers at most once")
     void triggersOnlyOnce() {
         GameWorld world = emptyWorld();
         HiddenEvent event = new PicnicBasketEvent(world.getPlayer().getX(), world.getPlayer().getY());
