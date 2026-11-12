@@ -23,224 +23,413 @@
 <main>
   <h1>Requirements traceability</h1>
   <p class="lead">
-    Each requirement is traced to the architecture diagrams that show it, the classes that
-    implement it, and the tests that check it. Requirement IDs appear in the diagrams, in code
-    comments and in test names, so you can search for an ID and find every place it is handled.
+    Every requirement in <strong>Req1</strong> traced to the architecture diagrams, the code and
+    the tests. Requirement IDs also appear in code comments and test names, so searching the
+    repository for an ID finds every place it is handled.
   </p>
   <p>
-    Jump to: <a href="#matrix">Traceability matrix</a> · <a href="#brief">Brief features without an ID yet</a> ·
-    <a href="#manual">Manual test cases</a>
+    Jump to: <a href="#summary">Summary</a> · <a href="#user">User requirements</a> ·
+    <a href="#functional">Functional</a> · <a href="#quality">Quality</a> ·
+    <a href="#constraint">Constraint</a> · <a href="#manual">Manual test cases</a>
   </p>
 
-  <h2 id="matrix">Traceability matrix</h2>
+  <h2 id="summary">Summary</h2>
+  <table>
+    <thead><tr><th>Status</th><th>Meaning</th><th>Functional requirements</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status ok">Implemented</span></td><td>All of the requirement's A1 scope is met</td><td>17</td></tr>
+      <tr><td><span class="status ok">Implemented early</span></td><td>Scoped A2 in Req1 but already delivered</td><td>4 (FR_CAMPUS_THEME, FR_GEESE_BLOCK, FR_GEESE_DISPERSE, FR_WIN_CONDITION)</td></tr>
+      <tr><td><span class="status pending">A2</span></td><td>Planned for Assessment 2, not yet implemented</td><td>6 (FR_GEESE_VARIETY, FR_PICKUP_PLACEMENT, FR_PICKUP_COLLECT, FR_SCORE_BASE, FR_SCORE_ITEMS, FR_SCORE_EVENTS)</td></tr>
+    </tbody>
+  </table>
   <p>Diagram numbers refer to the <a href="architecture.html#v2">v2 architecture</a>:
     1 component, 2 class, 3 game state machine, 4 goose state machine, 5 use-item sequence,
-    6 frame-update sequence. Test names are <code>TestClass.method</code> in <code>core/src/test</code>.</p>
+    6 frame-update sequence. Tests are <code>TestClass.method</code> in <code>core/src/test</code>;
+    see the <a href="testing.html">test report</a> for results.</p>
+
+  <h2 id="user">User requirements</h2>
+  <table>
+    <thead><tr><th>User requirement</th><th>Met through</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><code>UR_PLAYER_AVATAR</code></td><td>FR_PLAYER_MOVE</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>UR_CAMPUS_MAP</code></td><td>FR_MAP_BOUNDS, FR_CAMPUS_THEME</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>UR_GEESE_THREAT</code></td><td>FR_GEESE_SPAWN, FR_GEESE_BLOCK, FR_GEESE_DISPERSE (FR_GEESE_VARIETY in A2)</td><td><span class="status ok">Met for A1</span></td></tr>
+      <tr><td><code>UR_INITIAL_ITEMS</code></td><td>FR_INITIAL_INVENTORY, FR_USE_ITEM, FR_INVENTORY_DISPLAY</td><td><span class="status ok">Met for A1</span></td></tr>
+      <tr><td><code>UR_PICKUP_ITEMS</code></td><td>FR_PICKUP_PLACEMENT, FR_PICKUP_COLLECT</td><td><span class="status pending">A2</span></td></tr>
+      <tr><td><code>UR_HIDDEN_EVENTS</code></td><td>FR_EVENT_HIDDEN, FR_EVENT_COUNT, FR_EVENT_TRIGGER, FR_EVENT_EFFECT</td><td><span class="status ok">Met for A1</span></td></tr>
+      <tr><td><code>UR_TIME_LIMIT</code></td><td>FR_TIMER, FR_TIMER_EXPIRE</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>UR_PAUSE</code></td><td>FR_START_PAUSED, FR_PAUSE</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>UR_WIN_LOSE</code></td><td>FR_TIMER_EXPIRE, FR_WIN_CONDITION, FR_END_SCREEN</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>UR_SCORING</code></td><td>FR_SCORE_BASE, FR_SCORE_ITEMS, FR_SCORE_EVENTS</td><td><span class="status pending">A2</span></td></tr>
+      <tr><td><code>UR_PROGRESS_FEEDBACK</code></td><td>FR_ITEM_COUNTER, FR_EVENT_COUNTER</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>UR_CASUAL</code></td><td>QR_LEARNABILITY, QR_BALANCE (evaluated in A2)</td><td><span class="status pending">Evaluate in A2</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="functional">Functional requirements</h2>
+  <div class="table-scroll">
   <table>
     <thead>
-      <tr><th>Requirement</th><th>Summary</th><th>Diagrams</th><th>Implemented in</th><th>Automated tests</th><th>Manual tests</th></tr>
+      <tr><th>Requirement</th><th>Scope / status</th><th>Diagrams</th><th>Implemented in</th><th>Automated tests</th><th>Manual</th></tr>
     </thead>
     <tbody>
       <tr>
+        <td><code>FR_PLAYER_MOVE</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>2</td>
+        <td><code>Player.move</code>, <code>GameWorld.setPlayerDirection</code>, <code>GameScreen</code> (WASD / arrows)</td>
+        <td><code>PlayerTest.movesAtConfiguredSpeed</code>, <code>PlayerTest.diagonalMovementIsNotFaster</code>,
+            <code>PlayerTest.noInputOrZeroDeltaMeansNoMovement</code>, <code>GameWorldTest.playerMovesOnlyWhileRunning</code></td>
+        <td>MT-08</td>
+      </tr>
+      <tr>
+        <td><code>FR_MAP_BOUNDS</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>2</td>
+        <td><code>GameMap</code>, <code>Obstacle</code>, <code>Entity.moveBy</code></td>
+        <td><code>GameMapTest</code> (bounds, buildings, water, edges), <code>PlayerTest.isBlockedByBuildingsAndSlidesAlongThem</code>,
+            <code>PlayerTest.isBlockedByWaterAndMapEdges</code></td>
+        <td>MT-08</td>
+      </tr>
+      <tr>
+        <td><code>FR_CAMPUS_THEME</code></td>
+        <td>A2 · <span class="status ok">Implemented early</span></td>
+        <td>2</td>
+        <td><code>GameMap.createCampus</code>: Library, Computer Science, Central Hall, Students' Union, Dining Hall, Campus Lake</td>
+        <td><code>GameMapTest.campusMapIsConsistent</code></td>
+        <td>MT-08</td>
+      </tr>
+      <tr>
+        <td><code>FR_GEESE_SPAWN</code></td>
+        <td>A1 basic · <span class="status ok">Implemented</span></td>
+        <td>4, 6</td>
+        <td><code>GameWorld.updateSpawning</code>, <code>GameWorld.spawnGooseAt</code>, <code>Goose.chase</code></td>
+        <td><code>GameWorldTest.geeseSpawnPeriodicallyUpToLimit</code>, <code>GameWorldTest.geeseSpawnAwayFromThePlayer</code>,
+            <code>GameWorldTest.spawnedGeeseHaveHungerWithinConfiguredRange</code>, <code>GooseTest.chasingGooseMovesTowardsPlayerAtGooseSpeed</code></td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_GEESE_VARIETY</code></td>
+        <td>A2 · <span class="status pending">Not yet</span></td>
+        <td>–</td>
+        <td>Hunger already varies (1–2); different sizes not implemented</td>
+        <td>–</td><td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_GEESE_BLOCK</code></td>
+        <td>A2 · <span class="status ok">Implemented early</span></td>
+        <td>4, 6</td>
+        <td><code>Goose.isMobbing</code>, <code>Player.setMobbed</code>, <code>GameConfig.PLAYER_MOBBED_SPEED_MULTIPLIER</code></td>
+        <td><code>PlayerTest.beingMobbedSlowsThePlayer</code>, <code>GameWorldTest.playerIsSlowedWhileMobbedByAChasingGoose</code>,
+            <code>GooseTest.chasingGooseStopsWhenTouchingPlayer</code>, <code>GameWorldTest.geeseDoNotStackOnTopOfEachOther</code></td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_GEESE_DISPERSE</code></td>
+        <td>A2 · <span class="status ok">Implemented early</span></td>
+        <td>4, 5</td>
+        <td><code>Goose.feed</code>, <code>GooseState.DISPERSED</code>, <code>GameWorld.removeDispersedGeese</code></td>
+        <td><code>GooseTest.dispersesWhenFullyFed</code>, <code>ItemTest.breadDispersesFullGoose</code>,
+            <code>GameWorldTest.dispersedGeeseAreRemovedAndCounted</code></td>
+        <td>MT-04</td>
+      </tr>
+      <tr>
+        <td><code>FR_INITIAL_INVENTORY</code></td>
+        <td>A1 part · <span class="status ok">Implemented</span></td>
+        <td>2</td>
+        <td><code>GameWorld.createStartingInventory</code>: 2 item types (Bread ×4, Whistle ×3). A2 needs 5 types.</td>
+        <td><code>GameWorldTest.startingInventoryHasTwoItemTypes</code></td>
+        <td>MT-04</td>
+      </tr>
+      <tr>
+        <td><code>FR_USE_ITEM</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>2, 4, 5</td>
+        <td><code>GameWorld.useSelectedItem</code>, <code>Item</code>, <code>FoodItem</code>, <code>ScareItem</code>, <code>Inventory</code></td>
+        <td><code>ItemTest</code> (5 tests), <code>GameWorldTest.usingItemAffectsOnlyGeeseInRange</code>,
+            <code>GameWorldTest.usingItemWithNoGeeseInRangeStillUsesItUp</code>, <code>GameWorldTest.cannotUseItemsWhilePausedOrWithEmptyInventory</code>,
+            <code>InventoryTest</code> (9 tests)</td>
+        <td>MT-04</td>
+      </tr>
+      <tr>
+        <td><code>FR_INVENTORY_DISPLAY</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>1</td>
+        <td><code>Hud</code> (inventory bar, selected item and description)</td>
+        <td>Rendering not unit-testable; selection model covered by <code>InventoryTest</code></td>
+        <td>MT-04</td>
+      </tr>
+      <tr>
+        <td><code>FR_PICKUP_PLACEMENT</code></td>
+        <td>A2 · <span class="status pending">Not yet</span></td>
+        <td>–</td><td>–</td><td>–</td><td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_PICKUP_COLLECT</code></td>
+        <td>A2 · <span class="status pending">Not yet</span></td>
+        <td>–</td><td>–</td><td>–</td><td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_EVENT_HIDDEN</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>2</td>
+        <td><code>WorldRenderer.drawTriggeredEvents</code> (only triggered events are drawn)</td>
+        <td><code>GameWorldTest.defaultWorldHasHiddenEventsThatStartUntriggered</code></td>
+        <td>MT-06</td>
+      </tr>
+      <tr>
+        <td><code>FR_EVENT_COUNT</code></td>
+        <td>A1 part · <span class="status ok">Implemented</span></td>
+        <td>2</td>
+        <td><code>GameWorld.createDefault</code>: 4 events (A1 needs 2; A2 needs 5)</td>
+        <td><code>GameWorldTest.defaultWorldHasHiddenEventsThatStartUntriggered</code></td>
+        <td>MT-06</td>
+      </tr>
+      <tr>
+        <td><code>FR_EVENT_TRIGGER</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>2, 6</td>
+        <td><code>HiddenEvent.isTriggeredBy</code>, <code>GameWorld.checkHiddenEvents</code></td>
+        <td><code>HiddenEventTest.triggersOnlyWithinRadius</code>, <code>GameWorldTest.hiddenEventsTriggerOnceAndAreCounted</code>,
+            <code>GameWorldTest.longFrameDoesNotSkipHiddenEvents</code></td>
+        <td>MT-06</td>
+      </tr>
+      <tr>
+        <td><code>FR_EVENT_EFFECT</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>2, 6</td>
+        <td><code>HiddenEvent.trigger</code> (at most once); <code>PicnicBasketEvent</code> (+2 Bread), <code>LuckyShortcutEvent</code> (geese lose track),
+            <code>GooseNestEvent</code> (+3 geese), <code>SlipperyPathEvent</code> (−15 s)</td>
+        <td><code>HiddenEventTest.triggersOnlyOnce</code>, <code>HiddenEventTest.picnicBasketAddsBreadToInventory</code>,
+            <code>HiddenEventTest.gooseNestSpawnsAngryGeeseAroundTheNest</code>, <code>HiddenEventTest.slipperyPathRemovesTime</code>,
+            <code>HiddenEventTest.luckyShortcutScaresAllGeese</code>, <code>GameWorldTest.negativeEventSpawnsGeeseAndShowsWarning</code></td>
+        <td>MT-06</td>
+      </tr>
+      <tr>
+        <td><code>FR_TIMER</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>3, 6</td>
+        <td><code>GameTimer</code>, <code>Hud</code> (countdown, red below 1:00)</td>
+        <td><code>GameTimerTest.defaultDurationIsFiveMinutes</code>, <code>GameTimerTest.tickReducesRemainingTime</code>,
+            <code>GameTimerTest.formatsAsMinutesAndSecondsRoundingUp</code></td>
+        <td>MT-01, MT-03</td>
+      </tr>
+      <tr>
+        <td><code>FR_TIMER_EXPIRE</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>3, 6</td>
+        <td><code>GameWorld.updateEndConditions</code></td>
+        <td><code>GameWorldTest.losesWhenTimerExpires</code>, <code>GameWorldTest.finishedGameIgnoresPauseAndCommands</code>,
+            <code>GameWorldTest.slipperyPathEndsTheGameEarlyButReportsRealPlayTime</code>,
+            <code>HeadlessGameSessionTest.idleSessionEndsInLossAfterFiveMinutes</code></td>
+        <td>MT-03</td>
+      </tr>
+      <tr>
         <td><code>FR_START_PAUSED</code></td>
-        <td>The game starts paused</td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
         <td>3</td>
-        <td><code>GameWorld</code> (initial state), <code>GameState</code>, <code>Hud</code> (start overlay)</td>
+        <td><code>GameWorld</code> (initial state), <code>Hud</code> (start overlay)</td>
         <td><code>GameWorldTest.startsPaused</code></td>
         <td>MT-01</td>
       </tr>
       <tr>
         <td><code>FR_PAUSE</code></td>
-        <td>The game can be paused and resumed at any time; nothing updates while paused</td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
         <td>3, 6</td>
-        <td><code>GameWorld.togglePause</code>, <code>GameWorld.pause</code>, <code>GameWorld.update</code>, <code>GameScreen.pause</code></td>
-        <td><code>GameWorldTest.nothingUpdatesWhilePaused</code>,
-            <code>GameWorldTest.togglePauseSwitchesBetweenPausedAndRunning</code>,
-            <code>GameWorldTest.pauseOnlyAffectsARunningGame</code>,
-            <code>HeadlessGameSessionTest.scriptedSessionRunsToCompletion</code></td>
+        <td><code>GameWorld.togglePause</code>, <code>GameWorld.pause</code>, <code>GameWorld.update</code>, <code>GameScreen.pause</code> (focus loss)</td>
+        <td><code>GameWorldTest.nothingUpdatesWhilePaused</code>, <code>GameWorldTest.togglePauseSwitchesBetweenPausedAndRunning</code>,
+            <code>GameWorldTest.pauseOnlyAffectsARunningGame</code>, <code>HeadlessGameSessionTest.scriptedSessionRunsToCompletion</code></td>
         <td>MT-01, MT-02</td>
       </tr>
       <tr>
-        <td><code>FR_TIMER_EXPIRE</code></td>
-        <td>The game lasts 5 real-world minutes; when the timer runs out the game ends</td>
-        <td>3, 6</td>
-        <td><code>GameTimer</code>, <code>GameWorld.updateEndConditions</code>, <code>GameConfig.GAME_DURATION_SECONDS</code>, <code>Hud</code></td>
-        <td><code>GameTimerTest</code> (5 tests),
-            <code>GameWorldTest.losesWhenTimerExpires</code>,
-            <code>GameWorldTest.finishedGameIgnoresPauseAndCommands</code>,
-            <code>HeadlessGameSessionTest.idleSessionEndsInLossAfterFiveMinutes</code></td>
-        <td>MT-03</td>
-      </tr>
-      <tr>
-        <td><code>FR_USE_ITEM</code></td>
-        <td>The player can use the selected item on geese within its range</td>
-        <td>2, 4, 5</td>
-        <td><code>GameWorld.useSelectedItem</code>, <code>Item</code>, <code>FoodItem</code>, <code>ScareItem</code>, <code>Inventory</code>, <code>Goose.feed</code>, <code>Goose.scare</code></td>
-        <td><code>ItemTest.breadFeedsGoose</code>, <code>ItemTest.whistleScaresGoose</code>,
-            <code>GameWorldTest.usingItemAffectsOnlyGeeseInRange</code>,
-            <code>GameWorldTest.usingItemWithNoGeeseInRangeStillUsesItUp</code>,
-            <code>GameWorldTest.cannotUseItemsWhilePausedOrWithEmptyInventory</code>,
-            <code>GooseTest.eatingGooseStaysStillThenResumesChasing</code>,
-            <code>GooseTest.scaredGooseRunsAwayFromPlayerThenReturnsToChasing</code></td>
-        <td>MT-04</td>
-      </tr>
-      <tr>
         <td><code>FR_ITEM_COUNTER</code></td>
-        <td>A counter shows how many items have been used and how many events triggered</td>
-        <td>5, 6</td>
-        <td><code>GameStats</code>, <code>Hud</code> (top bar)</td>
-        <td><code>GameStatsTest</code> (3 tests),
-            <code>GameWorldTest.usingItemAffectsOnlyGeeseInRange</code>,
-            <code>GameWorldTest.hiddenEventsTriggerOnceAndAreCounted</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>5</td>
+        <td><code>GameStats.recordItemUsed</code>, <code>Hud</code></td>
+        <td><code>GameStatsTest.recordsEachCounterIndependently</code>, <code>GameWorldTest.usingItemAffectsOnlyGeeseInRange</code>,
+            <code>GameWorldTest.cannotUseItemsWhilePausedOrWithEmptyInventory</code></td>
         <td>MT-05</td>
       </tr>
       <tr>
-        <td><code>FR_EVENT_TRIGGER</code></td>
-        <td>Hidden events are invisible until the player walks into them, then fire once</td>
-        <td>2, 6</td>
-        <td><code>HiddenEvent</code>, <code>PicnicBasketEvent</code>, <code>GooseNestEvent</code>, <code>GameWorld.checkHiddenEvents</code></td>
-        <td><code>HiddenEventTest</code> (5 tests),
-            <code>GameWorldTest.hiddenEventsTriggerOnceAndAreCounted</code>,
-            <code>GameWorldTest.negativeEventSpawnsGeeseAndShowsWarning</code>,
-            <code>GameWorldTest.defaultWorldHasTwoHiddenEventsThatStartHidden</code></td>
-        <td>MT-06</td>
-      </tr>
-      <tr>
-        <td><code>FR_GEESE_SPAWN</code></td>
-        <td>Geese are present at the start and more arrive over time</td>
-        <td>4, 6</td>
-        <td><code>GameWorld.updateSpawning</code>, <code>GameWorld.spawnGooseAt</code>, <code>GameMap</code> (spawn points)</td>
-        <td><code>GameWorldTest.geeseSpawnPeriodicallyUpToLimit</code>,
-            <code>GameWorldTest.geeseSpawnAwayFromThePlayer</code>,
-            <code>GameWorldTest.spawnedGeeseHaveHungerWithinConfiguredRange</code></td>
-        <td>–</td>
-      </tr>
-      <tr>
-        <td><code>FR_GEESE_DISPERSE</code></td>
-        <td>A goose fed until its hunger reaches zero leaves the map</td>
-        <td>4, 5</td>
-        <td><code>Goose.feed</code>, <code>GooseState.DISPERSED</code>, <code>GameWorld.removeDispersedGeese</code></td>
-        <td><code>GooseTest.dispersesWhenFullyFed</code>,
-            <code>ItemTest.breadDispersesFullGoose</code>,
-            <code>GameWorldTest.dispersedGeeseAreRemovedAndCounted</code></td>
-        <td>MT-04</td>
+        <td><code>FR_EVENT_COUNTER</code></td>
+        <td>A1 · <span class="status ok">Implemented</span></td>
+        <td>6</td>
+        <td><code>GameStats.recordEventTriggered</code>, <code>Hud</code></td>
+        <td><code>GameStatsTest.recordsEachCounterIndependently</code>, <code>GameWorldTest.hiddenEventsTriggerOnceAndAreCounted</code></td>
+        <td>MT-05</td>
       </tr>
       <tr>
         <td><code>FR_WIN_CONDITION</code></td>
-        <td>The player wins once enough geese have been dispersed</td>
-        <td>3, 5, 6</td>
-        <td><code>GameWorld.updateEndConditions</code>, <code>GameConfig.GEESE_TO_DISPERSE_FOR_WIN</code>, <code>EndScreen</code></td>
+        <td>A2 · <span class="status ok">Implemented early</span></td>
+        <td>3, 5</td>
+        <td><code>GameWorld.updateEndConditions</code>, <code>GameConfig.GEESE_TO_DISPERSE_FOR_WIN</code> (8; to be tuned for QR_BALANCE)</td>
         <td><code>GameWorldTest.winsWhenEnoughGeeseDispersed</code></td>
         <td>MT-07</td>
+      </tr>
+      <tr>
+        <td><code>FR_END_SCREEN</code></td>
+        <td>A1 result · <span class="status ok">Implemented</span> (score: A2)</td>
+        <td>3</td>
+        <td><code>EndScreen</code>, <code>GameSummary</code></td>
+        <td><code>GameWorldTest.winsWhenEnoughGeeseDispersed</code> (summary contents)</td>
+        <td>MT-03, MT-07</td>
+      </tr>
+      <tr>
+        <td><code>FR_SCORE_BASE</code></td>
+        <td>A2 · <span class="status pending">Not yet</span></td>
+        <td>–</td><td>Time taken is already recorded in <code>GameSummary</code></td><td>–</td><td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_SCORE_ITEMS</code></td>
+        <td>A2 · <span class="status pending">Not yet</span></td>
+        <td>–</td><td>Wasted items are already detected in <code>GameWorld.useSelectedItem</code></td><td>–</td><td>–</td>
+      </tr>
+      <tr>
+        <td><code>FR_SCORE_EVENTS</code></td>
+        <td>A2 · <span class="status pending">Not yet</span></td>
+        <td>–</td><td>–</td><td>–</td><td>–</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="quality">Quality requirements</h2>
+  <table>
+    <thead><tr><th>Requirement</th><th>Fit criterion (Req1)</th><th>How it is met / verified</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>QR_FRAME_RATE</code></td><td>≥ 30 FPS on a lab machine</td>
+        <td>Simple shape rendering, no assets to load. Measured on a lab machine: MT-09</td>
+        <td><span class="status pending">Not yet measured</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_INPUT_RESPONSE</code></td><td>Movement begins &lt; 100 ms after key press</td>
+        <td>Keys are read every frame, so movement starts within one frame (about 17 ms at 60 FPS). Checked in MT-08</td>
+        <td><span class="status ok">Met by design</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_TIMER_ACCURACY</code></td><td>Drift &lt; 1 s over 5 minutes, excluding pauses</td>
+        <td>Timer advanced by real frame time using doubles. <code>GameTimerTest.staysAccurateOverAFullSessionOfFrames</code>,
+            <code>GameWorldTest.slowFrameAdvancesTimerByFullRealTime</code>; stopwatch check in MT-03</td>
+        <td><span class="status ok">Met (automated)</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_PAUSE_RESPONSE</code></td><td>All updates stop within 0.5 s of pausing</td>
+        <td>Pause takes effect in the same frame. <code>GameWorldTest.nothingUpdatesWhilePaused</code>; MT-02</td>
+        <td><span class="status ok">Met (automated)</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_LEARNABILITY</code></td><td>80% of users move, use an item and pause within 2 min unaided</td>
+        <td>Controls are shown on the start/pause overlay. To be measured in the A2 user evaluation</td>
+        <td><span class="status pending">A2 evaluation</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_MAP_CLARITY</code></td><td>80% of users identify where they can and can't go</td>
+        <td>Labelled buildings, a distinct lake, a hard map edge. To be measured in the A2 user evaluation</td>
+        <td><span class="status pending">A2 evaluation</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_BALANCE</code></td><td>30–70% of testers win within 5 minutes</td>
+        <td>All balance values are in <code>GameConfig</code> for tuning. To be measured in A2 play-testing</td>
+        <td><span class="status pending">A2 evaluation</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_SCORE_TRANSPARENCY</code></td><td>End screen shows a score breakdown</td>
+        <td>Depends on scoring (A2)</td>
+        <td><span class="status pending">A2</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_STABILITY</code></td><td>0 crashes across 3 consecutive 5-minute sessions</td>
+        <td><code>HeadlessGameSessionTest</code> plays full sessions automatically; MT-10 on the real JAR</td>
+        <td><span class="status pending">Manual run pending</span></td>
+      </tr>
+      <tr>
+        <td><code>QR_EXTENSIBILITY</code></td><td>New item/event added without modifying existing item or event classes</td>
+        <td>Abstract <code>Item</code> and <code>HiddenEvent</code>. Shown in practice: <code>LuckyShortcutEvent</code> and
+            <code>SlipperyPathEvent</code> were added with no change to any existing item or event class</td>
+        <td><span class="status ok">Met</span></td>
       </tr>
     </tbody>
   </table>
 
-  <h2 id="brief">Brief features without an ID yet</h2>
-  <p class="note">
-    These Assessment 1 features are implemented and tested, but the v1 diagrams didn't give them
-    requirement IDs. Assign IDs to match <strong>Req1.pdf</strong>, then update this table, the code
-    comments and the test names.
-  </p>
+  <h2 id="constraint">Constraint requirements</h2>
   <table>
-    <thead><tr><th>Feature (from the product brief)</th><th>Implemented in</th><th>Automated tests</th><th>Manual tests</th></tr></thead>
+    <thead><tr><th>Requirement</th><th>How it is met</th><th>Status</th></tr></thead>
     <tbody>
-      <tr>
-        <td>The player controls a student avatar</td>
-        <td><code>Player.move</code>, <code>GameWorld.setPlayerDirection</code>, <code>GameScreen</code> (keyboard)</td>
-        <td><code>PlayerTest</code> (7 tests), <code>GameWorldTest.playerMovesOnlyWhileRunning</code></td>
-        <td>MT-08</td>
-      </tr>
-      <tr>
-        <td>A campus map with clear limits on where the player can go</td>
-        <td><code>GameMap.createCampus</code>, <code>Obstacle</code>, <code>WorldRenderer</code></td>
-        <td><code>GameMapTest</code> (8 tests), <code>PlayerTest.isBlockedByBuildingsAndSlidesAlongThem</code>,
-            <code>PlayerTest.isBlockedByWaterAndMapEdges</code></td>
-        <td>MT-08</td>
-      </tr>
-      <tr>
-        <td>An onslaught of geese stops the player from simply running away</td>
-        <td><code>Goose.chase</code>, <code>Goose.isMobbing</code>, <code>Player.setMobbed</code></td>
-        <td><code>GooseTest.chasingGooseMovesTowardsPlayerAtGooseSpeed</code>,
-            <code>GooseTest.chasingGooseStopsWhenTouchingPlayer</code>,
-            <code>PlayerTest.beingMobbedSlowsThePlayer</code>,
-            <code>GameWorldTest.playerIsSlowedWhileMobbedByAChasingGoose</code>,
-            <code>GameWorldTest.geeseDoNotStackOnTopOfEachOther</code></td>
-        <td>–</td>
-      </tr>
-      <tr>
-        <td>A starting inventory with two item types (A1)</td>
-        <td><code>GameWorld.createStartingInventory</code>, <code>FoodItem.bread</code>, <code>ScareItem.whistle</code>, <code>Inventory</code></td>
-        <td><code>GameWorldTest.startingInventoryHasTwoItemTypes</code>, <code>InventoryTest</code> (9 tests),
-            <code>GameWorldTest.itemSelectionIsForwardedToInventory</code></td>
-        <td>MT-04</td>
-      </tr>
-      <tr>
-        <td>Two hidden events, one positive and one negative (A1)</td>
-        <td><code>PicnicBasketEvent</code>, <code>GooseNestEvent</code>, <code>GameWorld.createDefault</code></td>
-        <td><code>GameWorldTest.defaultWorldHasTwoHiddenEventsThatStartHidden</code>,
-            <code>HiddenEventTest.picnicBasketAddsBreadToInventory</code>,
-            <code>HiddenEventTest.gooseNestSpawnsAngryGeeseAroundTheNest</code></td>
-        <td>MT-06</td>
-      </tr>
+      <tr><td><code>CR_JAVA</code></td><td>Compiled with <code>--release 17</code> (<code>build.gradle</code>), producing Java 17 class files</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>CR_EXECUTABLE</code></td><td><code>./gradlew lwjgl3:jar</code> builds one JAR with all dependencies; CI builds it on Windows, macOS and Linux; the Release workflow publishes it. MT-10 runs it on a lab machine</td><td><span class="status ok">Met</span> (lab check: MT-10)</td></tr>
+      <tr><td><code>CR_SINGLE_PLAYER</code></td><td>One <code>Player</code>, keyboard only</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>CR_2D_TOPDOWN</code></td><td><code>WorldRenderer</code> draws a 2D top-down view</td><td><span class="status ok">Met</span></td></tr>
+      <tr><td><code>CR_LICENCES</code></td><td>libGDX (Apache 2.0), LWJGL (BSD 3-Clause), JUnit (EPL 2.0, tests only); no third-party art or audio. See README</td><td><span class="status ok">Met</span></td></tr>
     </tbody>
   </table>
 
   <h2 id="manual">Manual test cases</h2>
   <p>
-    These cover the presentation layer (<code>com.goosepatrol.screen</code>), which needs a real
-    window and keyboard and so can't be unit-tested. Run them on the released JAR and record
-    the result, date and tester.
+    These cover what automated tests can't: drawing, keyboard input and behaviour on real
+    hardware. Run them on the released JAR and record the result, date and tester.
   </p>
   <table>
-    <thead><tr><th>ID</th><th>Requirement</th><th>Steps</th><th>Expected result</th><th>Result</th></tr></thead>
+    <thead><tr><th>ID</th><th>Requirements</th><th>Steps</th><th>Expected result</th><th>Result</th></tr></thead>
     <tbody>
       <tr>
-        <td>MT-01</td><td>FR_START_PAUSED, FR_PAUSE</td>
+        <td>MT-01</td><td>FR_START_PAUSED, FR_PAUSE, FR_TIMER</td>
         <td>Launch the game. Wait 5 seconds. Press P.</td>
-        <td>The start overlay ("Press P to start") is shown, the timer stays at 5:00 and geese don't move. After pressing P the overlay disappears and the timer starts counting down.</td>
+        <td>The start overlay ("Press P to start") with the controls is shown, the timer stays at 5:00 and geese don't move. After pressing P the overlay disappears and the timer counts down.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-02</td><td>FR_PAUSE</td>
-        <td>During play, press ESC, wait, then press ESC again. Then click another application window and come back.</td>
-        <td>"Paused" overlay shown; the timer stops and resumes from the same value. Losing window focus pauses the game automatically.</td>
+        <td>MT-02</td><td>FR_PAUSE, QR_PAUSE_RESPONSE</td>
+        <td>During play, press ESC, wait, then press ESC again. Then click another window and come back.</td>
+        <td>Everything stops as soon as the key is pressed; the timer resumes from the same value. Losing window focus pauses the game automatically.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-03</td><td>FR_TIMER_EXPIRE</td>
-        <td>Start the game and play without dispersing 8 geese until the timer runs out.</td>
-        <td>The timer turns red below 1:00. At 0:00 the end screen shows "TIME'S UP!" with time played 5:00.</td>
+        <td>MT-03</td><td>FR_TIMER, FR_TIMER_EXPIRE, FR_END_SCREEN, QR_TIMER_ACCURACY</td>
+        <td>Start the game and a stopwatch together. Avoid all hidden events and play without dispersing 8 geese until the timer runs out.</td>
+        <td>The timer turns red below 1:00. At 0:00 the end screen shows "TIME'S UP!" with time played 5:00. The stopwatch reads 5:00 ± 1 s.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-04</td><td>FR_USE_ITEM, FR_GEESE_DISPERSE</td>
-        <td>Let geese approach. Select Bread (key 1) and press SPACE with geese inside the range circle. Repeat with the Whistle (key 5).</td>
-        <td>Bread: geese in range lose an orange hunger dot and stop to eat; full geese disappear and a "flew away" message is shown. Whistle: geese in range turn pale and run away, then return. The used item leaves the inventory bar.</td>
+        <td>MT-04</td><td>FR_INITIAL_INVENTORY, FR_USE_ITEM, FR_INVENTORY_DISPLAY, FR_GEESE_DISPERSE</td>
+        <td>Check the inventory bar. Let geese approach. Select Bread (key 1) and press SPACE with geese inside the range circle. Repeat with the Whistle (key 5).</td>
+        <td>The bar shows 4 Bread and 3 Whistles with the selected slot highlighted. Bread: geese in range lose an orange hunger dot and stop to eat; full geese disappear with a "flew away" message. Whistle: geese in range turn pale and run away, then return. Used items leave the bar.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-05</td><td>FR_ITEM_COUNTER</td>
+        <td>MT-05</td><td>FR_ITEM_COUNTER, FR_EVENT_COUNTER</td>
         <td>Use two items and trigger one hidden event.</td>
         <td>The top bar shows "Items used: 2" and "Events triggered: 1".</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-06</td><td>FR_EVENT_TRIGGER</td>
-        <td>Look for the event locations before triggering them, then walk to the east of the lake (goose nest) and to the far right of the map (picnic basket).</td>
-        <td>Nothing is visible before triggering. On triggering: a message appears (green for the picnic, red for the nest) and a coloured marker remains. The picnic adds 2 Bread; the nest spawns 3 geese.</td>
+        <td>MT-06</td><td>FR_EVENT_HIDDEN, FR_EVENT_TRIGGER, FR_EVENT_EFFECT, FR_EVENT_COUNT</td>
+        <td>Look for the four event locations before triggering them, then visit each: the path south-west of the lake, east of the lake, between the Library and Computer Science, and the far right of the map.</td>
+        <td>Nothing is visible before triggering. Each event fires once with a message and leaves a marker (green = good, red = bad): slippery path −15 s; goose nest +3 geese; lucky shortcut, where all geese run off; picnic basket +2 Bread.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-07</td><td>FR_WIN_CONDITION</td>
+        <td>MT-07</td><td>FR_WIN_CONDITION, FR_END_SCREEN</td>
         <td>Disperse 8 geese before the timer runs out. On the end screen, press R.</td>
-        <td>The end screen shows "YOU ESCAPED!" with the time played and statistics. R starts a new game in the paused state.</td>
+        <td>The end screen shows "YOU ESCAPED!" with time played and statistics. R starts a new game in the paused state.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
       <tr>
-        <td>MT-08</td><td>Movement / map limits</td>
-        <td>Move with WASD and with the arrow keys, including diagonally. Walk into a building, the lake and each edge of the map. Resize the window.</td>
-        <td>The player moves smoothly and can't enter buildings, the lake or leave the map, sliding along walls. When resized, the game scales with black bars and the HUD stays readable.</td>
+        <td>MT-08</td><td>FR_PLAYER_MOVE, FR_MAP_BOUNDS, FR_CAMPUS_THEME, QR_INPUT_RESPONSE</td>
+        <td>Move with WASD and with the arrow keys, including diagonally. Walk into a building, the lake and each map edge. Resize the window.</td>
+        <td>Movement starts immediately and is smooth. The player can't enter buildings, the lake or leave the map, and slides along walls. Six labelled campus locations are visible. When resized, the game scales with black bars.</td>
+        <td><span class="status pending">Not yet run</span></td>
+      </tr>
+      <tr>
+        <td>MT-09</td><td>QR_FRAME_RATE</td>
+        <td>On a University lab machine, run the JAR and play for 2 minutes with at least 9 geese on screen, using an FPS overlay or tool.</td>
+        <td>Frame rate stays at or above 30 FPS throughout.</td>
+        <td><span class="status pending">Not yet run</span></td>
+      </tr>
+      <tr>
+        <td>MT-10</td><td>QR_STABILITY, CR_EXECUTABLE, CR_JAVA</td>
+        <td>On a University lab machine (Java 17 or later), run <code>java -jar GoosePatrol.jar</code> and play three full sessions in a row (use R to restart).</td>
+        <td>The JAR starts without installing anything else; no crashes or errors in any of the three sessions.</td>
         <td><span class="status pending">Not yet run</span></td>
       </tr>
     </tbody>

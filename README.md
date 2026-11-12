@@ -22,19 +22,26 @@ runs out. Built with [libGDX](https://libgdx.com/) and originally generated with
 - **Whistle** scares nearby geese away for a few seconds but doesn't feed them.
 - Geese slow you down when they crowd you, and more geese arrive over time.
 - **Win** by dispersing 8 geese. **Lose** if the 5-minute timer runs out.
-- Two **hidden events** are somewhere on campus. They are invisible until you walk into them.
+- Four **hidden events** are somewhere on campus, two good and two bad. They are invisible until
+  you walk into them.
 
 ## Assessment 1 scope
 
-| Brief requirement (A1) | Where in the code |
-| --- | --- |
-| Two starting inventory items | `item.FoodItem` (Bread), `item.ScareItem` (Whistle), `logic.GameWorld#createStartingInventory` |
-| Two hidden events | `event.PicnicBasketEvent` (positive), `event.GooseNestEvent` (negative) |
-| 5-minute timer; starts paused; pause at any time | `logic.GameTimer`, `logic.GameState`, `logic.GameWorld#togglePause` |
-| Counter of items used and events triggered | `logic.GameStats`, drawn by `screen.Hud` |
-| Simple map with clear limits | `entity.GameMap#createCampus`, `entity.Obstacle` |
+Requirement IDs are those in Req1. The full matrix (requirement → design → code → tests) is on
+the website's traceability page (`website/traceability.html`).
 
-Balance values all live in `GameConfig`.
+| Requirements (A1) | Where in the code |
+| --- | --- |
+| FR_INITIAL_INVENTORY, FR_USE_ITEM, FR_INVENTORY_DISPLAY | `item.FoodItem` (Bread), `item.ScareItem` (Whistle), `item.Inventory`, `logic.GameWorld#useSelectedItem`, `screen.Hud` |
+| FR_EVENT_HIDDEN, FR_EVENT_TRIGGER, FR_EVENT_EFFECT, FR_EVENT_COUNT | `event.HiddenEvent` and four subclasses: `PicnicBasketEvent`, `LuckyShortcutEvent` (positive); `GooseNestEvent`, `SlipperyPathEvent` (negative) |
+| FR_TIMER, FR_TIMER_EXPIRE, FR_START_PAUSED, FR_PAUSE | `logic.GameTimer`, `logic.GameState`, `logic.GameWorld#update` / `#togglePause` |
+| FR_ITEM_COUNTER, FR_EVENT_COUNTER | `logic.GameStats`, drawn by `screen.Hud` |
+| FR_PLAYER_MOVE, FR_MAP_BOUNDS | `entity.Player`, `entity.GameMap#createCampus`, `entity.Obstacle` |
+| FR_GEESE_SPAWN | `entity.Goose`, `logic.GameWorld#updateSpawning` |
+| FR_END_SCREEN (result) | `screen.EndScreen` |
+
+Implemented early (scoped A2 in Req1): FR_GEESE_BLOCK, FR_GEESE_DISPERSE, FR_WIN_CONDITION and
+FR_CAMPUS_THEME. Balance values all live in `GameConfig`.
 
 ## Project structure
 
@@ -46,7 +53,7 @@ core/      game logic and screens (platform independent)
     logic/   GameWorld, GameState, GameTimer, GameStats, GameSummary, WorldMessage
     entity/  Entity, Player, Goose, GooseState, GameMap, Obstacle
     item/    Item, FoodItem, ScareItem, Inventory
-    event/   HiddenEvent, PicnicBasketEvent, GooseNestEvent
+    event/   HiddenEvent, PicnicBasketEvent, GooseNestEvent, LuckyShortcutEvent, SlipperyPathEvent
     screen/  GameScreen, WorldRenderer, Hud, EndScreen
   src/test/java/           JUnit 5 tests (unit tests plus a headless libGDX smoke test)
 lwjgl3/    desktop launcher (LWJGL3 backend)
@@ -61,7 +68,9 @@ gameplay can be unit-tested without a window.
 
 ## Building and running
 
-Requires JDK 21 or later. Gradle downloads everything else.
+The game runs on Java 17 or later (CR_JAVA); the code is compiled with `--release 17`. The Gradle
+build itself runs on JDK 21 (set in `gradle/gradle-daemon-jvm.properties`) and downloads that JDK
+automatically if it isn't installed. Gradle downloads everything else too.
 
 ```sh
 ./gradlew lwjgl3:run      # run the game

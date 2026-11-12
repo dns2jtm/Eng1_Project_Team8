@@ -12,14 +12,16 @@ in `v2/`, or start a `v3/` for Assessment 2.
 
 ## Diagrams
 
+Requirement IDs are those in **Req1** (UR_, FR_, QR_ and CR_ prefixes).
+
 | # | Diagram | UML type | Main requirements |
 | --- | --- | --- | --- |
-| 1 | Component | Structural (component) | all |
-| 2 | Class | Structural (class) | all |
-| 3 | Game state machine | Behavioural (state machine) | FR_START_PAUSED, FR_PAUSE, FR_TIMER_EXPIRE, FR_WIN_CONDITION |
-| 4 | Goose state machine | Behavioural (state machine) | FR_GEESE_SPAWN, FR_USE_ITEM, FR_GEESE_DISPERSE |
-| 5 | Use an item | Behavioural (sequence) | FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE |
-| 6 | One frame of gameplay | Behavioural (sequence) | FR_PAUSE, FR_EVENT_TRIGGER, FR_GEESE_SPAWN, FR_TIMER_EXPIRE |
+| 1 | Component | Structural (component) | all; QR_EXTENSIBILITY (separate logic and presentation layers) |
+| 2 | Class | Structural (class) | all; QR_EXTENSIBILITY (`Item` and `HiddenEvent` subclasses) |
+| 3 | Game state machine | Behavioural (state machine) | FR_START_PAUSED, FR_PAUSE, FR_TIMER_EXPIRE, FR_WIN_CONDITION, FR_END_SCREEN |
+| 4 | Goose state machine | Behavioural (state machine) | FR_GEESE_SPAWN, FR_GEESE_BLOCK, FR_USE_ITEM, FR_GEESE_DISPERSE |
+| 5 | Use an item | Behavioural (sequence) | FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE, FR_WIN_CONDITION |
+| 6 | One frame of gameplay | Behavioural (sequence) | FR_PAUSE, FR_TIMER, FR_EVENT_TRIGGER, FR_EVENT_EFFECT, FR_EVENT_COUNTER, FR_GEESE_SPAWN, FR_GEESE_BLOCK, FR_TIMER_EXPIRE, QR_TIMER_ACCURACY |
 
 **Language and tools:** UML 2 (component, class, state machine and sequence diagrams), written as
 text in [PlantUML](https://plantuml.com/) and rendered with Graphviz. Because the diagrams are
@@ -49,3 +51,5 @@ java -jar plantuml.jar -tsvg *.puml
 | 10 | Win condition and goose dispersal implemented (v1 marked them "A2") | Without them the game had no way to win; both were already in the v1 state machines |
 | 11 | `GameConfig` added for all balance constants | One place to tune difficulty; documentation can point to a single source |
 | 12 | `WorldMessage` added for on-screen feedback | Players need to see what an item or event did |
+| 13 | `GameWorld.update` advances the timer by the real frame time, then simulates movement in steps of at most 0.05 s; `GameTimer` tracks play time separately and supports `removeTime` | QR_TIMER_ACCURACY: capping the frame time made the timer run slow when the game lagged; small steps keep collisions stable and stop fast movement skipping events |
+| 14 | Two more hidden events, `LuckyShortcutEvent` and `SlipperyPathEvent`, from the base game on `main` | Added as new subclasses with no change to existing event classes (shows QR_EXTENSIBILITY); four events in total (FR_EVENT_COUNT) |

@@ -8,7 +8,7 @@ state Distracted {
 }
 
 Chasing --> Eating : fed, still hungry\n[FR_USE_ITEM]
-Chasing --> Fleeing : scared\n[FR_USE_ITEM]
+Chasing --> Fleeing : scared (Whistle or\nLuckyShortcutEvent) [FR_USE_ITEM]
 Eating --> Fleeing : scared
 Fleeing --> Eating : fed, still hungry
 Distracted --> Chasing : distraction timer ends
@@ -16,7 +16,7 @@ Chasing --> Dispersed : fed, hunger reaches 0\n[FR_GEESE_DISPERSE]
 Distracted --> Dispersed : fed, hunger reaches 0
 Dispersed --> [*] : removed from map,\ncounted in GameStats
 
-Chasing : walks towards the player;\nslows the player when touching
+Chasing : walks towards the player;\nslows the player when touching\n[FR_GEESE_BLOCK]
 Eating : stays still for 2.5 s
 Fleeing : runs away from the player
 @enduml

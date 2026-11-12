@@ -47,11 +47,11 @@
   <h3>Behavioural diagrams</h3>
   <figure>
     <img src="architecture/v2/state-game.png" alt="Game state machine v2">
-    <figcaption>Game state machine (v2). FR_START_PAUSED, FR_PAUSE, FR_TIMER_EXPIRE, FR_WIN_CONDITION.</figcaption>
+    <figcaption>Game state machine (v2). FR_START_PAUSED, FR_PAUSE, FR_TIMER_EXPIRE, FR_WIN_CONDITION, FR_END_SCREEN.</figcaption>
   </figure>
   <figure>
     <img src="architecture/v2/state-goose.png" alt="Goose state machine v2">
-    <figcaption>Goose state machine (v2). FR_GEESE_SPAWN, FR_USE_ITEM, FR_GEESE_DISPERSE.</figcaption>
+    <figcaption>Goose state machine (v2). FR_GEESE_SPAWN, FR_GEESE_BLOCK, FR_USE_ITEM, FR_GEESE_DISPERSE.</figcaption>
   </figure>
   <figure>
     <img src="architecture/v2/seq-use-item.png" alt="Use item sequence diagram v2">
@@ -59,7 +59,7 @@
   </figure>
   <figure>
     <img src="architecture/v2/seq-update.png" alt="Frame update sequence diagram v2">
-    <figcaption>Sequence: one frame of gameplay (v2). FR_PAUSE, FR_EVENT_TRIGGER, FR_GEESE_SPAWN, FR_TIMER_EXPIRE.</figcaption>
+    <figcaption>Sequence: one frame of gameplay (v2). FR_PAUSE, FR_TIMER, FR_EVENT_TRIGGER, FR_EVENT_EFFECT, FR_EVENT_COUNTER, FR_GEESE_SPAWN, FR_GEESE_BLOCK, FR_TIMER_EXPIRE, QR_TIMER_ACCURACY.</figcaption>
   </figure>
 
   <h2 id="evolution">Changes from v1 to v2</h2>
@@ -78,6 +78,8 @@
       <tr><td>10</td><td>Win condition and dispersal implemented (v1 marked them A2)</td><td>Gives the game a way to win; already in the v1 state machines</td></tr>
       <tr><td>11</td><td><code>GameConfig</code> for all balance constants</td><td>One place to tune difficulty</td></tr>
       <tr><td>12</td><td><code>WorldMessage</code> for on-screen feedback</td><td>Players see what items and events did</td></tr>
+      <tr><td>13</td><td>Timer advanced by real frame time; movement simulated in steps of at most 0.05 s; <code>GameTimer.removeTime</code></td><td>QR_TIMER_ACCURACY; stable collisions; fast movement can't skip events</td></tr>
+      <tr><td>14</td><td><code>LuckyShortcutEvent</code> and <code>SlipperyPathEvent</code> added (from the base game on <code>main</code>)</td><td>New subclasses with no change to existing classes (QR_EXTENSIBILITY); four events (FR_EVENT_COUNT)</td></tr>
     </tbody>
   </table>
 

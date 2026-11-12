@@ -7,6 +7,6 @@ Running --> Lost : timer reaches 0\n[FR_TIMER_EXPIRE]
 Running --> Won : geese dispersed >= 8\n[FR_WIN_CONDITION]
 Running : timer, geese, player, events\nand spawning update every frame
 Paused : nothing updates;\npause overlay shown
-Won --> [*] : EndScreen\n(R starts a new game)
-Lost --> [*] : EndScreen\n(R starts a new game)
+Won --> [*] : EndScreen [FR_END_SCREEN]\n(R starts a new game)
+Lost --> [*] : EndScreen [FR_END_SCREEN]\n(R starts a new game)
 @enduml

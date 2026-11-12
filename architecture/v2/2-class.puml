@@ -25,8 +25,10 @@ package logic {
   }
 
   class GameTimer {
-    - remainingSeconds : Float
+    - remainingSeconds : Double
+    - elapsedSeconds : Double
     + tick(delta : Float)
+    + removeTime(seconds : Float)
     + isExpired() : Boolean
   }
 
@@ -122,6 +124,8 @@ package event {
   }
   class PicnicBasketEvent
   class GooseNestEvent
+  class LuckyShortcutEvent
+  class SlipperyPathEvent
 }
 
 Entity <|-- Player
@@ -130,6 +134,8 @@ Item <|-- FoodItem
 Item <|-- ScareItem
 HiddenEvent <|-- PicnicBasketEvent
 HiddenEvent <|-- GooseNestEvent
+HiddenEvent <|-- LuckyShortcutEvent
+HiddenEvent <|-- SlipperyPathEvent
 
 GameWorld *-- "1" GameTimer : timer
 GameWorld *-- "1" GameStats : stats
