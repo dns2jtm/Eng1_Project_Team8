@@ -157,6 +157,9 @@ Thumbs.db
 
 ## Special cases:
 
+## Locally assembled website preview (scripts/build-website.sh)
+/_site/
+
 ## Module course material (lecture slides, assessment paper) is kept locally only.
 /course-material/
 

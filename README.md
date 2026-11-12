@@ -90,10 +90,21 @@ the download quarantine flag with `xattr -d com.apple.quarantine gradlew`.
 - **Releases** (`.github/workflows/release.yml`): push a tag such as `v1.0.0` to publish the JAR as
   a GitHub Release. The latest JAR is always at
   <https://github.com/soham-apte/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar>.
-- **Website** (`.github/workflows/website.yml`): every push to `main` publishes the team website
-  in `website/` to GitHub Pages, together with the architecture diagrams and the latest test and
-  coverage reports: <https://soham-apte.github.io/Eng1_Project_Team8/>. A repository admin must
-  first set *Settings → Pages → Source* to **GitHub Actions** (one-time setup).
+- **Website** (`.github/workflows/website.yml`): publishes the team website in `website/` to
+  GitHub Pages, together with the architecture diagrams and the latest test and coverage reports:
+  <https://soham-apte.github.io/Eng1_Project_Team8/>. The repository stays **private until
+  submission**, so the workflow skips itself while the repo is private. To preview locally:
+  `./gradlew test && scripts/build-website.sh && python3 -m http.server -d _site 8000`.
+
+### At submission
+
+1. Merge the final work into `main` and tag the release: `git tag v1.0.0 && git push origin v1.0.0`
+   (on a private repo the Release workflow still runs, but only collaborators can download the JAR
+   until the repo is public).
+2. Make the repository public (Settings → General → Danger Zone → Change visibility).
+3. Settings → Pages → Source: **GitHub Actions**, then Actions → Website → **Run workflow**.
+4. Check that the website, the JAR download link and the repository link all work in a private
+   browser window, since that's what markers and other teams will see.
 
 ```sh
 git tag v1.0.0

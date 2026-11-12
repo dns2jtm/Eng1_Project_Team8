@@ -2,9 +2,16 @@
 # Before publishing, it runs the tests and adds the latest JUnit and JaCoCo reports to the site,
 # along with the architecture diagrams, so the published reports always match main.
 #
-# One-time setup by a repository admin: Settings -> Pages -> Build and deployment ->
-# Source: "GitHub Actions".
+# The repository stays private until submission, and GitHub Pages isn't available for private
+# repositories on free accounts. So this workflow SKIPS ITSELF while the repo is private, and
+# starts publishing as soon as the repo is made public.
+#
+# At submission: make the repo public, then a repository admin sets Settings -> Pages ->
+# Build and deployment -> Source: "GitHub Actions", and runs this workflow from the Actions tab
+# ("Run workflow").
 # Site URL: https://soham-apte.github.io/Eng1_Project_Team8/
+#
+# To preview the site locally at any time: ./gradlew test && scripts/build-website.sh
 name: Website
 
 on:
@@ -24,6 +31,8 @@ concurrency:
 jobs:
   build:
     name: Build site
+    # Skip while the repository is private (see the comment at the top of this file).
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
 
     steps:
@@ -45,17 +54,7 @@ jobs:
         run: ./gradlew test --continue --console=plain
 
       - name: Assemble site
-        run: |
-          mkdir -p _site/architecture _site/testing/tests _site/testing/coverage
-          cp -r website/. _site/
-          cp -r architecture/v1 architecture/v2 _site/architecture/
-          if [ -d core/build/reports/tests/test ]; then
-            cp -r core/build/reports/tests/test/. _site/testing/tests/
-          fi
-          if [ -d core/build/reports/jacoco/test/html ]; then
-            cp -r core/build/reports/jacoco/test/html/. _site/testing/coverage/
-          fi
-          touch _site/.nojekyll
+        run: scripts/build-website.sh
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
