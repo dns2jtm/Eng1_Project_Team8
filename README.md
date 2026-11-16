@@ -1,6 +1,6 @@
 # Goose Patrol
 
-[![CI](https://github.com/soham-apte/Eng1_Project_Team8/actions/workflows/ci.yml/badge.svg)](https://github.com/soham-apte/Eng1_Project_Team8/actions/workflows/ci.yml)
+[![CI](https://github.com/dns2jtm/Eng1_Project_Team8/actions/workflows/ci.yml/badge.svg)](https://github.com/dns2jtm/Eng1_Project_Team8/actions/workflows/ci.yml)
 
 A single-player 2D top-down game built for ENG1 (Cohort 2, Team 8). You play as a University of York
 student surrounded by hungry geese on campus, and have to disperse 8 geese before the 5-minute timer
@@ -88,7 +88,7 @@ quarantine attribute with `xattr -d com.apple.quarantine gradlew`.
 - **Releases** (`.github/workflows/release.yml`) builds and attaches `GoosePatrol.jar` whenever a version
   tag such as `v1.0.0` is pushed.
 - **Website** (`.github/workflows/website.yml`) deploys `website/` along with the latest test/coverage
-  reports and UML diagrams to GitHub Pages (<https://soham-apte.github.io/Eng1_Project_Team8/>).
+  reports and UML diagrams to GitHub Pages (<https://dns2jtm.github.io/Eng1_Project_Team8/>).
   To build and preview the site locally:
   `./gradlew test && bash scripts/build-website.sh && python3 -m http.server -d _site 8000`.
 

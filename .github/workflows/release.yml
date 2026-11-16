@@ -2,7 +2,7 @@
 # builds the runnable JAR and publishes it as a GitHub Release.
 #
 # The JAR is also attached as GoosePatrol.jar, so the team website can use one permanent link:
-#   https://github.com/soham-apte/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar
+#   https://github.com/dns2jtm/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar
 name: Release
 
 on:

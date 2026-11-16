@@ -9,7 +9,7 @@
 # At submission: make the repo public, then a repository admin sets Settings -> Pages ->
 # Build and deployment -> Source: "GitHub Actions", and runs this workflow from the Actions tab
 # ("Run workflow").
-# Site URL: https://soham-apte.github.io/Eng1_Project_Team8/
+# Site URL: https://dns2jtm.github.io/Eng1_Project_Team8/
 #
 # To preview the site locally at any time: ./gradlew test && scripts/build-website.sh
 name: Website
