@@ -1,0 +1,51 @@
+# Release: pushing a version tag (e.g. `git tag v1.0.0 && git push origin v1.0.0`) runs the tests,
+# builds the runnable JAR and publishes it as a GitHub Release.
+#
+# The JAR is also attached as GoosePatrol.jar, so the team website can use one permanent link:
+#   https://github.com/soham-apte/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Test and build JAR (version taken from the tag)
+        run: ./gradlew test lwjgl3:jar --console=plain -PprojectVersion="${GITHUB_REF_NAME#v}"
+
+      - name: Add stable-name copy of the JAR
+        run: cp lwjgl3/build/libs/GoosePatrol-*.jar GoosePatrol.jar
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Goose Patrol ${{ github.ref_name }} (Assessment 1)
+          body: |
+            ENG1 Assessment 1 executable release for Cohort 2, Team 8 (*Goose Patrol*).
+
+            - **Run (Windows / Linux):** `java -jar GoosePatrol.jar` (Java 17+)
+            - **Run (macOS):** `java -XstartOnFirstThread -jar GoosePatrol.jar` (or double-click / `java -jar`, which restarts on thread 0 via `StartupHelper`)
+            - **Included:** 2D campus map (`1280 x 720`), 5-minute real-time survival timer, pause/resume, 2 inventory items (Bread, Whistle), 4 hidden events, usage counters, and embedded third-party licence notices (`THIRD-PARTY-NOTICES.txt` + `licenses/`).
+          files: |
+            GoosePatrol.jar
+            lwjgl3/build/libs/GoosePatrol-*.jar

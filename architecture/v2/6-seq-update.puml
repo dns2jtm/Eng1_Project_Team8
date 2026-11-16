@@ -1,0 +1,47 @@
+@startuml seq-update
+title One frame of gameplay (v2) [FR_PAUSE, FR_TIMER, FR_EVENT_TRIGGER, FR_EVENT_EFFECT, FR_EVENT_COUNTER, FR_GEESE_SPAWN, FR_GEESE_BLOCK, FR_TIMER_EXPIRE, QR_TIMER_ACCURACY]
+participant "GameScreen" as S
+participant "world : GameWorld" as W
+participant "timer : GameTimer" as T
+participant "goose : Goose" as G
+participant "player : Player" as P
+participant "event : HiddenEvent" as E
+participant "stats : GameStats" as ST
+
+S -> S : handleInput()
+S -> W : update(delta)
+alt state == RUNNING
+  W -> T : tick(delta)
+  note right of T : full real frame time\n[QR_TIMER_ACCURACY]
+  loop simulation steps of at most 0.05 s
+    loop each goose
+      W -> G : chase(player, map, step)
+    end
+    W -> W : separateGeese()
+    W -> P : setMobbed(any goose touching)
+    W -> P : move(direction, step, map)
+    loop each event
+      W -> E : isTriggeredBy(player)
+      opt true
+        W -> E : trigger(world)
+        E -> E : apply(world)
+        E -> W : effect, e.g. spawnGooseAt(),\nadd items or remove time
+        W -> ST : recordEventTriggered()
+        W -> W : showMessage(event message)
+      end
+    end
+    W -> W : updateSpawning(step)
+  end
+  W -> W : updateEndConditions()
+  note right of W
+    WON if dispersed >= target,
+    else LOST if timer expired
+  end note
+else PAUSED / WON / LOST
+  W --> S : return (nothing updates)
+end
+S -> S : render world + HUD
+opt world finished
+  S -> S : show EndScreen
+end
+@enduml

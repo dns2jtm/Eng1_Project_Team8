@@ -1,0 +1,159 @@
+@startuml class
+title Goose Patrol - Class Diagram (v2, A1 implementation)
+left to right direction
+hide empty members
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 20
+skinparam ranksep 30
+
+package logic {
+  enum GameState {
+    PAUSED
+    RUNNING
+    WON
+    LOST
+  }
+
+  class GameWorld {
+    - state : GameState
+    + update(delta : Float)
+    + togglePause()
+    + pause()
+    + setPlayerDirection(dx : Float, dy : Float)
+    + useSelectedItem() : Boolean
+    + spawnGooseAt(x : Float, y : Float) : Goose
+    + showMessage(text : String, tone : Tone)
+    + createSummary() : GameSummary
+  }
+
+  class GameTimer {
+    - remainingSeconds : Double
+    - elapsedSeconds : Double
+    + tick(delta : Float)
+    + removeTime(seconds : Float)
+    + isExpired() : Boolean
+  }
+
+  class GameStats {
+    - itemsUsed : Integer
+    - eventsTriggered : Integer
+    - geeseDispersed : Integer
+    + recordItemUsed()
+    + recordEventTriggered()
+    + recordGeeseDispersed(count : Integer)
+  }
+
+  class GameSummary <<record>>
+  class WorldMessage <<record>>
+}
+
+package event {
+  abstract class HiddenEvent {
+    - triggered : Boolean
+    - radius : Float
+    + isTriggeredBy(player : Player) : Boolean
+    + trigger(world : GameWorld)
+    # {abstract} apply(world : GameWorld)
+    + {abstract} isPositive() : Boolean
+  }
+  class PicnicBasketEvent
+  class GooseNestEvent
+  class LuckyShortcutEvent
+  class SlipperyPathEvent
+}
+
+package entity {
+  abstract class Entity {
+    - x : Float
+    - y : Float
+    - radius : Float
+    # moveBy(dx : Float, dy : Float, map : GameMap)
+    # {abstract} canOccupy(map : GameMap, x : Float, y : Float) : Boolean
+  }
+
+  class Player {
+    - speed : Float
+    - mobbed : Boolean
+    + move(dx : Float, dy : Float, delta : Float, map : GameMap)
+  }
+
+  enum GooseState {
+    CHASING
+    DISTRACTED
+    DISPERSED
+  }
+
+  class Goose {
+    - hunger : Integer
+    - state : GooseState
+    + chase(target : Player, map : GameMap, delta : Float)
+    + feed(amount : Integer)
+    + scare(seconds : Float)
+    + isMobbing(player : Player) : Boolean
+  }
+
+  class GameMap {
+    + isWalkable(x : Float, y : Float) : Boolean
+    + canPlayerOccupy(x : Float, y : Float, radius : Float) : Boolean
+    + canGooseOccupy(x : Float, y : Float, radius : Float) : Boolean
+    + {static} createCampus() : GameMap
+  }
+
+  class Obstacle {
+    - type : Type
+    + overlapsCircle(x : Float, y : Float, radius : Float) : Boolean
+  }
+}
+
+package item {
+  class Inventory {
+    - selectedIndex : Integer
+    + add(item : Item)
+    + remove(item : Item) : Boolean
+    + selected() : Item
+    + selectNext()
+    + selectPrevious()
+  }
+
+  abstract class Item {
+    - name : String
+    - range : Float
+    + {abstract} applyTo(goose : Goose)
+  }
+  class FoodItem {
+    - foodValue : Integer
+    + {static} bread() : FoodItem
+  }
+  class ScareItem {
+    - scareSeconds : Float
+    + {static} whistle() : ScareItem
+  }
+}
+
+Entity <|-- Player
+Entity <|-- Goose
+Item <|-- FoodItem
+Item <|-- ScareItem
+HiddenEvent <|-- PicnicBasketEvent
+HiddenEvent <|-- GooseNestEvent
+HiddenEvent <|-- LuckyShortcutEvent
+HiddenEvent <|-- SlipperyPathEvent
+
+GameWorld *-- "1" GameTimer : timer
+GameWorld *-- "1" GameStats : stats
+GameWorld *-- "1" GameMap : map
+GameWorld *-- "1" Player : player
+GameWorld *-- "*" Goose : geese
+GameWorld *-- "*" HiddenEvent : events
+GameWorld --> GameState
+GameWorld ..> GameSummary : creates
+GameWorld --> "0..1" WorldMessage : message
+GameMap *-- "*" Obstacle
+Goose --> GooseState
+Player *-- "1" Inventory : inventory
+Inventory o-- "*" Item : items
+Entity ..> GameMap : collision checks
+Item ..> Goose : applyTo
+HiddenEvent ..> GameWorld : apply
+@enduml

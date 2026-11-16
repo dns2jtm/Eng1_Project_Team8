@@ -1,0 +1,22 @@
+@startuml state-goose
+title Goose - State Machine (v2, A1 implementation)
+[*] --> Chasing : spawned at a spawn point\nor by GooseNestEvent [FR_GEESE_SPAWN]
+
+state Distracted {
+  state Eating
+  state Fleeing
+}
+
+Chasing --> Eating : fed, still hungry\n[FR_USE_ITEM]
+Chasing --> Fleeing : scared (Whistle or\nLuckyShortcutEvent) [FR_USE_ITEM]
+Eating --> Fleeing : scared
+Fleeing --> Eating : fed, still hungry
+Distracted --> Chasing : distraction timer ends
+Chasing --> Dispersed : fed, hunger reaches 0\n[FR_GEESE_DISPERSE]
+Distracted --> Dispersed : fed, hunger reaches 0
+Dispersed --> [*] : removed from map,\ncounted in GameStats
+
+Chasing : walks towards the player;\nslows the player when touching\n[FR_GEESE_BLOCK]
+Eating : stays still for 2.5 s
+Fleeing : runs away from the player
+@enduml

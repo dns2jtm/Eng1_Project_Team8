@@ -1,0 +1,88 @@
+# Continuous integration: runs on every push and on every pull request into main.
+# - Builds and tests on Linux, Windows and macOS (the game must run on all three).
+# - Publishes test results, the JaCoCo coverage report and the runnable JAR as artifacts.
+# - Writes a coverage summary to the workflow run page.
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Test and build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle (with dependency caching)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run tests and build runnable JAR
+        shell: bash
+        run: ./gradlew test lwjgl3:jar --console=plain
+
+      - name: Coverage summary
+        if: always() && matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          python3 - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          import os, xml.etree.ElementTree as ET
+          path = 'core/build/reports/jacoco/test/jacocoTestReport.xml'
+          if not os.path.exists(path):
+              print('No coverage report produced.')
+              raise SystemExit
+          root = ET.parse(path).getroot()
+          print('## Test coverage (core module)\n')
+          print('| Package | Line coverage | Branch coverage |')
+          print('| --- | --- | --- |')
+          def pct(node, kind):
+              for c in node.findall('counter'):
+                  if c.get('type') == kind:
+                      covered, missed = int(c.get('covered')), int(c.get('missed'))
+                      return f'{100 * covered / (covered + missed):.0f}%'
+              return 'n/a'
+          for pkg in root.findall('package'):
+              print(f"| `{pkg.get('name').replace('/', '.')}` | {pct(pkg, 'LINE')} | {pct(pkg, 'BRANCH')} |")
+          print(f"| **Total** | **{pct(root, 'LINE')}** | **{pct(root, 'BRANCH')}** |")
+          EOF
+
+      - name: Upload test and coverage reports
+        if: always() && matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-and-coverage-reports
+          path: |
+            core/build/reports/tests/test
+            core/build/reports/jacoco/test
+          if-no-files-found: warn
+
+      - name: Upload runnable JAR
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: GoosePatrol-jar
+          path: lwjgl3/build/libs/*.jar
+          if-no-files-found: error

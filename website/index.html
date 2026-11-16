@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goose Patrol - ENG1 Cohort 2, Team 8</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="inner">
+    <a class="brand" href="index.html">Goose Patrol<span>ENG1 · Cohort 2 · Team 8</span></a>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="planning.html">Planning</a>
+      <a href="traceability.html">Traceability</a>
+      <a href="testing.html">Testing &amp; CI</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Goose Patrol</h1>
+  <p class="lead">
+    A single-player 2D top-down libGDX game built for ENG1 (Cohort 2, Team 8). You play as a University of York
+    student surrounded by hungry geese on campus: use items sensibly, watch out for hidden campus events, and
+    disperse 8 geese before the 5-minute timer runs out.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Play the game</h3>
+      <p>Runnable JAR with all dependencies included. Requires Java 17 or later.</p>
+      <a class="button" href="https://github.com/soham-apte/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar">Download JAR</a>
+      <p><small>Run with <code>java -jar GoosePatrol.jar</code> ·
+        <a href="https://github.com/soham-apte/Eng1_Project_Team8/releases">all releases</a></small></p>
+    </div>
+    <div class="card">
+      <h3>Source code</h3>
+      <p>Git repository on GitHub: Java 17 source, 88 JUnit 5 tests, PlantUML diagrams and CI workflows.</p>
+      <a class="button" href="https://github.com/soham-apte/Eng1_Project_Team8">View repository</a>
+    </div>
+    <div class="card">
+      <h3>Build status</h3>
+      <p>Automated tests and JAR builds run on Linux, Windows and macOS on every push.</p>
+      <a href="https://github.com/soham-apte/Eng1_Project_Team8/actions/workflows/ci.yml">
+        <img src="https://github.com/soham-apte/Eng1_Project_Team8/actions/workflows/ci.yml/badge.svg" alt="CI status">
+      </a>
+      <p><a href="testing.html">Test results and coverage &rarr;</a></p>
+    </div>
+  </div>
+
+  <h2 id="assessment-1">Assessment 1 deliverables</h2>
+  <table>
+    <thead>
+      <tr><th>Deliverable</th><th>Document (PDF)</th><th>Status</th><th>Supporting material</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2. Requirements</td>
+        <td><a href="docs/Req1.pdf">Req1.pdf</a></td>
+        <td><span class="status ok">Published</span></td>
+        <td><a href="traceability.html">Requirements traceability matrix</a></td>
+      </tr>
+      <tr>
+        <td>3. Architecture</td>
+        <td><a href="docs/Arch1.pdf">Arch1.pdf</a></td>
+        <td><span class="status ok">Published</span></td>
+        <td><a href="architecture.html">UML diagrams (v1 &amp; v2), SVGs, CRC cards &amp; evolution</a></td>
+      </tr>
+      <tr>
+        <td>4. Method selection and planning</td>
+        <td><a href="docs/Plan1.pdf">Plan1.pdf</a></td>
+        <td><span class="status ok">Published</span></td>
+        <td><a href="planning.html">Weekly plan snapshots (Weeks 1&ndash;6) &amp; Gantt schedule</a></td>
+      </tr>
+      <tr>
+        <td>5. Risk assessment and mitigation</td>
+        <td><a href="docs/Risk1.pdf">Risk1.pdf</a></td>
+        <td><span class="status ok">Published</span></td>
+        <td><a href="planning.html#risk-summary">Weekly risk monitoring log</a></td>
+      </tr>
+      <tr>
+        <td>6. Implementation</td>
+        <td><a href="docs/Impl1.pdf">Impl1.pdf</a></td>
+        <td><span class="status ok">Published</span></td>
+        <td><a href="https://github.com/soham-apte/Eng1_Project_Team8">Source repository</a> ·
+            <a href="https://github.com/soham-apte/Eng1_Project_Team8/releases/latest/download/GoosePatrol.jar">Executable JAR</a> ·
+            <a href="testing.html">Test &amp; coverage reports</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="how-to-play">How to play</h2>
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><code>ENTER</code> / <code>P</code> / <code>ESC</code></td><td>Start, pause and resume (the game starts paused)</td></tr>
+      <tr><td><code>W A S D</code> / arrow keys</td><td>Move around campus</td></tr>
+      <tr><td><code>SPACE</code></td><td>Use the selected item on all geese within range</td></tr>
+      <tr><td><code>1</code>&ndash;<code>9</code>, <code>Q</code> / <code>E</code> / <code>TAB</code></td><td>Select an inventory item</td></tr>
+      <tr><td><code>R</code> / <code>ENTER</code> (end screen)</td><td>Play again (<code>ESC</code> to quit)</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="team">Team</h2>
+  <p>
+    <strong>ENG1 (COM00019I), Department of Computer Science, University of York (Cohort 2, Team 8):</strong><br>
+    Soham Apte · Elliott Christie · James Hammett · Dawud Kazi · Evan O'Reilly · Daniel Sawa · Karthik Udaiyar.
+  </p>
+</main>
+
+<footer>
+  Goose Patrol · ENG1 Cohort 2, Team 8 · Built with libGDX (Apache 2.0)
+</footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+@startuml component
+title Goose Patrol - Component Diagram (v2, A1 implementation)
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+
+package "Desktop launcher (lwjgl3 module)" {
+  [Lwjgl3Launcher]
+}
+
+package "Presentation (GoosePatrolGame + com.goosepatrol.screen)" as PRES {
+  [GoosePatrolGame]
+  [GameScreen]
+  [WorldRenderer]
+  [Hud]
+  [EndScreen]
+}
+
+package "Game Logic (com.goosepatrol.logic)" {
+  [GameWorld]
+  [GameTimer]
+  [GameStats]
+  [GameSummary]
+}
+
+package "Entities (com.goosepatrol.entity)" {
+  [Player]
+  [Goose]
+  [GameMap]
+}
+
+package "Items (com.goosepatrol.item)" {
+  [Inventory]
+  [Item]
+}
+
+package "Hidden Events (com.goosepatrol.event)" {
+  [HiddenEvent]
+}
+
+[GameConfig] as CFG
+
+package "libGDX (3rd party)" as gdx {
+  [Rendering / Input / Application loop] as LIB
+}
+
+[Lwjgl3Launcher] --> [GoosePatrolGame] : starts
+[GoosePatrolGame] --> [GameScreen] : shows
+[GoosePatrolGame] --> [EndScreen] : shows
+[GameScreen] --> [GameWorld] : commands +\nupdate(delta)
+[GameScreen] --> [WorldRenderer] : render(world)
+[GameScreen] --> [Hud] : render(world)
+[WorldRenderer] ..> [GameWorld] : reads
+[Hud] ..> [GameWorld] : reads
+[EndScreen] ..> [GameSummary] : reads
+
+[GameWorld] --> [GameTimer]
+[GameWorld] --> [GameStats]
+[GameWorld] --> [Player]
+[GameWorld] --> [Goose]
+[GameWorld] --> [GameMap]
+[GameWorld] --> [HiddenEvent]
+[GameWorld] ..> [GameSummary] : creates
+[Player] --> [Inventory]
+[Inventory] --> [Item]
+[Item] ..> [Goose] : applyTo
+[HiddenEvent] ..> [GameWorld] : apply(world)
+
+[GameWorld] ..> CFG : balance values
+
+PRES ..> LIB : draws with /\nreads input from
+
+note bottom of [GameWorld]
+  The logic, entity, item and event packages
+  contain no rendering or input code, so they
+  are fully unit-testable without a window.
+end note
+@enduml

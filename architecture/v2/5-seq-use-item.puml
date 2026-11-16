@@ -1,0 +1,35 @@
+@startuml seq-use-item
+title Use an item (v2) [FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE, FR_WIN_CONDITION]
+actor Student as U
+participant "GameScreen" as S
+participant "world : GameWorld" as W
+participant "inventory : Inventory" as I
+participant "item : Item" as IT
+participant "goose : Goose" as G
+participant "stats : GameStats" as ST
+
+U -> S : press SPACE
+S -> W : useSelectedItem()
+alt state != RUNNING
+  W --> S : false
+else
+  W -> I : selected()
+  I --> W : item (or null)
+  alt inventory empty
+    W --> S : false
+  else
+    loop for each goose within item.range of player
+      W -> IT : applyTo(goose)
+      IT -> G : feed(amount) / scare(seconds)
+    end
+    W -> I : remove(item)
+    W -> ST : recordItemUsed()
+    W -> W : removeDispersedGeese()
+    W -> ST : recordGeeseDispersed(n)
+    W -> W : showMessage(result)
+    W -> W : updateEndConditions()
+    note right: WON if enough geese dispersed
+    W --> S : true
+  end
+end
+@enduml

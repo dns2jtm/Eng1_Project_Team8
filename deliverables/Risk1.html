@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Risk1 - Goose Patrol - Cohort 2, Team 8</title>
+<link rel="stylesheet" href="deliverables.css">
+</head>
+<body>
+
+<h1>Risk Assessment and Mitigation (Risk1) - Goose Patrol</h1>
+<div class="meta">
+  ENG1 (COM00019I) Assessment 1 · Cohort 2, Team 8 · Linked project plan: <a href="https://soham-apte.github.io/Eng1_Project_Team8/planning.html">soham-apte.github.io/Eng1_Project_Team8/planning.html</a> · Traceability: <a href="https://soham-apte.github.io/Eng1_Project_Team8/traceability.html">traceability.html</a>
+</div>
+
+<h2 style="margin-top:4px;">5(a) Risk management process and risk register format</h2>
+
+<h3>Risk management process followed</h3>
+<p>We followed Sommerville's four-step risk management cycle [1] from the ENG1 risk lecture [2], scaled appropriately for a 6-week, 7-person student game project:</p>
+<ol>
+  <li><b>Risk Identification:</b> In Week 2 (and reviewed each week), we listed practical risks across six standard areas [1, 2]: <i>Schedule/Project</i>, <i>People/Team</i>, <i>Requirements/Scope</i>, <i>Architecture/Integration</i>, <i>Technology/Platform</i>, and <i>Legal/Licensing</i>.</li>
+  <li><b>Risk Analysis (Qualitative Scales):</b> Because this is a short desktop game project with no past failure data, exact percentage probabilities would be guesswork [2]. Following the module guidance, we scored <b>Likelihood</b> and <b>Impact</b> on simple three-level scales (Low / Medium / High) to rank overall <b>Exposure</b>:
+    <table class="compact-table" style="margin:3px 0;">
+      <tr><th style="width:22%;">Level</th><th style="width:39%;">Likelihood (L)</th><th style="width:39%;">Impact (I) if the risk happens</th></tr>
+      <tr><td><b>Low</b></td><td>Unlikely over the 6-week project (&lt;20%).</td><td>Half a day or less of extra work; absorbed without losing marks.</td></tr>
+      <tr><td><b>Medium</b></td><td>Realistic in a student group project (20&ndash;50%).</td><td>Delays a work package by 1&ndash;3 days or reduces non-essential polish.</td></tr>
+      <tr><td><b>High</b></td><td>Likely without a clear plan (&gt;50%).</td><td>Threatens a submission deadline, page limit, licence rule or runnable JAR.</td></tr>
+    </table>
+    <i>Exposure rule:</i> <code>High &times; High = Critical</code>; <code>High &times; Med</code> or <code>Med &times; High = High</code>; <code>Med &times; Med</code> or <code>Low &times; High = Medium</code>; otherwise <code>Low</code>.
+  </li>
+  <li><b>Risk Planning (Reducing Impact When Risks Happen):</b> Following [1, 3] and ENG1 Section 4.8, risks like illness, diverging code branches or driver issues cannot be prevented just by "trying harder". Each <b>Mitigation</b> entry in our register therefore sets out <b>practical steps that limit the damage and keep us moving if the risk occurs</b> (such as backup reviewers, isolating OpenGL in <code>screen/</code>, dropping optional visual extras, or keeping fallback builds).</li>
+  <li><b>Risk Monitoring:</b> High-exposure risks were checked alongside our weekly plan snapshots, updating each status (<i>Active</i>, <i>Triggered &amp; Mitigated</i>, or <i>Retired</i>) up to submission.</li>
+</ol>
+
+<h3>Justification of risk register format</h3>
+<ul>
+  <li><b>Clear IDs and categories (<code>ID</code>, <code>Category</code>):</b> Fixed IDs (<code>R01</code>&ndash;<code>R12</code>) let our weekly plan snapshots refer directly to specific risks, while categories check that we covered team, schedule and legal risks as well as code bugs [1, 2].</li>
+  <li><b>Cause and effect in one column (<code>Risk event &amp; project effect</code>):</b> Writing both what might happen and how it hurts the project avoids vague labels like "Git problems" and justifies the Impact score [2].</li>
+  <li><b>Simple <code>L</code> / <code>I</code> / <code>Exposure</code> ratings:</b> Easy to scan quickly in weekly meetings without complex spreadsheets.</li>
+  <li><b>Concrete <code>Mitigation</code> actions:</b> Focuses on fallback plans and damage limitation if triggered.</li>
+  <li><b>One named <code>Owner</code> and live <code>Status</code>:</b> Every risk has <b>one named person</b> watching it (never "All") so someone is clearly responsible [2], and the status column records which mitigations actually had to be used in Weeks 5&ndash;6.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">5(b) Project risk register</h2>
+
+<table class="compact-table">
+  <tr>
+    <th style="width:6%;">ID</th>
+    <th style="width:11%;">Category</th>
+    <th style="width:25%;">Risk event &amp; project effect</th>
+    <th style="width:6%;">L</th>
+    <th style="width:6%;">I</th>
+    <th style="width:8%;">Exp.</th>
+    <th style="width:27%;">Mitigation (impact reduction &amp; fallback)</th>
+    <th style="width:11%;">Owner / Status</th>
+  </tr>
+  <tr>
+    <td><b>R01</b></td>
+    <td>People / Team</td>
+    <td>A team member is ill or tied up with other coursework deadlines in Weeks 5&ndash;6, stalling their assigned section.</td>
+    <td>Med</td>
+    <td>High</td>
+    <td><span class="badge b-high">High</span></td>
+    <td>Pair every work package with a backup reviewer and keep all drafts/diagrams/code in Git; if an owner is unreachable for &gt;24 h in Week 6, the backup takes over and optional polish is cut first. Flag longer absences to module staff early (Section 4.11).</td>
+    <td>Evan O'Reilly<br><i>Active</i></td>
+  </tr>
+  <tr>
+    <td><b>R02</b></td>
+    <td>Arch. / Integration</td>
+    <td>Separate coding prototypes use different package layouts, causing merge conflicts and broken builds in Week 6.</td>
+    <td>Med</td>
+    <td>High</td>
+    <td><span class="badge b-high">High</span></td>
+    <td>Compare prototypes on a separate branch (<code>review/side-by-side</code>) instead of force-merging onto <code>main</code>; pick one clean architecture against <code>Req1</code> testability needs and port useful features across as clean subclasses.</td>
+    <td>Daniel Sawa<br><i>Triggered W6 &amp; Mitigated</i></td>
+  </tr>
+  <tr>
+    <td><b>R03</b></td>
+    <td>Schedule / Project</td>
+    <td>Coding overruns eat into the final days needed to write and check the five PDF reports (75% of technical marks).</td>
+    <td>Med</td>
+    <td>High</td>
+    <td><span class="badge b-high">High</span></td>
+    <td>Draft reports in parallel once <code>Req1</code> IDs and <code>v1</code> diagrams are fixed; freeze game features 48 h before deadline and keep graphics simple (GUI polish carries few marks per Section 4.5) to protect report quality.</td>
+    <td>Elliott Christie<br><i>Mitigated</i></td>
+  </tr>
+  <tr>
+    <td><b>R04</b></td>
+    <td>Tech. / Platform</td>
+    <td>Standalone JAR fails to open or hits Java/OpenGL issues on University lab PCs (<code>CR_JAVA</code>, <code>CR_EXECUTABLE</code>).</td>
+    <td>Low</td>
+    <td>High</td>
+    <td><span class="badge b-med">Med</span></td>
+    <td>Compile with <code>--release 17</code>, bundle LWJGL3 desktop natives plus <code>StartupHelper</code>, and stick to standard OpenGL 2.0 <code>ShapeRenderer</code>/<code>SpriteBatch</code> calls; if a lab issue appears, adjust launcher settings in <code>lwjgl3</code> without touching game logic.</td>
+    <td>James Hammett<br><i>Active (QA)</i></td>
+  </tr>
+  <tr>
+    <td><b>R05</b></td>
+    <td>Tech. / Testing</td>
+    <td>Game logic depends directly on an OpenGL window, blocking JUnit tests in CI and making A2 changes error-prone.</td>
+    <td>Low</td>
+    <td>High</td>
+    <td><span class="badge b-med">Med</span></td>
+    <td>Keep all OpenGL and input calls inside <code>screen/</code> so domain rules stay covered by fast headless JUnit tests even if rendering changes; cover the thin <code>screen/</code> classes with short manual checks (<code>MT-01</code>&ndash;<code>MT-10</code>).</td>
+    <td>Daniel Sawa<br><i>Retired</i></td>
+  </tr>
+  <tr>
+    <td><b>R06</b></td>
+    <td>Req. / Scope</td>
+    <td>Scope creep or confusion between A1 and A2 wastes time on extra features while leaving required A1 items unfinished.</td>
+    <td>Med</td>
+    <td>Med</td>
+    <td><span class="badge b-med">Med</span></td>
+    <td>Move optional ideas (e.g. extra difficulty modes) straight to an A2 list; prioritise the 17 A1 functional requirements first and record exact A1/A2 boundaries clearly in <code>Impl1.pdf</code> Section 6(b).</td>
+    <td>Dawud Kazi<br><i>Retired</i></td>
+  </tr>
+</table>
+
+<div class="page-break"></div>
+
+<table class="compact-table" style="margin-top:0;">
+  <tr>
+    <th style="width:6%;">ID</th>
+    <th style="width:11%;">Category</th>
+    <th style="width:25%;">Risk event &amp; project effect</th>
+    <th style="width:6%;">L</th>
+    <th style="width:6%;">I</th>
+    <th style="width:8%;">Exp.</th>
+    <th style="width:27%;">Mitigation (impact reduction &amp; fallback)</th>
+    <th style="width:11%;">Owner / Status</th>
+  </tr>
+  <tr>
+    <td><b>R07</b></td>
+    <td>Product / Quality</td>
+    <td>Slow frames or OS pauses cause timer drift (&gt;1 s) or let moving entities jump past walls and hidden events.</td>
+    <td>Med</td>
+    <td>Med</td>
+    <td><span class="badge b-med">Med</span></td>
+    <td>Tick <code>GameTimer</code> with double-precision real delta time while splitting movement and event checks into steps of at most <code>0.05 s</code> in <code>GameWorld.update</code>, capping how far anything moves in one step.</td>
+    <td>Daniel Sawa<br><i>Triggered W6 &amp; Mitigated</i></td>
+  </tr>
+  <tr>
+    <td><b>R08</b></td>
+    <td>Arch. / Handover</td>
+    <td>Late code edits leave UML diagrams, requirement IDs and reports out of sync, losing consistency marks (Section 4.1).</td>
+    <td>Med</td>
+    <td>High</td>
+    <td><span class="badge b-high">High</span></td>
+    <td>Use <code>traceability.html</code> as one shared checklist linking <code>Req1</code> IDs to diagrams, classes and tests, and re-render PNG/SVG diagrams directly from <code>architecture/v2/*.puml</code> whenever classes change.</td>
+    <td>Soham Apte<br><i>Mitigated</i></td>
+  </tr>
+  <tr>
+    <td><b>R09</b></td>
+    <td>Legal / Licensing</td>
+    <td>Bundled libraries or downloaded web sprites carry non-commercial (CC BY-NC) or incompatible copyleft licences (<code>CR_LICENCES</code>).</td>
+    <td>Med</td>
+    <td>High</td>
+    <td><span class="badge b-high">High</span></td>
+    <td>Draw the A1 campus, player and geese directly with libGDX <code>ShapeRenderer</code> so no unverified web art is needed; keep libGDX's transitive LGPL audio libraries unmodified in the unobfuscated JAR with <code>LGPL-2.1.txt</code> and source links included.</td>
+    <td>Karthik Udaiyar<br><i>Triggered W6 &amp; Mitigated</i></td>
+  </tr>
+  <tr>
+    <td><b>R10</b></td>
+    <td>Project / Packaging</td>
+    <td>Reports spill over strict page limits (e.g. cover pages pushing <code>Req1.pdf</code> past 4 content pages), causing trailing pages to be ignored (Section 3.3.1).</td>
+    <td>Med</td>
+    <td>High</td>
+    <td><span class="badge b-high">High</span></td>
+    <td>Use compact 2-line headers instead of full cover pages, control section breaks in CSS, check page counts automatically with <code>pdfinfo</code> in our build script, and place full tables/SVGs on the website with clear links (Section 4.2).</td>
+    <td>Evan O'Reilly<br><i>Triggered W6 &amp; Mitigated</i></td>
+  </tr>
+  <tr>
+    <td><b>R11</b></td>
+    <td>Tech. / Deployment</td>
+    <td>GitHub Pages or the <code>GoosePatrol.jar</code> release link returns 404 to markers if the repo is still private or a workflow fails.</td>
+    <td>Low</td>
+    <td>High</td>
+    <td><span class="badge b-med">Med</span></td>
+    <td>Follow a short submission checklist (make repo public, push <code>v1.0.0</code>, run Pages workflow) and test all links in a private browser window; also include full source, JAR and all 5 PDFs inside the VLE <code>.zip</code> as required.</td>
+    <td>Soham Apte<br><i>Active (Cutover)</i></td>
+  </tr>
+  <tr>
+    <td><b>R12</b></td>
+    <td>Product / Balance</td>
+    <td>Initial goose speeds, hunger values or the 8-goose win target feel too hard or too easy for casual players (<code>QR_BALANCE</code>).</td>
+    <td>Med</td>
+    <td>Low</td>
+    <td><span class="badge b-low">Low</span></td>
+    <td>Keep all balance numbers in <code>GameConfig.java</code> so tuning difficulty in Assessment 2 user testing only means changing constants in one file.</td>
+    <td>Karthik Udaiyar<br><i>Active (A2 Eval)</i></td>
+  </tr>
+</table>
+
+<h3>Summary at Assessment 1 submission</h3>
+<p>Four of our 12 tracked risks occurred during Weeks 5&ndash;6 (<code>R02</code> separate prototype branches, <code>R07</code> slow-frame timing/collision edge cases, <code>R09</code> transitive LGPL audio licences in the fat JAR, and <code>R10</code> draft page-count overflow) and were resolved using the planned mitigations above without missing our schedule. Remaining pre-submission checks (<code>R04</code> and <code>R11</code>) are covered by our packaging script and release checklist.</p>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">References</h2>
+<ul class="refs">
+  <li>[1] I. Sommerville, <i>Software Engineering</i>, 10th ed., Ch. 22 (Project Management and Risk Management). Harlow: Pearson, 2016.</li>
+  <li>[2] K. Barmpis, "Project Planning and Risk Management", ENG1 (COM00019I) lecture slides, Department of Computer Science, University of York, 2026.</li>
+  <li>[3] B. W. Boehm, "Software Risk Management: Principles and Practices", <i>IEEE Software</i>, vol. 8, no. 1, pp. 32&ndash;41, Jan. 1991.</li>
+</ul>
+
+</body>
+</html>

@@ -1,3 +1,7 @@
+plugins {
+  id 'jacoco'
+}
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
@@ -6,6 +10,32 @@ dependencies {
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+
+  // Automated testing: JUnit 5 for unit tests; the headless backend lets tests boot a real
+  // libGDX application without a window or GPU (used by the integration smoke test).
+  testImplementation platform("org.junit:junit-bom:$junitVersion")
+  testImplementation 'org.junit.jupiter:junit-jupiter'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events 'passed', 'skipped', 'failed'
+    exceptionFormat 'full'
+  }
+  finalizedBy jacocoTestReport
+}
+
+// Coverage report: core/build/reports/jacoco/test/html/index.html
+jacocoTestReport {
+  dependsOn test
+  reports {
+    xml.required = true
+    html.required = true
   }
 }
 
