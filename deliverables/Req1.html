@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Req1 - Goose Patrol - Cohort 2, Team 8</title>
+<link rel="stylesheet" href="deliverables.css">
+</head>
+<body>
+
+<h1>Requirements (Req1) - Goose Patrol</h1>
+<div class="meta">
+  ENG1 (COM00019I) Assessment 1 · Cohort 2, Team 8 · Members: Soham Apte, Elliott Christie, James Hammett, Dawud Kazi, Evan O'Reilly, Daniel Sawa, Karthik Udaiyar · Website: <a href="https://soham-apte.github.io/Eng1_Project_Team8/">soham-apte.github.io/Eng1_Project_Team8</a>
+</div>
+
+<h2 style="margin-top:4px;">2(a) Elicitation, negotiation and presentation</h2>
+
+<p><b>Stakeholders.</b> <i>Direct:</i> the customer (a module lecturer representing the University who may market and sell the game) and players; the customer described the target player as a 16-year-old student interested in computer science. <i>Indirect:</i> the ENG1 team that will take over, maintain and extend our project in Assessment 2.</p>
+
+<p><b>Elicitation.</b> We used two main elicitation techniques [1, 4]: (1) <b>Document analysis</b>, reading through the product brief and assessment paper to extract initial requirements and separate reduced Assessment 1 scope from full Assessment 2 scope; and (2) a <b>semi-structured customer interview</b>, preparing specific questions beforehand to clear up vague points in the brief while leaving room for follow-up questions. We considered user questionnaires and workplace observation [1], but ruled out questionnaires because a single customer sets the project brief, and ruled out observation because this is a new game with no existing system in use. Key points from the interview were:</p>
+
+<table>
+  <tr><th style="width:24%;">Question</th><th style="width:48%;">Customer answer</th><th style="width:28%;">Requirements affected</th></tr>
+  <tr>
+    <td><b>What counts as a hidden event?</b></td>
+    <td>A triggered activity that changes the game state; "hidden" means the player does not know its consequences in advance; the story must stay consistent; no marks for creativity alone.</td>
+    <td><code>FR_EVENT_HIDDEN</code>, <code>FR_EVENT_TRIGGER</code>, <code>FR_EVENT_EFFECT</code></td>
+  </tr>
+  <tr>
+    <td><b>How should the geese behave?</b></td>
+    <td>They should stop the player moving freely ("bullet hell" style crowding pressure).</td>
+    <td><code>FR_GEESE_SPAWN</code>, <code>FR_GEESE_BLOCK</code></td>
+  </tr>
+  <tr>
+    <td><b>Are multiple difficulties needed?</b></td>
+    <td>The game must be easy to play and short; a harder difficulty is optional.</td>
+    <td><code>UR_CASUAL</code>, <code>QR_LEARNABILITY</code></td>
+  </tr>
+  <tr>
+    <td><b>Any graphics preference?</b></td>
+    <td>2D top-down is fine.</td>
+    <td><code>CR_2D_TOPDOWN</code></td>
+  </tr>
+  <tr>
+    <td><b>Who is the target audience?</b></td>
+    <td>A 16-year-old student interested in computer science.</td>
+    <td><code>UR_CASUAL</code>, <code>QR_LEARNABILITY</code>, <code>QR_MAP_CLARITY</code></td>
+  </tr>
+  <tr>
+    <td><b>Where on campus should it be?</b></td>
+    <td>An open campus area with recognisable University features.</td>
+    <td><code>UR_CAMPUS_MAP</code>, <code>FR_CAMPUS_THEME</code></td>
+  </tr>
+</table>
+
+<p><b>Negotiation.</b> Different interpretations within the team were resolved against the brief and customer answers [1, 4]:</p>
+<ul>
+  <li><b>Keeping scope realistic (KISS):</b> Extra difficulty modes were left out of mandatory scope once the customer confirmed they were optional, avoiding unrequested complexity; speed and count values are kept in one place for tuning.</li>
+  <li><b>Turning subjective goals into testable targets:</b> Informal terms ("fun", "casual", "winnable") were turned into measurable Volere fit criteria [3] (<code>QR_LEARNABILITY</code>, <code>QR_MAP_CLARITY</code>, <code>QR_BALANCE</code>) to be checked during the Assessment 2 user evaluation. The win threshold in <code>FR_WIN_CONDITION</code> is left configurable for play-testing.</li>
+  <li><b>Splitting A1 and A2 clearly:</b> Every system requirement is tagged as <code>A1</code>, <code>A2</code>, or split <code>A1 / A2</code> to match the reduced Assessment 1 brief.</li>
+</ul>
+
+<p><b>Presentation.</b> Our requirements layout follows the ENG1 requirements lecture [4], Sommerville [1] and ISO/IEC/IEEE 29148 [2]:</p>
+<ul>
+  <li><b>Two levels of detail:</b> User requirements (<code>UR_</code>) state high-level goals in plain English for the customer; system requirements (<code>FR_</code>, <code>QR_</code>, <code>CR_</code>) state testable developer obligations without locking in class or method names too early [1, 4].</li>
+  <li><b>Readable, stable IDs:</b> Topic-based prefixes (<code>UR_</code>, <code>FR_</code>, <code>QR_</code>, <code>CR_</code>) do not break if rows are added or reordered, making it easy to reference the same IDs in UML diagrams, Java comments and tests [2, 4].</li>
+  <li><b>Fit criteria and priorities:</b> Every system requirement links back to its user requirement(s), every quality requirement includes a measurable fit criterion [3], and priorities use standard IEEE terms: <b>Shall</b> (mandatory) and <b>Should</b> (desirable) [2].</li>
+  <li><b>Tables rather than long use-case forms:</b> We considered full text and UML use-case templates [1, 4] but chose compact tables because continuous real-time game rules are clearer to read and cross-reference within the 4-page limit.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">2(b) User and system requirements</h2>
+
+<p><b>Overall product need:</b> A short, casual, single-player 2D game in which a University of York student escapes a flock of hungry geese on campus within 5 minutes by using items sensibly and dealing with hidden events.</p>
+
+<h3>User requirements</h3>
+<table class="compact-table">
+  <tr><th style="width:25%;">ID</th><th style="width:65%;">Description</th><th style="width:10%;">Priority</th></tr>
+  <tr><td><code>UR_PLAYER_AVATAR</code></td><td>The player shall control a character representing a UoY undergraduate student.</td><td>Shall</td></tr>
+  <tr><td><code>UR_CAMPUS_MAP</code></td><td>The game shall take place on a university-themed campus map with clear limits to where the player can go.</td><td>Shall</td></tr>
+  <tr><td><code>UR_GEESE_THREAT</code></td><td>Hungry geese shall pursue the player and prevent them from simply running to safety.</td><td>Shall</td></tr>
+  <tr><td><code>UR_INITIAL_ITEMS</code></td><td>The player shall start with an inventory of items to manage the geese.</td><td>Shall</td></tr>
+  <tr><td><code>UR_PICKUP_ITEMS</code></td><td>The player shall be able to find additional items on the map.</td><td>Shall</td></tr>
+  <tr><td><code>UR_HIDDEN_EVENTS</code></td><td>The map shall contain hidden events that trigger fun positive or negative interactions.</td><td>Shall</td></tr>
+  <tr><td><code>UR_TIME_LIMIT</code></td><td>The game shall last at most 5 minutes, and the player must escape within that time.</td><td>Shall</td></tr>
+  <tr><td><code>UR_PAUSE</code></td><td>The game shall start paused and the player shall be able to pause at any time.</td><td>Shall</td></tr>
+  <tr><td><code>UR_WIN_LOSE</code></td><td>The game shall end in victory once enough geese are dispersed, and in defeat if time runs out.</td><td>Shall</td></tr>
+  <tr><td><code>UR_SCORING</code></td><td>The game shall award a score based on speed, smart item use and handling of hidden events.</td><td>Shall</td></tr>
+  <tr><td><code>UR_PROGRESS_FEEDBACK</code></td><td>The player shall be able to see how many items they have used and events they have interacted with.</td><td>Shall</td></tr>
+  <tr><td><code>UR_CASUAL</code></td><td>The game shall be accessible and enjoyable for a casual audience.</td><td>Should</td></tr>
+</table>
+
+<h3>Functional requirements</h3>
+<table class="compact-table">
+  <tr><th style="width:24%;">ID</th><th style="width:44%;">Description</th><th style="width:20%;">User requirements</th><th style="width:12%;">Scope</th></tr>
+  <tr><td><code>FR_PLAYER_MOVE</code></td><td>The player shall move the avatar in all directions using keyboard input.</td><td><code>UR_PLAYER_AVATAR</code></td><td>A1</td></tr>
+  <tr><td><code>FR_MAP_BOUNDS</code></td><td>The avatar shall be unable to move outside the map or through obstacles (e.g. buildings, water).</td><td><code>UR_CAMPUS_MAP</code></td><td>A1</td></tr>
+  <tr><td><code>FR_CAMPUS_THEME</code></td><td>The map shall include at least 5 distinct university-style locations (e.g. library, lake, lecture hall).</td><td><code>UR_CAMPUS_MAP</code></td><td>A2</td></tr>
+  <tr><td><code>FR_GEESE_SPAWN</code></td><td>Geese shall spawn on the map and pursue the player (A1: initial and periodic spawns with direct chase; A2: full wave/variant spawning).</td><td><code>UR_GEESE_THREAT</code></td><td>A1 (basic), A2 (full)</td></tr>
+  <tr><td><code>FR_GEESE_VARIETY</code></td><td>Geese shall come in at least 2 distinct sizes differing visibly in radius and gameplay behaviour (e.g. speed or food demand).</td><td><code>UR_GEESE_THREAT</code></td><td>A2</td></tr>
+  <tr><td><code>FR_GEESE_BLOCK</code></td><td>Geese in contact with the player shall slow or block the avatar's movement.</td><td><code>UR_GEESE_THREAT</code></td><td>A2</td></tr>
+  <tr><td><code>FR_GEESE_DISPERSE</code></td><td>A goose shall leave the player once its food demand has been satisfied.</td><td><code>UR_GEESE_THREAT</code>, <code>UR_WIN_LOSE</code></td><td>A2</td></tr>
+  <tr><td><code>FR_INITIAL_INVENTORY</code></td><td>The player shall start with 2 item types in A1 and at least 5 distinct item types in A2.</td><td><code>UR_INITIAL_ITEMS</code></td><td>A1 / A2</td></tr>
+  <tr><td><code>FR_USE_ITEM</code></td><td>The player shall select and use an item, which applies its effect to nearby geese and is consumed or put on cooldown.</td><td><code>UR_INITIAL_ITEMS</code>, <code>UR_PICKUP_ITEMS</code></td><td>A1</td></tr>
+  <tr><td><code>FR_INVENTORY_DISPLAY</code></td><td>The current inventory shall be visible on screen at all times.</td><td><code>UR_INITIAL_ITEMS</code>, <code>UR_CASUAL</code></td><td>A1</td></tr>
+  <tr><td><code>FR_PICKUP_PLACEMENT</code></td><td>At least 5 distinct pickup item types shall be placed on the map.</td><td><code>UR_PICKUP_ITEMS</code></td><td>A2</td></tr>
+  <tr><td><code>FR_PICKUP_COLLECT</code></td><td>Walking over a pickup shall add it to the inventory and remove it from the map.</td><td><code>UR_PICKUP_ITEMS</code></td><td>A2</td></tr>
+  <tr><td><code>FR_EVENT_HIDDEN</code></td><td>Hidden events shall show no visual indication until triggered.</td><td><code>UR_HIDDEN_EVENTS</code></td><td>A1</td></tr>
+  <tr><td><code>FR_EVENT_COUNT</code></td><td>The map shall contain at least 2 hidden events in A1 and at least 5 in A2.</td><td><code>UR_HIDDEN_EVENTS</code></td><td>A1 / A2</td></tr>
+  <tr><td><code>FR_EVENT_TRIGGER</code></td><td>An event shall trigger when the player reaches its location or performs its trigger action.</td><td><code>UR_HIDDEN_EVENTS</code></td><td>A1</td></tr>
+  <tr><td><code>FR_EVENT_EFFECT</code></td><td>Each event shall have a distinct positive or negative effect on the game state, and shall trigger at most once.</td><td><code>UR_HIDDEN_EVENTS</code></td><td>A1</td></tr>
+  <tr><td><code>FR_TIMER</code></td><td>A countdown from 5 minutes shall be displayed throughout the game.</td><td><code>UR_TIME_LIMIT</code></td><td>A1</td></tr>
+  <tr><td><code>FR_TIMER_EXPIRE</code></td><td>The game shall end in defeat when the timer reaches zero.</td><td><code>UR_TIME_LIMIT</code>, <code>UR_WIN_LOSE</code></td><td>A1</td></tr>
+  <tr><td><code>FR_START_PAUSED</code></td><td>The game shall start in a paused state until the player starts it.</td><td><code>UR_PAUSE</code></td><td>A1</td></tr>
+  <tr><td><code>FR_PAUSE</code></td><td>The player shall pause and resume at any time, which freezes the timer, geese and player movement.</td><td><code>UR_PAUSE</code></td><td>A1</td></tr>
+  <tr><td><code>FR_ITEM_COUNTER</code></td><td>A counter shall show the number of items used.</td><td><code>UR_PROGRESS_FEEDBACK</code></td><td>A1</td></tr>
+  <tr><td><code>FR_EVENT_COUNTER</code></td><td>A counter shall show the number of events interacted with.</td><td><code>UR_PROGRESS_FEEDBACK</code></td><td>A1</td></tr>
+  <tr><td><code>FR_WIN_CONDITION</code></td><td>The game shall end in victory when the number of dispersed geese reaches a defined threshold.</td><td><code>UR_WIN_LOSE</code></td><td>A2</td></tr>
+  <tr><td><code>FR_END_SCREEN</code></td><td>An end screen shall display the result (win or lose) and the final score.</td><td><code>UR_WIN_LOSE</code>, <code>UR_SCORING</code></td><td>A1 (result), A2 (score)</td></tr>
+  <tr><td><code>FR_SCORE_BASE</code></td><td>The base score shall increase the less time the player takes to win.</td><td><code>UR_SCORING</code></td><td>A2</td></tr>
+  <tr><td><code>FR_SCORE_ITEMS</code></td><td>The score shall reward items used effectively and shall not reward wasted items.</td><td><code>UR_SCORING</code></td><td>A2</td></tr>
+  <tr><td><code>FR_SCORE_EVENTS</code></td><td>The score shall be adjusted according to how the player handled each hidden event.</td><td><code>UR_SCORING</code></td><td>A2</td></tr>
+</table>
+
+<h3>Quality requirements</h3>
+<table class="compact-table">
+  <tr><th style="width:25%;">ID</th><th style="width:28%;">Description</th><th style="width:19%;">User requirements</th><th style="width:28%;">Fit criterion</th></tr>
+  <tr><td><code>QR_FRAME_RATE</code></td><td>The game shall run smoothly.</td><td><code>UR_CASUAL</code></td><td>&ge; 30 FPS on a University lab machine with &ge; 9 geese active.</td></tr>
+  <tr><td><code>QR_INPUT_RESPONSE</code></td><td>The avatar shall respond promptly to input.</td><td><code>UR_PLAYER_AVATAR</code></td><td>Movement begins &lt; 100 ms after key press.</td></tr>
+  <tr><td><code>QR_TIMER_ACCURACY</code></td><td>The timer shall track real time accurately.</td><td><code>UR_TIME_LIMIT</code>, <code>UR_PAUSE</code></td><td>Drift &lt; 1 s over a 5-minute session, excluding paused time.</td></tr>
+  <tr><td><code>QR_PAUSE_RESPONSE</code></td><td>Pausing shall take effect immediately.</td><td><code>UR_PAUSE</code></td><td>All game updates stop within 0.5 s of pressing pause.</td></tr>
+  <tr><td><code>QR_LEARNABILITY</code></td><td>New players shall understand the controls quickly.</td><td><code>UR_CASUAL</code></td><td>&ge; 80% of A2 evaluation users move, use an item and pause within 2 minutes unaided.</td></tr>
+  <tr><td><code>QR_MAP_CLARITY</code></td><td>The limits of the map shall be obvious to the player.</td><td><code>UR_CAMPUS_MAP</code></td><td>&ge; 80% of A2 evaluation users correctly identify walkable vs blocked areas.</td></tr>
+  <tr><td><code>QR_BALANCE</code></td><td>The game shall be winnable but not trivial.</td><td><code>UR_TIME_LIMIT</code>, <code>UR_CASUAL</code></td><td>30&ndash;70% of A2 evaluation testers win within 5 minutes.</td></tr>
+  <tr><td><code>QR_SCORE_TRANSPARENCY</code></td><td>The player shall understand how their score was calculated.</td><td><code>UR_SCORING</code></td><td>End screen shows an itemised breakdown of time, item and event score components.</td></tr>
+  <tr><td><code>QR_STABILITY</code></td><td>The game shall run without crashing.</td><td><code>UR_CASUAL</code></td><td>0 crashes or unhandled exceptions across 3 consecutive full 5-minute sessions.</td></tr>
+  <tr><td><code>QR_EXTENSIBILITY</code></td><td>New items, events and goose types shall be easy to add.</td><td><code>UR_INITIAL_ITEMS</code>, <code>UR_HIDDEN_EVENTS</code></td><td>A new item or hidden event can be added without modifying existing item or event classes.</td></tr>
+</table>
+
+<h3>Constraint requirements</h3>
+<table class="compact-table">
+  <tr><th style="width:25%;">ID</th><th style="width:47%;">Description</th><th style="width:28%;">Source</th></tr>
+  <tr><td><code>CR_JAVA</code></td><td>The game shall be implemented in Java 17 (compiled to Java 17 bytecode).</td><td>ENG1 module / University lab specification</td></tr>
+  <tr><td><code>CR_EXECUTABLE</code></td><td>The game shall be distributed as a single executable JAR including all external dependencies, runnable on a University lab machine.</td><td>ENG1 assessment paper (Section 3.3, item 6a)</td></tr>
+  <tr><td><code>CR_SINGLE_PLAYER</code></td><td>The game shall be single-player.</td><td>ENG1 product brief</td></tr>
+  <tr><td><code>CR_2D_TOPDOWN</code></td><td>The game shall use 2D top-down graphics.</td><td>Customer interview</td></tr>
+  <tr><td><code>CR_LICENCES</code></td><td>All 3rd-party libraries and assets shall have licences permitting commercial redistribution.</td><td>ENG1 product brief (customer may market/sell game)</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">References</h2>
+<ul class="refs">
+  <li>[1] I. Sommerville, <i>Software Engineering</i>, 10th ed. Harlow: Pearson, 2016.</li>
+  <li>[2] ISO/IEC/IEEE 29148:2018, <i>Systems and software engineering - Life cycle processes - Requirements engineering</i>. Geneva: IEEE / ISO, 2018.</li>
+  <li>[3] S. Robertson and J. Robertson, <i>Mastering the Requirements Process: Getting Requirements Right</i>, 3rd ed. Upper Saddle River, NJ: Addison-Wesley, 2012.</li>
+  <li>[4] K. Barmpis, "Requirements Engineering", ENG1 (COM00019I) lecture slides, Department of Computer Science, University of York, 2026.</li>
+</ul>
+
+</body>
+</html>

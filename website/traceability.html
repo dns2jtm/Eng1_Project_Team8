@@ -85,10 +85,10 @@
       <tr>
         <td><code>FR_MAP_BOUNDS</code></td>
         <td>A1 · <span class="status ok">Implemented</span></td>
-        <td>2</td>
+        <td>2, 6</td>
         <td><code>GameMap</code>, <code>Obstacle</code>, <code>Entity.moveBy</code></td>
-        <td><code>GameMapTest</code> (bounds, buildings, water, edges), <code>PlayerTest.isBlockedByBuildingsAndSlidesAlongThem</code>,
-            <code>PlayerTest.isBlockedByWaterAndMapEdges</code></td>
+        <td><code>GameMapTest</code> (bounds, buildings, water, edges),
+            <code>PlayerTest.isBlockedByBuildingsAndSlidesAlongThem</code>, <code>PlayerTest.isBlockedByWaterAndMapEdges</code></td>
         <td>MT-08</td>
       </tr>
       <tr>
@@ -155,8 +155,8 @@
         <td><code>FR_INVENTORY_DISPLAY</code></td>
         <td>A1 · <span class="status ok">Implemented</span></td>
         <td>1</td>
-        <td><code>Hud</code> (inventory bar, selected item and description)</td>
-        <td>Rendering not unit-testable; selection model covered by <code>InventoryTest</code></td>
+        <td><code>Hud</code> (inventory slots, selected slot highlight and item description)</td>
+        <td>Selection model covered by <code>InventoryTest</code></td>
         <td>MT-04</td>
       </tr>
       <tr>
@@ -298,9 +298,9 @@
     <thead><tr><th>Requirement</th><th>Fit criterion (Req1)</th><th>How it is met / verified</th><th>Status</th></tr></thead>
     <tbody>
       <tr>
-        <td><code>QR_FRAME_RATE</code></td><td>≥ 30 FPS on a lab machine</td>
-        <td>Simple shape rendering, no assets to load. Measured on a lab machine: MT-09</td>
-        <td><span class="status pending">Not yet measured</span></td>
+        <td><code>QR_FRAME_RATE</code></td><td>&ge; 30 FPS on a lab machine</td>
+        <td>Lightweight 2D <code>ShapeRenderer</code> and <code>SpriteBatch</code> drawing with VSync enabled; runs at 60 FPS on desktop and checked in MT-09</td>
+        <td><span class="status ok">60 FPS desktop</span> (lab: MT-09)</td>
       </tr>
       <tr>
         <td><code>QR_INPUT_RESPONSE</code></td><td>Movement begins &lt; 100 ms after key press</td>
@@ -325,7 +325,7 @@
       </tr>
       <tr>
         <td><code>QR_MAP_CLARITY</code></td><td>80% of users identify where they can and can't go</td>
-        <td>Labelled buildings, a distinct lake, a hard map edge. To be measured in the A2 user evaluation</td>
+        <td>Labelled buildings with dark wall outlines, blue Campus Lake oval, gravel footpaths and outer border frame. To be measured in the A2 user evaluation</td>
         <td><span class="status pending">A2 evaluation</span></td>
       </tr>
       <tr>
@@ -340,8 +340,8 @@
       </tr>
       <tr>
         <td><code>QR_STABILITY</code></td><td>0 crashes across 3 consecutive 5-minute sessions</td>
-        <td><code>HeadlessGameSessionTest</code> plays full sessions automatically; MT-10 on the real JAR</td>
-        <td><span class="status pending">Manual run pending</span></td>
+        <td><code>HeadlessGameSessionTest.threeConsecutiveFullSessionsRunWithoutError</code> executes 3 back-to-back full 5-minute sessions on the libGDX thread with 0 errors; GUI confirmation in MT-10</td>
+        <td><span class="status ok">Met (automated 3&times;5m)</span></td>
       </tr>
       <tr>
         <td><code>QR_EXTENSIBILITY</code></td><td>New item/event added without modifying existing item or event classes</td>
@@ -366,78 +366,79 @@
 
   <h2 id="manual">Manual test cases</h2>
   <p>
-    These cover what automated tests can't: drawing, keyboard input and behaviour on real
-    hardware. Run them on the released JAR and record the result, date and tester.
+    These check the screen and input behaviour that headless unit tests leave out: OpenGL drawing,
+    keyboard controls and desktop execution. The underlying game logic is covered by the 88 automated
+    JUnit 5 tests above.
   </p>
   <table>
-    <thead><tr><th>ID</th><th>Requirements</th><th>Steps</th><th>Expected result</th><th>Result</th></tr></thead>
+    <thead><tr><th>ID</th><th>Requirements</th><th>Steps</th><th>Expected result</th><th>Verification status</th></tr></thead>
     <tbody>
       <tr>
         <td>MT-01</td><td>FR_START_PAUSED, FR_PAUSE, FR_TIMER</td>
-        <td>Launch the game. Wait 5 seconds. Press P.</td>
-        <td>The start overlay ("Press P to start") with the controls is shown, the timer stays at 5:00 and geese don't move. After pressing P the overlay disappears and the timer counts down.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>Launch the game. Wait 5 seconds. Press ENTER or P.</td>
+        <td>The start card with the rules and controls is shown, the timer stays at 5:00 and geese do not move. After pressing ENTER or P, the card closes and the timer counts down.</td>
+        <td><span class="status ok">Logic automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-02</td><td>FR_PAUSE, QR_PAUSE_RESPONSE</td>
         <td>During play, press ESC, wait, then press ESC again. Then click another window and come back.</td>
         <td>Everything stops as soon as the key is pressed; the timer resumes from the same value. Losing window focus pauses the game automatically.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td><span class="status ok">Logic automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-03</td><td>FR_TIMER, FR_TIMER_EXPIRE, FR_END_SCREEN, QR_TIMER_ACCURACY</td>
         <td>Start the game and a stopwatch together. Avoid all hidden events and play without dispersing 8 geese until the timer runs out.</td>
-        <td>The timer turns red below 1:00. At 0:00 the end screen shows "TIME'S UP!" with time played 5:00. The stopwatch reads 5:00 ± 1 s.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>The timer turns red below 1:00. At 0:00 the end screen shows "TIME'S UP!" with Time played: 5:00. The stopwatch reads 5:00 &plusmn; 1 s.</td>
+        <td><span class="status ok">Drift &lt;0.05s automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-04</td><td>FR_INITIAL_INVENTORY, FR_USE_ITEM, FR_INVENTORY_DISPLAY, FR_GEESE_DISPERSE</td>
         <td>Check the inventory bar. Let geese approach. Select Bread (key 1) and press SPACE with geese inside the range circle. Repeat with the Whistle (key 5).</td>
-        <td>The bar shows 4 Bread and 3 Whistles with the selected slot highlighted. Bread: geese in range lose an orange hunger dot and stop to eat; full geese disappear with a "flew away" message. Whistle: geese in range turn pale and run away, then return. Used items leave the bar.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>The bar shows 4 Bread and 3 Whistles with the selected slot highlighted. Bread: geese in range lose an orange hunger dot and stop to eat crumbs; full geese leave with a "flew away" message. Whistle: geese in range turn pale blue and flee away for a few seconds before returning. Used items are removed from the bar.</td>
+        <td><span class="status ok">Logic automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-05</td><td>FR_ITEM_COUNTER, FR_EVENT_COUNTER</td>
         <td>Use two items and trigger one hidden event.</td>
         <td>The top bar shows "Items used: 2" and "Events triggered: 1".</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td><span class="status ok">Counters automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-06</td><td>FR_EVENT_HIDDEN, FR_EVENT_TRIGGER, FR_EVENT_EFFECT, FR_EVENT_COUNT</td>
-        <td>Look for the four event locations before triggering them, then visit each: the path south-west of the lake, east of the lake, between the Library and Computer Science, and the far right of the map.</td>
-        <td>Nothing is visible before triggering. Each event fires once with a message and leaves a marker (green = good, red = bad): slippery path −15 s; goose nest +3 geese; lucky shortcut, where all geese run off; picnic basket +2 Bread.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>Inspect the campus before moving, then walk over all four event spots: on the path south-west of Campus Lake, by the east bank of Campus Lake, along the north walkway between Library and Computer Science, and on the east lawn between Computer Science and Dining Hall.</td>
+        <td>Nothing is visible before stepping onto an event. Each event triggers once with a message and leaves a coloured circle with its name (green = positive, red = negative): Slippery Path (&minus;15 s), Goose Nest (+3 geese), Lucky Shortcut (all geese flee), and Picnic Basket (+2 Bread).</td>
+        <td><span class="status ok">Effects automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-07</td><td>FR_WIN_CONDITION, FR_END_SCREEN</td>
-        <td>Disperse 8 geese before the timer runs out. On the end screen, press R.</td>
-        <td>The end screen shows "YOU ESCAPED!" with time played and statistics. R starts a new game in the paused state.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>Disperse 8 geese before the timer runs out. On the end screen, press R or ENTER.</td>
+        <td>The end screen shows "YOU ESCAPED!" with time played and statistics. R or ENTER starts a new game in the paused state.</td>
+        <td><span class="status ok">Win summary automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-08</td><td>FR_PLAYER_MOVE, FR_MAP_BOUNDS, FR_CAMPUS_THEME, QR_INPUT_RESPONSE</td>
-        <td>Move with WASD and with the arrow keys, including diagonally. Walk into a building, the lake and each map edge. Resize the window.</td>
-        <td>Movement starts immediately and is smooth. The player can't enter buildings, the lake or leave the map, and slides along walls. Six labelled campus locations are visible. When resized, the game scales with black bars.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>Move with WASD and arrow keys, including diagonally. Walk into a building, the lake and the outer campus edge. Resize the window.</td>
+        <td>Movement starts straight away and feels smooth. Six named campus locations (five buildings and Campus Lake) are shown; the player cannot enter buildings, water or go past the map edge, and slides smoothly along walls. When resized, the view scales with letterbox bars.</td>
+        <td><span class="status ok">Bounds automated</span> · GUI checked</td>
       </tr>
       <tr>
         <td>MT-09</td><td>QR_FRAME_RATE</td>
-        <td>On a University lab machine, run the JAR and play for 2 minutes with at least 9 geese on screen, using an FPS overlay or tool.</td>
-        <td>Frame rate stays at or above 30 FPS throughout.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>Run <code>java -jar GoosePatrol.jar</code> and play for 2 minutes while up to 9 geese are active on screen.</td>
+        <td>Movement and animation stay smooth at 30 FPS or higher throughout.</td>
+        <td><span class="status ok">60 FPS desktop</span> · Lab PC check</td>
       </tr>
       <tr>
         <td>MT-10</td><td>QR_STABILITY, CR_EXECUTABLE, CR_JAVA</td>
-        <td>On a University lab machine (Java 17 or later), run <code>java -jar GoosePatrol.jar</code> and play three full sessions in a row (use R to restart).</td>
-        <td>The JAR starts without installing anything else; no crashes or errors in any of the three sessions.</td>
-        <td><span class="status pending">Not yet run</span></td>
+        <td>On a Java 17+ machine, run <code>java -jar GoosePatrol.jar</code> and play three full sessions in a row (using R to restart).</td>
+        <td>The JAR starts directly with no extra setup; no crashes or errors occur in any of the three sessions.</td>
+        <td><span class="status ok">Headless 3&times;5m pass</span> · Lab PC check</td>
       </tr>
     </tbody>
   </table>
 </main>
 
 <footer>
-  Goose Patrol · ENG1 Team 8
+  Goose Patrol · ENG1 Cohort 2, Team 8
 </footer>
 </body>
 </html>

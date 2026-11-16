@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Arch1 - Goose Patrol - Cohort 2, Team 8</title>
+<link rel="stylesheet" href="deliverables.css">
+</head>
+<body>
+
+<h1>Architecture (Arch1) - Goose Patrol</h1>
+<div class="meta">
+  ENG1 (COM00019I) Assessment 1 · Cohort 2, Team 8 · Diagrams and SVG sources: <a href="https://soham-apte.github.io/Eng1_Project_Team8/architecture.html">soham-apte.github.io/Eng1_Project_Team8/architecture.html</a> · Traceability: <a href="https://soham-apte.github.io/Eng1_Project_Team8/traceability.html">traceability.html</a>
+</div>
+
+<h2 style="margin-top:4px;">3.1 Modelling languages and tools</h2>
+<p>We describe the system using four complementary views from <b>UML 2.5</b> [1], following Kruchten's multi-view model [2] so that package dependencies and runtime behaviour are separated clearly without cluttering one giant diagram:</p>
+<ul>
+  <li><b>Structural views:</b> a <i>UML Component Diagram</i> (package layering and the libGDX boundary) and a <i>UML Class Diagram</i> (domain classes, key fields/methods, multiplicities and inheritance/composition links).</li>
+  <li><b>Behavioural views:</b> two <i>UML State Machine Diagrams</i> (session states and individual goose states) and two <i>UML Sequence Diagrams</i> (using an item and running one frame of gameplay).</li>
+  <li><b>Tools and alternatives considered:</b> All diagrams are written as plain text in <b>PlantUML 1.2026</b> and laid out automatically with <b>Graphviz (<code>dot</code>)</b>, outputting PNGs and SVGs committed in Git (<code>architecture/v1/</code>, <code>architecture/v2/</code>). Text files give clear line-by-line diffs in pull requests, keep class names aligned with the Java code, and are easy for the Assessment 2 team to update. We considered <i>Draw.io / Lucidchart</i> (rejected due to manual box layout and messy XML merge conflicts across a 7-person team) and desktop CASE tools like <i>StarUML / Modelio</i> (rejected due to heavy project files for a 6-week project).</li>
+</ul>
+
+<h2>3.2 Architectural overview and component justification</h2>
+<div class="diagram-box">
+  <img src="../architecture/v2/component.png" alt="Component diagram v2" style="max-height:245px;">
+  <div class="diagram-caption"><b>Diagram 1 - Component Diagram (v2):</b> Layered architecture separating the desktop launcher, libGDX screens and headless game logic.</div>
+</div>
+
+<p>Following Sommerville's layered architecture pattern [3], dependencies point strictly downwards across three layers:</p>
+<ul>
+  <li><b>Desktop Launcher (<code>com.goosepatrol.lwjgl3</code>):</b> <code>Lwjgl3Launcher</code> and <code>StartupHelper</code> set up the 1280&times;720 desktop window and JVM startup flags (<code>CR_JAVA</code>, <code>CR_EXECUTABLE</code>) and launch <code>GoosePatrolGame</code>; no game rules sit in the desktop module.</li>
+  <li><b>Presentation Layer (<code>GoosePatrolGame</code>, <code>com.goosepatrol.screen</code>):</b> <code>GoosePatrolGame</code> owns the shared libGDX rendering objects (<code>ShapeRenderer</code>, <code>SpriteBatch</code>, <code>BitmapFont</code>) and switches between <code>GameScreen</code> and <code>EndScreen</code>. Drawing is split between <code>WorldRenderer</code> (2D top-down campus grass, walkways, buildings, lake, player, geese and triggered event markers; <code>CR_2D_TOPDOWN</code>) and <code>Hud</code> (countdown timer, counters, inventory bar, feedback banner and start/pause card).</li>
+  <li><b>Gameplay Domain Layer (<code>logic</code>, <code>entity</code>, <code>item</code>, <code>event</code> + <code>GameConfig</code>):</b> Has <b>no imports from <code>com.badlogic.gdx.graphics</code> or <code>Gdx.input</code></b>. <code>GameScreen</code> turns keyboard input into method calls on <code>GameWorld</code>, while the renderers only read state. This separation lets <b>88 JUnit 5 tests (99.4% line coverage across the four domain packages)</b> run quickly in CI on Linux, Windows and macOS without a GPU or window, and keeps future Assessment 2 sprite or UI changes confined to <code>screen/</code>.</li>
+  <li><b>Alternatives considered:</b> (1) Putting update and drawing code together inside <code>Screen.render()</code> (as in our early prototype on <code>main</code>) is fast to write at first, but ties game logic to OpenGL and blocks unit testing. (2) A full Entity-Component-System (<i>libGDX Ashley</i>) was rejected because Goose Patrol has only a few entity types (one <code>Player</code>, up to nine <code>Goose</code> objects and static <code>Obstacle</code>s), where standard Java inheritance is much easier for the Assessment 2 team to read and extend.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">3.3 Domain class structure, design patterns and notation choices</h2>
+<div class="diagram-box">
+  <img src="../architecture/v2/class.png" alt="Class diagram v2" style="max-height:390px;">
+  <div class="diagram-caption"><b>Diagram 2 - Domain Class Diagram (v2):</b> Core packages, attributes, methods and relationships (full-size SVG at <a href="https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#v2">architecture.html#v2</a>).</div>
+</div>
+
+<ul>
+  <li><b><code>logic</code> (Facade):</b> <code>GameWorld</code> owns the <code>Player</code>, active <code>Goose</code> list, <code>HiddenEvent</code> list, <code>GameMap</code>, <code>GameTimer</code> and <code>GameStats</code> behind a small set of command and getter methods. When a game finishes, <code>createSummary()</code> returns an immutable Java <code>&lt;&lt;record&gt;&gt;</code> (<code>GameSummary</code>) so <code>EndScreen</code> can display results without holding a reference to the live <code>GameWorld</code>; <code>WorldMessage</code> stores short feedback text and its display tone.</li>
+  <li><b><code>entity</code> (Shared Collision and Template Method):</b> Abstract <code>Entity</code> handles axis-separated wall-sliding movement in <code>moveBy(dx, dy, map)</code> and delegates terrain checks to abstract <code>canOccupy(map, x, y)</code> [4]. <code>Player</code> calls <code>GameMap.canPlayerOccupy</code> (blocked by map edges, <code>BUILDING</code> and <code>WATER</code>), while <code>Goose</code> calls <code>canGooseOccupy</code> (blocked by edges and buildings, allowed across the campus lake). Passing <code>GameMap</code> as a parameter avoids circular references between entities and the map.</li>
+  <li><b><code>item</code> (Polymorphic Strategy):</b> Abstract <code>Item</code> stores <code>name</code>, description and effect <code>range</code>, and declares abstract <code>applyTo(Goose)</code> [4]. <code>GameWorld.useSelectedItem()</code> finds geese within range, calls <code>item.applyTo(goose)</code> polymorphically, removes the used item from <code>Inventory</code> and updates <code>GameStats</code>. Adding new Assessment 2 items only requires a new <code>Item</code> subclass (<code>QR_EXTENSIBILITY</code>).</li>
+  <li><b><code>event</code> (Template Method One-Shot Rule):</b> Abstract <code>HiddenEvent</code> provides concrete <code>trigger(GameWorld)</code>, which sets <code>triggered = true</code> before calling <code>protected abstract apply(GameWorld)</code> [4]. The "fires at most once" rule (<code>FR_EVENT_EFFECT</code>) is therefore handled in one base class rather than repeated in <code>PicnicBasketEvent</code>, <code>GooseNestEvent</code>, <code>LuckyShortcutEvent</code> and <code>SlipperyPathEvent</code>.</li>
+  <li><b>Notation choices:</b> Screen classes (<code>GameScreen</code>, <code>WorldRenderer</code>, <code>Hud</code>, <code>EndScreen</code>) and constants in <code>GameConfig</code> are shown at component level in Diagram 1 and left out of Diagram 2 to keep the domain diagram readable. Simple getters and constructors are omitted; Java 17 records use the <code>&lt;&lt;record&gt;&gt;</code> stereotype.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">3.4 Behavioural architecture: state machines</h2>
+
+<div class="diagram-box">
+  <img src="../architecture/v2/state-game.png" alt="Game state machine v2" style="max-height:215px;">
+  <div class="diagram-caption"><b>Diagram 3 - Game Session State Machine (v2):</b> Pause handling and win/loss transitions in <code>GameWorld</code> and <code>GoosePatrolGame</code>.</div>
+</div>
+<ul>
+  <li><b>Session states:</b> A new <code>GameWorld</code> starts in <code>PAUSED</code> with <code>started = false</code> (<code>FR_START_PAUSED</code>), showing the rules and controls card (<code>QR_LEARNABILITY</code>). Pressing <code>ENTER</code>, <code>P</code> or <code>ESC</code> moves to <code>RUNNING</code>; pressing <code>P</code>/<code>ESC</code> during play or losing window focus (<code>GameScreen.pause()</code>) switches back to <code>PAUSED</code>, where <code>GameWorld.update()</code> returns immediately so the timer, geese and player stop on the same frame (<code>FR_PAUSE</code>, <code>QR_PAUSE_RESPONSE</code>). Reaching <code>geeseDispersed &ge; 8</code> enters <code>WON</code> (<code>FR_WIN_CONDITION</code>), while <code>timer.isExpired()</code> enters <code>LOST</code> (<code>FR_TIMER_EXPIRE</code>); both pass a <code>GameSummary</code> to <code>EndScreen</code> (<code>FR_END_SCREEN</code>), where <code>R</code> or <code>ENTER</code> starts a fresh session.</li>
+</ul>
+
+<div class="diagram-box" style="margin-top:8px;">
+  <img src="../architecture/v2/state-goose.png" alt="Goose state machine v2" style="max-height:260px;">
+  <div class="diagram-caption"><b>Diagram 4 - Goose State Machine (v2):</b> Chasing, crowding, temporary distraction (eating vs fleeing) and dispersal.</div>
+</div>
+<ul>
+  <li><b>Goose states:</b> Each spawned goose starts in <code>CHASING</code> with <code>hunger &isin; {1, 2}</code>, walking towards the player and slowing them via <code>Player.setMobbed(true)</code> on contact (<code>FR_GEESE_SPAWN</code>, <code>FR_GEESE_BLOCK</code>). Feeding a goose with <code>FoodItem</code> reduces <code>hunger</code>: if <code>hunger == 0</code>, it enters <code>DISPERSED</code> and is removed and counted by <code>GameWorld</code> (<code>FR_GEESE_DISPERSE</code>); if still hungry, it enters composite state <code>Distracted</code> in sub-state <code>Eating</code> (standing still). Scaring a goose with <code>ScareItem</code> or <code>LuckyShortcutEvent</code> enters <code>Distracted</code> in sub-state <code>Fleeing</code> (running away from the player). In code, <code>Distracted { Eating, Fleeing }</code> is stored as <code>GooseState.DISTRACTED</code> plus boolean <code>fleeing</code> because both share the same countdown timer back to <code>CHASING</code>.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">3.4 Behavioural architecture: runtime interaction sequences</h2>
+
+<div class="diagram-box">
+  <img src="../architecture/v2/seq-use-item.png" alt="Use item sequence diagram v2" style="max-height:265px;">
+  <div class="diagram-caption"><b>Diagram 5 - Item Use Sequence (v2):</b> Range check, inventory removal, dispersal cleanup and counter updates.</div>
+</div>
+<p>When <code>GameScreen</code> reads <code>SPACE</code> while <code>RUNNING</code>, <code>GameWorld.useSelectedItem()</code> fetches <code>Inventory.selected()</code>, applies it to every goose within <code>item.getRange()</code> (<code>FR_USE_ITEM</code>), removes the item from the inventory, increments <code>GameStats.recordItemUsed()</code> (<code>FR_ITEM_COUNTER</code>) even if no geese were in range (distinguishing effective vs wasted uses for Assessment 2's <code>FR_SCORE_ITEMS</code>), removes any <code>DISPERSED</code> geese, and shows a feedback message.</p>
+
+<div class="diagram-box" style="margin-top:6px;">
+  <img src="../architecture/v2/seq-update.png" alt="Frame update sequence diagram v2" style="max-height:305px;">
+  <div class="diagram-caption"><b>Diagram 6 - Per-Frame Update Sequence (v2):</b> Real-time countdown tick paired with sub-stepped movement, event checks and spawning.</div>
+</div>
+<p>Diagram 6 shows how <code>GameWorld.update(delta)</code> handles slow frames cleanly: <code>GameTimer.tick(delta)</code> uses double-precision real frame time so 5-minute countdown drift stays well below 1 s (<code>QR_TIMER_ACCURACY</code>), while movement, wall sliding, hidden-event checks and spawning run in sub-steps of at most <code>0.05 s</code>. That way, a lag spike cannot make the player step straight through a building wall or skip over a hidden event (<code>FR_MAP_BOUNDS</code>, <code>FR_EVENT_TRIGGER</code>).</p>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">3.5 Design process and architectural evolution (<code>v1</code> &rarr; <code>v2</code>)</h2>
+
+<p>All six <code>v1</code> diagrams, the full 14-item change log and our Week 3 CRC cards are hosted on the team website:</p>
+<ul>
+  <li><b>Design process and CRC cards:</b> <a href="https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#process">https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#process</a></li>
+  <li><b>Initial pre-implementation architecture (<code>v1</code>):</b> <a href="https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#v1">https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#v1</a></li>
+  <li><b>Full <code>v1</code> &rarr; <code>v2</code> change table:</b> <a href="https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#evolution">https://soham-apte.github.io/Eng1_Project_Team8/architecture.html#evolution</a></li>
+</ul>
+
+<h3>Design process followed</h3>
+<ol>
+  <li><b>Domain Breakdown with CRC Cards (Week 3):</b> Working from nouns and verbs in <code>Req1</code>, we drafted Class-Responsibility-Collaborator (CRC) cards [5] to separate libGDX screen code from pure game logic so rules could be tested in JUnit.</li>
+  <li><b>Initial UML Design: <code>v1</code> (Week 4):</b> Before building the screens, we committed six PlantUML <code>v1</code> diagrams (commit <code>91a6bc0</code>) setting out the packages (<code>logic</code>, <code>entity</code>, <code>item</code>, <code>event</code>), main classes and state machines.</li>
+  <li><b>Comparing Prototypes in Week 6:</b> Two prototypes had been written: a compact 7-class flat-package version on <code>main</code> (commit <code>88ede63</code>) and the layered <code>com.goosepatrol</code> version on <code>feature/a1-implementation</code>. We compared them side-by-side on a review branch (<code>review/side-by-side</code>) for testability, requirement coverage and structure, keeping the layered design while bringing across the flat prototype's two extra hidden events (<code>LuckyShortcutEvent</code>, <code>SlipperyPathEvent</code>) as <code>HiddenEvent</code> subclasses.</li>
+  <li><b>Updating to <code>v2</code> (Week 6):</b> We updated the PlantUML diagrams to <code>v2</code> alongside code review and cross-checked every requirement in <code>traceability.html</code>.</li>
+</ol>
+
+<h3>Main changes from <code>v1</code> to <code>v2</code> and reasons</h3>
+<table>
+  <tr><th style="width:28%;">Area</th><th style="width:36%;">Initial <code>v1</code> design</th><th style="width:36%;">Updated <code>v2</code> design and reason</th></tr>
+  <tr>
+    <td><b>Screen responsibilities</b></td>
+    <td>Single <code>GameScreen</code> handled input and drew the map, entities and HUD; no top-level <code>Game</code> class shown.</td>
+    <td>Added <code>GoosePatrolGame</code> to manage screens and split drawing into <code>WorldRenderer</code> and <code>Hud</code> so each class has one clear job.</td>
+  </tr>
+  <tr>
+    <td><b>Movement and obstacles</b></td>
+    <td>Point-based <code>Entity</code> with no radius; <code>GameMap</code> had outer bounds only and no obstacle types.</td>
+    <td>Added circle radius, shared <code>Entity.moveBy</code> wall-sliding and per-subclass <code>canOccupy</code> over <code>Obstacle(BUILDING, WATER)</code> so geese can cross the lake while the player cannot (<code>FR_MAP_BOUNDS</code>, <code>FR_CAMPUS_THEME</code>).</td>
+  </tr>
+  <tr>
+    <td><b>Goose distraction and winning</b></td>
+    <td>Single generic <code>Distracted</code> state; win condition and dispersal left as A2 notes.</td>
+    <td>Split <code>Distracted</code> into stationary <code>Eating</code> vs fleeing <code>Fleeing</code>, and implemented <code>DISPERSED</code> + <code>GEESE_TO_DISPERSE_FOR_WIN</code> in A1 so players can actually win a session.</td>
+  </tr>
+  <tr>
+    <td><b>One-shot hidden events</b></td>
+    <td>Placeholder <code>BonusTimeEvent</code> / <code>GooseSwarmEvent</code>; subclasses tracked their own trigger flags.</td>
+    <td>Moved the single-trigger check into <code>HiddenEvent.trigger()</code> &rarr; <code>apply()</code>. Adding <code>LuckyShortcutEvent</code> and <code>SlipperyPathEvent</code> from the base prototype needed <b>no changes</b> to existing event or item classes (<code>QR_EXTENSIBILITY</code>).</td>
+  </tr>
+  <tr>
+    <td><b>End screen and frame timing</b></td>
+    <td><code>EndScreen</code> read from live <code>GameWorld</code>; single-step <code>update(delta)</code> could drift or skip collisions on slow frames.</td>
+    <td>Added <code>GameSummary</code> record, double-precision <code>GameTimer</code> (<code>QR_TIMER_ACCURACY</code>), <code>0.05 s</code> movement sub-steps, and <code>GameConfig</code> constants.</td>
+  </tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">3.6 Requirements traceability and Assessment 2 extension points</h2>
+<p>Matching names connect <code>Req1.pdf</code>, Diagrams 1&ndash;6, Java classes and JUnit tests (full matrix at <a href="https://soham-apte.github.io/Eng1_Project_Team8/traceability.html">traceability.html</a>):</p>
+
+<table class="compact-table">
+  <tr><th style="width:32%;">Req1 IDs</th><th style="width:12%;">Diagrams</th><th style="width:56%;">Classes and methods</th></tr>
+  <tr><td><code>FR_PLAYER_MOVE</code>, <code>FR_MAP_BOUNDS</code>, <code>FR_CAMPUS_THEME</code></td><td>1, 2, 6</td><td><code>GameScreen.handleInput</code> &rarr; <code>GameWorld.setPlayerDirection</code> &rarr; <code>Player.move</code>, <code>Entity.moveBy</code>, <code>GameMap.createCampus</code>, <code>Obstacle</code>; drawn by <code>WorldRenderer</code>.</td></tr>
+  <tr><td><code>FR_GEESE_SPAWN</code>, <code>FR_GEESE_BLOCK</code>, <code>FR_GEESE_DISPERSE</code></td><td>2, 4, 5, 6</td><td><code>GameWorld.updateSpawning</code>, <code>Goose</code> (<code>chase</code>, <code>feed</code>, <code>scare</code>, <code>isMobbing</code>), <code>GooseState</code>, <code>Player.setMobbed</code>, <code>GameWorld.removeDispersedGeese</code>.</td></tr>
+  <tr><td><code>FR_INITIAL_INVENTORY</code>, <code>FR_USE_ITEM</code>, <code>FR_INVENTORY_DISPLAY</code></td><td>1, 2, 4, 5</td><td><code>Inventory</code>, abstract <code>Item</code>, <code>FoodItem.bread</code>, <code>ScareItem.whistle</code>, <code>GameWorld.useSelectedItem</code>; inventory bar drawn in <code>Hud</code>.</td></tr>
+  <tr><td><code>FR_EVENT_HIDDEN</code>, <code>FR_EVENT_COUNT</code>, <code>FR_EVENT_TRIGGER</code>, <code>FR_EVENT_EFFECT</code></td><td>1, 2, 6</td><td>Abstract <code>HiddenEvent</code> (<code>isTriggeredBy</code>, <code>trigger</code>, <code>apply</code>) + 4 subclasses; <code>WorldRenderer.drawTriggeredEvents</code> only draws triggered events.</td></tr>
+  <tr><td><code>FR_TIMER</code>, <code>FR_TIMER_EXPIRE</code>, <code>FR_START_PAUSED</code>, <code>FR_PAUSE</code></td><td>1, 2, 3, 6</td><td><code>GameTimer</code>, <code>GameState</code>, <code>GameWorld.togglePause</code> / <code>pause</code> / <code>updateEndConditions</code>, <code>GameScreen.pause</code>, <code>Hud</code> start/pause card.</td></tr>
+  <tr><td><code>FR_ITEM_COUNTER</code>, <code>FR_EVENT_COUNTER</code>, <code>FR_WIN_CONDITION</code>, <code>FR_END_SCREEN</code></td><td>1, 2, 3, 5, 6</td><td><code>GameStats</code>, <code>Hud.drawTopBar</code>, <code>GameSummary</code> record, <code>GoosePatrolGame.showEndScreen</code>, <code>EndScreen</code>.</td></tr>
+  <tr><td><code>QR_FRAME_RATE</code>, <code>QR_INPUT_RESPONSE</code>, <code>QR_TIMER_ACCURACY</code>, <code>QR_PAUSE_RESPONSE</code></td><td>1, 3, 6</td><td>Simple 2D shape/font rendering in <code>WorldRenderer</code> and <code>Hud</code>; per-frame key polling in <code>GameScreen</code>; <code>double</code> timer + <code>0.05 s</code> sub-stepping in <code>GameWorld</code>.</td></tr>
+  <tr><td><code>QR_STABILITY</code>, <code>QR_EXTENSIBILITY</code>, <code>QR_LEARNABILITY</code>, <code>QR_MAP_CLARITY</code>, <code>QR_BALANCE</code></td><td>1, 2, 3</td><td>Headless-testable logic (<code>HeadlessGameSessionTest</code>); extensible <code>Item</code>/<code>HiddenEvent</code> base classes; controls card in <code>Hud</code>; labelled campus obstacles; <code>GameConfig</code>.</td></tr>
+  <tr><td><code>CR_JAVA</code>, <code>CR_EXECUTABLE</code>, <code>CR_SINGLE_PLAYER</code>, <code>CR_2D_TOPDOWN</code>, <code>CR_LICENCES</code></td><td>1, 2</td><td><code>Lwjgl3Launcher</code> + Java 17 standalone JAR; single <code>Player</code>; top-down <code>FitViewport</code> in <code>GameScreen</code>/<code>WorldRenderer</code>; permissive/replaceable libraries + bundled notices.</td></tr>
+</table>
+
+<h3>Extension points prepared for Assessment 2</h3>
+<table class="compact-table">
+  <tr><th style="width:30%;">Remaining A2 requirements</th><th style="width:70%;">How the v2 design supports them</th></tr>
+  <tr><td><code>FR_PICKUP_PLACEMENT</code>, <code>FR_PICKUP_COLLECT</code>, <code>FR_INITIAL_INVENTORY</code> (&ge;5 items)</td><td>Add 3+ new <code>Item</code> subclasses; store map pickups in <code>GameWorld</code> and call <code>Inventory.add(Item)</code> when the player walks over one.</td></tr>
+  <tr><td><code>FR_EVENT_COUNT</code> (&ge;5 events)</td><td>Add at least one more <code>HiddenEvent</code> subclass implementing <code>apply(GameWorld)</code> and register it in <code>GameWorld.createDefault</code> with no edits to existing events.</td></tr>
+  <tr><td><code>FR_GEESE_VARIETY</code></td><td>Pass size, speed and starting hunger parameters into <code>Goose</code> (or add factory methods) while keeping <code>Entity.moveBy</code> and <code>GooseState</code> unchanged.</td></tr>
+  <tr><td><code>FR_SCORE_BASE</code>, <code>FR_SCORE_ITEMS</code>, <code>FR_SCORE_EVENTS</code>, <code>QR_SCORE_TRANSPARENCY</code></td><td><code>GameWorld.useSelectedItem</code> already distinguishes effective vs wasted items and <code>GameTimer</code> records elapsed play time; add score fields to <code>GameStats</code> and <code>GameSummary</code> and display the breakdown on <code>EndScreen</code>.</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">References</h2>
+<ul class="refs">
+  <li>[1] Object Management Group (OMG), <i>OMG Unified Modeling Language (OMG UML) Specification</i>, Version 2.5.1, 2017.</li>
+  <li>[2] P. B. Kruchten, "The 4+1 View Model of Architecture", <i>IEEE Software</i>, vol. 12, no. 6, pp. 42&ndash;50, Nov. 1995.</li>
+  <li>[3] I. Sommerville, <i>Software Engineering</i>, 10th ed., Ch. 6 (Architectural Design). Harlow: Pearson, 2016.</li>
+  <li>[4] E. Gamma, R. Helm, R. Johnson and J. Vlissides, <i>Design Patterns: Elements of Reusable Object-Oriented Software</i>. Reading, MA: Addison-Wesley, 1994.</li>
+  <li>[5] K. Beck and W. Cunningham, "A Laboratory for Teaching Object-Oriented Thinking", in <i>Proc. OOPSLA '89</i>, ACM, 1989, pp. 1&ndash;6.</li>
+</ul>
+
+</body>
+</html>

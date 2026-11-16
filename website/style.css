@@ -128,6 +128,83 @@ figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
   border-radius: 4px;
 }
 
+.crc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+  margin: 16px 0 24px;
+}
+
+.crc-card {
+  background: var(--card);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.crc-card .crc-title {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  padding: 7px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.crc-card .crc-title span {
+  font-weight: 400;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.crc-card .crc-body {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.crc-card .crc-col {
+  padding: 8px 12px;
+}
+
+.crc-card .crc-col + .crc-col {
+  border-left: 1px solid var(--border);
+  background: #faf9fd;
+}
+
+.crc-card h4 {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.crc-card ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.crc-card li {
+  margin: 2px 0;
+}
+
+.week-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.week-card h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+
 footer {
   color: var(--muted);
   font-size: 0.85rem;

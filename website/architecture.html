@@ -23,8 +23,10 @@
 <main>
   <h1>Architecture</h1>
   <p class="lead">
-    UML 2 diagrams written in PlantUML. <strong>v2</strong> matches the current implementation;
-    <strong>v1</strong> is the design from before implementation, kept as evidence of how the design evolved.
+    UML 2.5 diagrams written in PlantUML and rendered with Graphviz. <strong>v2</strong> matches the
+    Assessment 1 implementation; <strong>v1</strong> is the baseline design produced before coding,
+    retained as evidence of architectural evolution. Full justification and traceability are in
+    <a href="docs/Arch1.pdf"><strong>Arch1.pdf</strong></a>.
   </p>
   <p>
     Jump to: <a href="#v2">Current design (v2)</a> · <a href="#v1">Initial design (v1)</a> ·
@@ -110,14 +112,186 @@
   </figure>
 
   <h2 id="process">Design process evidence</h2>
-  <!-- Add photos or scans of CRC cards, whiteboard sketches and any other interim designs here,
-       e.g. <figure><img src="process/crc-cards-week3.jpg" alt="CRC cards"><figcaption>...</figcaption></figure>
-       Put the image files in website/process/. -->
-  <p class="note">CRC cards, sketches and other interim design material will be added here.</p>
+  <p>
+    Our architecture evolved through four traceable stages: (1) Week 3 noun/verb domain extraction from
+    <code>Req1</code> using Class–Responsibility–Collaborator (CRC) cards to isolate pure gameplay logic
+    from libGDX OpenGL rendering; (2) Week 4 commitment of the baseline <code>v1</code> PlantUML models
+    (<a href="#v1">above</a>, commit <code>91a6bc0</code>); (3) Week 6 side-by-side architectural review
+    reconciling two implementation spikes; and (4) synchronisation to the <code>v2</code> models
+    (<a href="#v2">top</a>) verified against every requirement on <a href="traceability.html">traceability.html</a>.
+  </p>
+
+  <h3>Stage 1: Initial domain CRC cards (Week 3)</h3>
+  <div class="crc-grid">
+    <div class="crc-card">
+      <div class="crc-title">GameWorld <span>logic (Facade)</span></div>
+      <div class="crc-body">
+        <div class="crc-col">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li>Own session state (paused, running, won, lost)</li>
+            <li>Advance timer, entities, spawns &amp; event checks per frame</li>
+            <li>Apply selected item to geese in range</li>
+            <li>Produce immutable end-of-game summary</li>
+          </ul>
+        </div>
+        <div class="crc-col">
+          <h4>Collaborators</h4>
+          <ul>
+            <li>Player</li>
+            <li>Goose</li>
+            <li>GameMap</li>
+            <li>HiddenEvent</li>
+            <li>GameTimer, GameStats</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="crc-card">
+      <div class="crc-title">Entity / Player / Goose <span>entity</span></div>
+      <div class="crc-body">
+        <div class="crc-col">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li>Maintain 2D position &amp; collision radius</li>
+            <li>Slide smoothly along obstacle edges</li>
+            <li>Player: move on input; slow when mobbed; hold inventory</li>
+            <li>Goose: chase, eat, flee or disperse when fed</li>
+          </ul>
+        </div>
+        <div class="crc-col">
+          <h4>Collaborators</h4>
+          <ul>
+            <li>GameMap</li>
+            <li>Obstacle</li>
+            <li>Inventory</li>
+            <li>GooseState</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="crc-card">
+      <div class="crc-title">GameMap &amp; Obstacle <span>entity</span></div>
+      <div class="crc-body">
+        <div class="crc-col">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li>Define campus world bounds &amp; named locations</li>
+            <li>Test circle overlap against buildings &amp; lake</li>
+            <li>Distinguish player walkability from goose water access</li>
+          </ul>
+        </div>
+        <div class="crc-col">
+          <h4>Collaborators</h4>
+          <ul>
+            <li>Obstacle (BUILDING, WATER)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="crc-card">
+      <div class="crc-title">Item &amp; Inventory <span>item</span></div>
+      <div class="crc-body">
+        <div class="crc-col">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li>Define item name, description &amp; effect radius</li>
+            <li>Apply polymorphic effect (<code>FoodItem</code>, <code>ScareItem</code>) to a goose</li>
+            <li>Manage ordered item slots &amp; active selection</li>
+          </ul>
+        </div>
+        <div class="crc-col">
+          <h4>Collaborators</h4>
+          <ul>
+            <li>Goose</li>
+            <li>Item subclasses</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="crc-card">
+      <div class="crc-title">HiddenEvent <span>event</span></div>
+      <div class="crc-body">
+        <div class="crc-col">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li>Remain invisible until player enters trigger radius</li>
+            <li>Guarantee at-most-once firing (Template Method)</li>
+            <li>Apply positive or negative world effect</li>
+          </ul>
+        </div>
+        <div class="crc-col">
+          <h4>Collaborators</h4>
+          <ul>
+            <li>Player</li>
+            <li>GameWorld</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="crc-card">
+      <div class="crc-title">GameScreen, WorldRenderer &amp; Hud <span>screen</span></div>
+      <div class="crc-body">
+        <div class="crc-col">
+          <h4>Responsibilities</h4>
+          <ul>
+            <li>Poll keyboard &amp; forward commands to <code>GameWorld</code></li>
+            <li>Render 2D campus, entities &amp; triggered markers</li>
+            <li>Draw timer, counters, inventory &amp; pause overlay</li>
+          </ul>
+        </div>
+        <div class="crc-col">
+          <h4>Collaborators</h4>
+          <ul>
+            <li>GoosePatrolGame</li>
+            <li>GameWorld (read/cmd)</li>
+            <li>libGDX GL/Batch</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Stage 3: Week 6 side-by-side prototype comparison</h3>
+  <p>
+    Before finalising <code>v2</code>, we compared two working prototypes on a separate review branch: a
+    compact 7-class flat-package build (commit <code>88ede63</code>) and the layered 6-package
+    architecture. The comparison below guided our final <code>v2</code> structure:
+  </p>
+  <table>
+    <thead>
+      <tr><th>Criterion</th><th>Flat prototype (7 classes)</th><th>Layered domain architecture (v2)</th><th>Design decision</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Automated testability</strong></td>
+        <td>Update &amp; rendering coupled to libGDX runtime; 0 unit tests</td>
+        <td>No GL/input imports in domain packages; 88 JUnit 5 tests (99.4% domain line coverage)</td>
+        <td>Kept layered domain separation</td>
+      </tr>
+      <tr>
+        <td><strong>Extensibility for A2 (<code>QR_EXTENSIBILITY</code>)</strong></td>
+        <td>Fixed 2 geese and hardcoded item/event fields</td>
+        <td>Abstract <code>Item</code> and <code>HiddenEvent</code> hierarchies + centralised <code>GameConfig</code></td>
+        <td>Retained polymorphic hierarchies</td>
+      </tr>
+      <tr>
+        <td><strong>Hidden event variety (<code>FR_EVENT_COUNT</code>)</strong></td>
+        <td>Introduced time-altering <em>Slippery Path</em> (−15 s) and <em>Lucky Shortcut</em> concepts</td>
+        <td>Had <em>Picnic Basket</em> (+2 Bread) and <em>Goose Nest</em> (+3 geese)</td>
+        <td>Ported both ideas into <code>v2</code> as <code>SlipperyPathEvent</code> &amp; <code>LuckyShortcutEvent</code> with zero edits to existing event classes</td>
+      </tr>
+    </tbody>
+  </table>
 </main>
 
 <footer>
-  Goose Patrol · ENG1 Team 8 · Diagrams: UML 2 in PlantUML, rendered with Graphviz
+  Goose Patrol · ENG1 Cohort 2, Team 8 · Diagrams: UML 2.5 in PlantUML, rendered with Graphviz
 </footer>
 </body>
 </html>

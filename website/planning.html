@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Planning – Goose Patrol</title>
+  <title>Planning – Goose Patrol (Cohort 2, Team 8)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,29 +23,165 @@
 <main>
   <h1>Project plan – weekly snapshots</h1>
   <p class="lead">
-    One snapshot of the project plan per week, showing tasks, dates, priorities and dependencies,
-    and how the plan changed over the project. See <strong>Plan1.pdf</strong> for discussion.
+    Weekly snapshots of the Assessment 1 plan from Semester 1 Week 1 (5 Oct 2026) through Week 6
+    (15 Nov 2026), recording task states, priorities, dependencies and schedule adjustments. For
+    software engineering method justification, team organisation and full discussion, see
+    <a href="docs/Plan1.pdf"><strong>Plan1.pdf</strong></a> (and <a href="docs/Risk1.pdf"><strong>Risk1.pdf</strong></a> for the linked risk register).
   </p>
 
-  <!--
-    How to add a snapshot: save an image (e.g. a Gantt chart or a screenshot of the task board)
-    as website/plan/week-N.png and copy one of the rows below.
-  -->
+  <p>
+    Jump to: <a href="#overview">Master Gantt &amp; WBS</a> ·
+    <a href="#week-1">Week 1</a> · <a href="#week-2">Week 2</a> · <a href="#week-3">Week 3</a> ·
+    <a href="#week-4">Week 4</a> · <a href="#week-5">Week 5</a> · <a href="#week-6">Week 6</a> ·
+    <a href="#risk-summary">Risk monitoring log</a>
+  </p>
+
+  <h2 id="overview">Master schedule overview (Weeks 1–7)</h2>
+  <div class="table-scroll">
   <table>
-    <thead><tr><th>Week</th><th>Snapshot</th><th>Main changes since the previous week</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Work Package</th>
+        <th>Lead (Reviewer)</th>
+        <th>Priority</th>
+        <th>Depends on</th>
+        <th>W1<br><small>05 Oct</small></th>
+        <th>W2<br><small>12 Oct</small></th>
+        <th>W3<br><small>19 Oct</small></th>
+        <th>W4<br><small>26 Oct</small></th>
+        <th>W5<br><small>02 Nov</small></th>
+        <th>W6<br><small>09 Nov</small></th>
+        <th>W7 Mon<br><small>16 Nov</small></th>
+      </tr>
+    </thead>
     <tbody>
-      <tr><td>Week 1</td><td><span class="status pending">To be added</span></td><td>–</td></tr>
-      <tr><td>Week 2</td><td><span class="status pending">To be added</span></td><td>–</td></tr>
-      <tr><td>Week 3</td><td><span class="status pending">To be added</span></td><td>–</td></tr>
-      <tr><td>Week 4</td><td><span class="status pending">To be added</span></td><td>–</td></tr>
-      <tr><td>Week 5</td><td><span class="status pending">To be added</span></td><td>–</td></tr>
-      <tr><td>Week 6</td><td><span class="status pending">To be added</span></td><td>–</td></tr>
+      <tr>
+        <td><strong>WP1:</strong> Repo, CI &amp; Website</td><td>SA, DS</td><td>High</td><td>&ndash;</td>
+        <td>T1.1</td><td><strong>M1</strong></td><td>&ndash;</td><td>&ndash;</td><td>T1.2</td><td>T1.3</td><td><strong>D1 / M5</strong></td>
+      </tr>
+      <tr>
+        <td><strong>WP2:</strong> Requirements (<code>Req1</code>)</td><td>DK (EO)</td><td>High</td><td>WP1</td>
+        <td>Prep</td><td>T2.1</td><td>T2.1/2.2</td><td><strong>M2</strong></td><td>Trace</td><td>T2.3 (<strong>D2</strong>)</td><td><span class="status ok">Done</span></td>
+      </tr>
+      <tr>
+        <td><strong>WP3:</strong> Architecture (<code>Arch1</code>)</td><td>SA, DS</td><td>High</td><td>M2</td>
+        <td>&ndash;</td><td>&ndash;</td><td>CRC</td><td>T3.1 (<strong>M3</strong>)</td><td>T3.2 (v2)</td><td>T3.3 (<strong>D3</strong>)</td><td><span class="status ok">Done</span></td>
+      </tr>
+      <tr>
+        <td><strong>WP4:</strong> Planning &amp; Risk</td><td>EC, EO</td><td>Med/High</td><td>WP1</td>
+        <td>Roles</td><td>T4.1</td><td>W2 snap</td><td>W3 snap</td><td>W4 snap</td><td>T4.3 (<strong>D4, D5</strong>)</td><td><span class="status ok">Done</span></td>
+      </tr>
+      <tr>
+        <td><strong>WP5:</strong> Implementation &amp; Tests</td><td>DS, KU, JH</td><td>High</td><td>M3, T5.1</td>
+        <td>&ndash;</td><td>T5.1</td><td>Prototype</td><td>Prototype</td><td>T5.2 / T5.3</td><td><strong>M4</strong> (88 tests)</td><td><span class="status ok">Done</span></td>
+      </tr>
+      <tr>
+        <td><strong>WP6:</strong> Licences, Lab QA &amp; Zip</td><td>JH (All)</td><td>High</td><td>WP5</td>
+        <td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>CI setup</td><td>T6.1 / T6.2</td><td><strong>D6 / M5</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 id="snapshots">Weekly snapshots and plan evolution</h2>
+
+  <div class="week-card" id="week-1">
+    <h3>Week 1 Snapshot (05 Oct &ndash; 11 Oct 2026): Team Formation &amp; Initial Scope Review</h3>
+    <p><strong>Changes from baseline:</strong> Initial plan drafted. Established communication channels (Discord), reviewed the ENG1 assessment paper and product brief, and agreed single-lead + secondary-reviewer ownership per deliverable to avoid joint-leadership diffusion.</p>
+    <table>
+      <thead><tr><th>Task</th><th>Priority</th><th>Depends on</th><th>Planned dates</th><th>Status at end of W1</th></tr></thead>
+      <tbody>
+        <tr><td><code>T1.1</code> Team charter, communication channels &amp; GitHub repo creation</td><td>High</td><td>&ndash;</td><td>05 Oct – 13 Oct</td><td><span class="status pending">In progress</span></td></tr>
+        <tr><td><code>T2.1</code> Initial breakdown of product brief &amp; candidate customer questions</td><td>High</td><td>T1.1</td><td>10 Oct – 20 Oct</td><td><span class="status pending">Started</span></td></tr>
+        <tr><td><code>T4.1</code> Draft work-package structure &amp; role assignments</td><td>Medium</td><td>T1.1</td><td>09 Oct – 18 Oct</td><td><span class="status pending">Started</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-card" id="week-2">
+    <h3>Week 2 Snapshot (12 Oct &ndash; 18 Oct 2026): Repository Setup, libGDX Starter &amp; Task Ordering</h3>
+    <p><strong>Main changes since Week 1:</strong> Reached <strong>M1</strong>: Git repository initialised (<code>2df5b84</code>, 13 Oct) and Gradle + libGDX starter scaffold committed (<code>337a8cf</code>, 14 Oct). <em>Schedule adjustment:</em> rather than starting full gameplay coding in Week 3 before customer answers were confirmed, we added a hard dependency from <code>T3.1</code> (<code>v1</code> architecture) onto <code>T2.2</code> (customer interview outcomes) to avoid rework, restricting Week 3 code work to environment checks and small spikes.</p>
+    <table>
+      <thead><tr><th>Task</th><th>Priority</th><th>Depends on</th><th>Planned dates</th><th>Status at end of W2</th></tr></thead>
+      <tbody>
+        <tr><td><code>T1.1</code> GitHub repository &amp; branch rules initialised</td><td>High</td><td>&ndash;</td><td>05 Oct – 13 Oct</td><td><span class="status ok">Completed (13 Oct)</span></td></tr>
+        <tr><td><code>T5.1</code> libGDX LWJGL3 Gradle starter &amp; local toolchain check</td><td>High</td><td>T1.1</td><td>13 Oct – 18 Oct</td><td><span class="status ok">Completed (14 Oct)</span></td></tr>
+        <tr><td><code>T4.1</code> Baseline WBS (WP1–WP6) and 12-item risk register (<code>R01</code>–<code>R12</code>)</td><td>Medium</td><td>T1.1</td><td>12 Oct – 18 Oct</td><td><span class="status ok">Completed</span></td></tr>
+        <tr><td><code>T2.1</code> Prepare structured customer interview questions</td><td>High</td><td>T1.1</td><td>12 Oct – 20 Oct</td><td><span class="status pending">In progress</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-card" id="week-3">
+    <h3>Week 3 Snapshot (19 Oct &ndash; 25 Oct 2026): Customer Interview &amp; Domain CRC Cards</h3>
+    <p><strong>Main changes since Week 2:</strong> Completed customer interview preparation and elicited key clarifications (2D top-down view, 16-year-old CS prospective student persona, "bullet-hell" goose crowding pressure, optionality of extra difficulty modes). Started CRC card modelling in WP3 to separate headless domain logic from OpenGL rendering.</p>
+    <table>
+      <thead><tr><th>Task</th><th>Priority</th><th>Depends on</th><th>Planned dates</th><th>Status at end of W3</th></tr></thead>
+      <tbody>
+        <tr><td><code>T2.1</code> Brief decomposition &amp; customer Q&amp;A session</td><td>High</td><td>T1.1</td><td>12 Oct – 22 Oct</td><td><span class="status ok">Completed</span></td></tr>
+        <tr><td><code>T2.2</code> Negotiate A1/A2 scope &amp; define mnemonic ID scheme (<code>UR_</code>, <code>FR_</code>, <code>QR_</code>, <code>CR_</code>)</td><td>High</td><td>T2.1</td><td>21 Oct – 27 Oct</td><td><span class="status pending">In progress</span></td></tr>
+        <tr><td><code>T3.1</code> Domain CRC cards &amp; initial PlantUML structural/behavioural drafts</td><td>High</td><td>T2.2</td><td>24 Oct – 31 Oct</td><td><span class="status pending">Started</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-card" id="week-4">
+    <h3>Week 4 Snapshot (26 Oct &ndash; 01 Nov 2026): Requirements Baseline (M2) &amp; v1 Architecture (M3)</h3>
+    <p><strong>Main changes since Week 3:</strong> Reached <strong>M2</strong> (requirement IDs and A1/A2 scope split agreed) and <strong>M3</strong>: all six <code>v1</code> PlantUML diagrams committed to <code>main</code> (<code>91a6bc0</code>, 31 Oct). <em>Schedule adjustment:</em> extended <code>T3.1</code> by three days to include explicit state-machine and sequence diagrams in <code>v1</code>, reducing ambiguity for Week 5 implementation.</p>
+    <table>
+      <thead><tr><th>Task</th><th>Priority</th><th>Depends on</th><th>Planned dates</th><th>Status at end of W4</th></tr></thead>
+      <tbody>
+        <tr><td><code>T2.2</code> Baseline 54 user/system requirements &amp; Volere fit criteria</td><td>High</td><td>T2.1</td><td>21 Oct – 27 Oct</td><td><span class="status ok">Completed (M2)</span></td></tr>
+        <tr><td><code>T3.1</code> Commit 6 <code>v1</code> UML diagrams (component, class, 2 state, 2 sequence)</td><td>High</td><td>T2.2</td><td>24 Oct – 31 Oct</td><td><span class="status ok">Completed (31 Oct, M3)</span></td></tr>
+        <tr><td><code>T5.2</code> Implement core gameplay domain, screens, campus map &amp; items</td><td>High</td><td>T3.1, T5.1</td><td>01 Nov – 12 Nov</td><td><span class="status pending">Ready to start</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-card" id="week-5">
+    <h3>Week 5 Snapshot (02 Nov &ndash; 08 Nov 2026): Core Implementation, JUnit/JaCoCo Suite, CI &amp; Early A2 Features</h3>
+    <p><strong>Main changes since Week 4:</strong> Rapid progress on <code>feature/a1-implementation</code> (5 Nov, commits <code>be45145</code>–<code>7d34290</code>): core domain, screens, 80 JUnit 5 tests (~99% domain line coverage), GitHub Actions 3-OS CI/Release/Website workflows, <code>v2</code> UML diagrams and static website scaffold all landed ahead of schedule. <em>Scope/plan adjustment:</em> because headless domain development moved faster than estimated, we pulled four cohesive A2-scoped items forward (<code>FR_CAMPUS_THEME</code>, <code>FR_GEESE_BLOCK</code>, <code>FR_GEESE_DISPERSE</code>, <code>FR_WIN_CONDITION</code>) so Assessment 1 delivers a complete win/lose loop.</p>
+    <table>
+      <thead><tr><th>Task</th><th>Priority</th><th>Depends on</th><th>Planned dates</th><th>Status at end of W5</th></tr></thead>
+      <tbody>
+        <tr><td><code>T5.2</code> Core domain, screens, campus map, items &amp; initial hidden events</td><td>High</td><td>T3.1, T5.1</td><td>01 Nov – 12 Nov</td><td><span class="status ok">Core complete (05 Nov)</span></td></tr>
+        <tr><td><code>T5.3</code> Headless JUnit 5 suite + JaCoCo coverage + multi-OS GitHub Actions CI</td><td>High</td><td>T5.2</td><td>04 Nov – 14 Nov</td><td><span class="status ok">CI operational (05 Nov)</span></td></tr>
+        <tr><td><code>T1.2</code> Team website scaffold &amp; GitHub Pages deployment workflow</td><td>Medium</td><td>T1.1, T5.3</td><td>02 Nov – 06 Nov</td><td><span class="status ok">Completed (05 Nov)</span></td></tr>
+        <tr><td><code>T3.2</code> Initial <code>v2</code> PlantUML diagram synchronisation</td><td>High</td><td>T3.1, T5.2</td><td>05 Nov – 12 Nov</td><td><span class="status pending">In progress</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-card" id="week-6">
+    <h3>Week 6 Snapshot (09 Nov &ndash; 15 Nov 2026): Prototype Merge (M4), Licence Checks &amp; Final Reports</h3>
+    <p><strong>Main changes since Week 5:</strong> Triggered mitigation <code>R02</code> when Karthik's base-game prototype landed on <code>main</code> (<code>88ede63</code>, 11 Nov): created <code>review/side-by-side</code> (12 Nov) to compare both branches, kept the tested 6-package architecture, and brought across Karthik's <code>SlipperyPathEvent</code> (&minus;15 s) and <code>LuckyShortcutEvent</code> (scare all geese) with no edits to existing event classes (<strong>M4</strong>, 88 JUnit 5 tests passing). Added tasks for Java 17 bytecode enforcement (<code>--release 17</code>, <code>1356ffa</code>), sub-stepped frame timing (<code>14dffaa</code>, <code>R07</code>), bundled JAR licence texts (<code>a120eda</code>, <code>R09</code>), and A4 PDF formatting across all five reports (<code>R10</code>).</p>
+    <table>
+      <thead><tr><th>Task</th><th>Priority</th><th>Depends on</th><th>Planned dates</th><th>Status at end of W6</th></tr></thead>
+      <tbody>
+        <tr><td><code>T5.2 / T5.3</code> Side-by-side prototype merge of 4 events + 88 passing JUnit tests</td><td>High</td><td>T3.1, T5.1</td><td>01 Nov &ndash; 15 Nov</td><td><span class="status ok">Completed (M4)</span></td></tr>
+        <tr><td><code>T6.1</code> Java 17 target, <code>THIRD-PARTY-NOTICES.txt</code> &amp; fat-JAR verification</td><td>High</td><td>T5.2</td><td>11 Nov – 14 Nov</td><td><span class="status ok">Completed</span></td></tr>
+        <tr><td><code>T2.3 / T3.3 / T4.3</code> Finalise <code>Req1.pdf</code>, <code>Arch1.pdf</code>, <code>Plan1.pdf</code>, <code>Risk1.pdf</code>, <code>Impl1.pdf</code></td><td>High</td><td>T2.2, T3.2, T4.2</td><td>09 Nov – 15 Nov</td><td><span class="status ok">Completed</span></td></tr>
+        <tr><td><code>T1.3 / T6.2</code> Lab smoke check, public repo/Pages cutover, <code>v1.0.0</code> tag &amp; VLE <code>.zip</code></td><td>High</td><td>All above</td><td>15 Nov – 16 Nov 12:00</td><td><span class="status pending">Final cutover</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="risk-summary">Weekly risk monitoring highlights</h2>
+  <p>Full process justification and the 12-risk register are in <a href="docs/Risk1.pdf"><strong>Risk1.pdf</strong></a>. Key risk state transitions across Weeks 2–6:</p>
+  <table>
+    <thead><tr><th>Risk ID</th><th>Summary</th><th>Peak Exposure</th><th>Outcome / Contingency Action Taken</th></tr></thead>
+    <tbody>
+      <tr><td><code>R02</code></td><td>Parallel prototype divergence between branches</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Evaluated on <code>review/side-by-side</code>; ported 2 time/scare events cleanly as <code>HiddenEvent</code> subclasses into layered architecture.</td></tr>
+      <tr><td><code>R07</code></td><td>Frame-rate hitches causing timer drift or wall/event tunnelling</td><td>Medium</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Decoupled <code>Double</code> real-time timer from <code>0.05 s</code> sub-stepped movement/event checks (<code>14dffaa</code>).</td></tr>
+      <tr><td><code>R09</code></td><td>Transitive LGPL audio libraries &amp; commercial licence compliance</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Used libGDX <code>ShapeRenderer</code> shapes (no third-party art) and bundled <code>THIRD-PARTY-NOTICES.txt</code> + <code>licenses/</code> in JAR (<code>a120eda</code>).</td></tr>
+      <tr><td><code>R10</code></td><td>Standalone cover sheets pushing report content beyond page limits</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Standardised compact 2-line headers across all 5 reports and added automated <code>pdfinfo</code> page-limit checks.</td></tr>
+      <tr><td><code>R04, R11</code></td><td>Lab machine execution &amp; public GitHub Pages/Release visibility</td><td>Medium</td><td><strong>Active at cutover:</strong> Covered by manual runtime checks (<code>MT-09</code>, <code>MT-10</code>) and private-window URL verification.</td></tr>
     </tbody>
   </table>
 </main>
 
 <footer>
-  Goose Patrol · ENG1 Team 8
+  Goose Patrol · ENG1 Cohort 2, Team 8
 </footer>
 </body>
 </html>
