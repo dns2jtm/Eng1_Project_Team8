@@ -56,27 +56,27 @@
     </thead>
     <tbody>
       <tr>
-        <td><strong>WP1:</strong> Repo, CI &amp; Website</td><td>SA, DS</td><td>High</td><td>&ndash;</td>
+        <td><strong>WP1:</strong> Repo, CI &amp; Website</td><td>EO, DS (SA)</td><td>High</td><td>&ndash;</td>
         <td>T1.1</td><td><strong>M1</strong></td><td>&ndash;</td><td>&ndash;</td><td>T1.2</td><td>T1.3</td><td><strong>D1 / M5</strong></td>
       </tr>
       <tr>
-        <td><strong>WP2:</strong> Requirements (<code>Req1</code>)</td><td>DK (EO)</td><td>High</td><td>WP1</td>
+        <td><strong>WP2:</strong> Requirements (<code>Req1</code>)</td><td>SA (EO)</td><td>High</td><td>WP1</td>
         <td>Prep</td><td>T2.1</td><td>T2.1/2.2</td><td><strong>M2</strong></td><td>Trace</td><td>T2.3 (<strong>D2</strong>)</td><td><span class="status ok">Done</span></td>
       </tr>
       <tr>
-        <td><strong>WP3:</strong> Architecture (<code>Arch1</code>)</td><td>SA, DS</td><td>High</td><td>M2</td>
+        <td><strong>WP3:</strong> Architecture (<code>Arch1</code>)</td><td>EC (SA, EO)</td><td>High</td><td>M2</td>
         <td>&ndash;</td><td>&ndash;</td><td>CRC</td><td>T3.1 (<strong>M3</strong>)</td><td>T3.2 (v2)</td><td>T3.3 (<strong>D3</strong>)</td><td><span class="status ok">Done</span></td>
       </tr>
       <tr>
-        <td><strong>WP4:</strong> Planning &amp; Risk</td><td>EC, EO</td><td>Med/High</td><td>WP1</td>
+        <td><strong>WP4:</strong> Planning &amp; Risk</td><td>JH, DK (EC)</td><td>Med/High</td><td>WP1</td>
         <td>Roles</td><td>T4.1</td><td>W2 snap</td><td>W3 snap</td><td>W4 snap</td><td>T4.3 (<strong>D4, D5</strong>)</td><td><span class="status ok">Done</span></td>
       </tr>
       <tr>
-        <td><strong>WP5:</strong> Implementation &amp; Tests</td><td>DS, KU, JH</td><td>High</td><td>M3, T5.1</td>
+        <td><strong>WP5:</strong> Implementation &amp; Tests</td><td>DS, KU (JH)</td><td>High</td><td>M3, T5.1</td>
         <td>&ndash;</td><td>T5.1</td><td>Prototype</td><td>Prototype</td><td>T5.2 / T5.3</td><td><strong>M4</strong> (88 tests)</td><td><span class="status ok">Done</span></td>
       </tr>
       <tr>
-        <td><strong>WP6:</strong> Licences, Lab QA &amp; Zip</td><td>JH (All)</td><td>High</td><td>WP5</td>
+        <td><strong>WP6:</strong> Licences, Lab QA &amp; Zip</td><td>DS, JH (All)</td><td>High</td><td>WP5</td>
         <td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>CI setup</td><td>T6.1 / T6.2</td><td><strong>D6 / M5</strong></td>
       </tr>
     </tbody>
@@ -167,15 +167,15 @@
   </div>
 
   <h2 id="risk-summary">Weekly risk monitoring highlights</h2>
-  <p>Full process justification and the 12-risk register are in <a href="docs/Risk1.pdf"><strong>Risk1.pdf</strong></a>. Key risk state transitions across Weeks 2–6:</p>
+  <p>Full process justification and the 11-risk register (<code>R01</code>&ndash;<code>R11</code>) are in <a href="docs/Risk1.pdf"><strong>Risk1.pdf</strong></a>. Key risk state transitions across Weeks 2&ndash;6:</p>
   <table>
-    <thead><tr><th>Risk ID</th><th>Summary</th><th>Peak Exposure</th><th>Outcome / Contingency Action Taken</th></tr></thead>
+    <thead><tr><th>Risk ID</th><th>Summary</th><th>Peak Severity</th><th>Outcome / Mitigation Taken</th></tr></thead>
     <tbody>
-      <tr><td><code>R02</code></td><td>Parallel prototype divergence between branches</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Evaluated on <code>review/side-by-side</code>; ported 2 time/scare events cleanly as <code>HiddenEvent</code> subclasses into layered architecture.</td></tr>
-      <tr><td><code>R07</code></td><td>Frame-rate hitches causing timer drift or wall/event tunnelling</td><td>Medium</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Decoupled <code>Double</code> real-time timer from <code>0.05 s</code> sub-stepped movement/event checks (<code>14dffaa</code>).</td></tr>
-      <tr><td><code>R09</code></td><td>Transitive LGPL audio libraries &amp; commercial licence compliance</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Used libGDX <code>ShapeRenderer</code> shapes (no third-party art) and bundled <code>THIRD-PARTY-NOTICES.txt</code> + <code>licenses/</code> in JAR (<code>a120eda</code>).</td></tr>
-      <tr><td><code>R10</code></td><td>Standalone cover sheets pushing report content beyond page limits</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Standardised compact 2-line headers across all 5 reports and added automated <code>pdfinfo</code> page-limit checks.</td></tr>
-      <tr><td><code>R04, R11</code></td><td>Lab machine execution &amp; public GitHub Pages/Release visibility</td><td>Medium</td><td><strong>Active at cutover:</strong> Covered by manual runtime checks (<code>MT-09</code>, <code>MT-10</code>) and private-window URL verification.</td></tr>
+      <tr><td><code>R04</code></td><td>Parallel prototype divergence / merge conflicts between branches</td><td>Medium</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Evaluated on <code>review/side-by-side</code>; ported 2 time/scare events cleanly as <code>HiddenEvent</code> subclasses into layered architecture.</td></tr>
+      <tr><td><code>R09</code></td><td>Frame-rate hitches causing timer drift or wall/event tunnelling</td><td>Medium</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Decoupled <code>double</code> real-time timer from <code>0.05 s</code> sub-stepped movement/event checks (<code>14dffaa</code>).</td></tr>
+      <tr><td><code>R06</code></td><td>Third-party library &amp; commercial licence compliance</td><td>Medium</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Used libGDX <code>ShapeRenderer</code> shapes (no third-party art) and bundled <code>THIRD-PARTY-NOTICES.txt</code> + <code>licenses/</code> in JAR (<code>a120eda</code>).</td></tr>
+      <tr><td><code>R11</code></td><td>Cover sheets pushing report content past page limits or broken cutover links</td><td>High</td><td><strong>Triggered W6 &amp; Mitigated:</strong> Standardised compact headers across all 5 reports, verified page counts with <code>pdfinfo</code>, and updated all links to <code>dns2jtm.github.io</code>.</td></tr>
+      <tr><td><code>R08</code></td><td>Standalone Java 17 JAR execution across desktop platforms</td><td>High</td><td><strong>Verified:</strong> <code>--release 17</code> bytecode + LWJGL 3 natives verified across Linux, Windows and macOS in GitHub Actions CI.</td></tr>
     </tbody>
   </table>
 </main>
