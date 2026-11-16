@@ -42,7 +42,7 @@ class GameWorldTest {
         return world;
     }
 
-    // --- Game state: start paused / pause / resume ---------------------------------------------
+    // Game state: start paused, pause and resume
 
     @Test
     @DisplayName("FR_START_PAUSED: a new game starts paused and hasn't started")
@@ -92,7 +92,7 @@ class GameWorldTest {
         assertEquals(GameState.PAUSED, world.getState());
     }
 
-    // --- Timer and losing ----------------------------------------------------------------------
+    // Timer and losing
 
     @Test
     @DisplayName("FR_TIMER_EXPIRE: the game is lost when the 5-minute timer runs out")
@@ -120,7 +120,7 @@ class GameWorldTest {
         assertThrows(IllegalArgumentException.class, () -> runningWorld().update(-0.1f));
     }
 
-    // --- Player movement -----------------------------------------------------------------------
+    // Player movement
 
     @Test
     @DisplayName("FR_PLAYER_MOVE: the player moves in the input direction while the game is running")
@@ -143,7 +143,7 @@ class GameWorldTest {
         assertTrue(player.isMobbed());
     }
 
-    // --- Starting inventory and using items ----------------------------------------------------
+    // Starting inventory and using items
 
     @Test
     @DisplayName("FR_INITIAL_INVENTORY: the starting inventory holds two kinds of item")
@@ -239,7 +239,7 @@ class GameWorldTest {
         assertNull(world.getMessage());
     }
 
-    // --- Winning ---------------------------------------------------------------------------------
+    // Winning
 
     @Test
     @DisplayName("FR_WIN_CONDITION: the game is won once enough geese are dispersed")
@@ -260,7 +260,7 @@ class GameWorldTest {
         assertEquals(2, summary.geeseToWin());
     }
 
-    // --- Hidden events ---------------------------------------------------------------------------
+    // Hidden events
 
     @Test
     @DisplayName("FR_EVENT_TRIGGER / FR_EVENT_COUNTER: walking into a hidden event triggers it once and counts it")
@@ -335,7 +335,7 @@ class GameWorldTest {
             world.createSummary().elapsedSeconds(), 0.06f);
     }
 
-    // --- Spawning ------------------------------------------------------------------------------
+    // Spawning
 
     @Test
     @DisplayName("FR_GEESE_SPAWN: geese spawn at start, then periodically up to the limit")
@@ -381,7 +381,7 @@ class GameWorldTest {
         assertTrue(a.distanceTo(b) >= 2f * GameConfig.GOOSE_RADIUS - 0.5f);
     }
 
-    // --- Construction and read-only views ----------------------------------------------------
+    // Construction and read-only views
 
     @Test
     void rejectsInvalidConstruction() {

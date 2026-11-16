@@ -23,16 +23,11 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * Owns and updates all game state for one session: the map, player, geese, hidden events, timer and
- * statistics.
+ * Holds and updates all state for a single game session: map, player, geese,
+ * hidden events, timer and counters.
  *
- * <p>This class has no rendering or input code (it never touches {@code Gdx.graphics} or
- * {@code Gdx.input}), so the whole game can be unit-tested without a window. The presentation layer
- * ({@code GameScreen}) turns key presses into calls such as {@link #setPlayerDirection(float, float)},
- * {@link #useSelectedItem()} and {@link #togglePause()}, and calls {@link #update(float)} once per frame.</p>
- *
- * <p>The update order follows the "one frame of gameplay" sequence diagram
- * (architecture/v2/6-seq-update.puml).</p>
+ * <p>Kept independent of {@code Gdx.graphics} and {@code Gdx.input} so gameplay
+ * rules can be tested directly with JUnit.</p>
  */
 public class GameWorld {
 
@@ -58,32 +53,20 @@ public class GameWorld {
     private float messageSecondsLeft;
 
     /**
-     * Creates a world with the default campus map, hidden events and balance values.
-     * There are four hidden events, two positive and two negative; A1 needs at least two.
-     * [FR_EVENT_COUNT, FR_EVENT_EFFECT]
-     *
-     * @param random source of randomness (pass a seeded instance for reproducible sessions)
+     * Creates a session on the default campus map with four hidden events
+     * (two positive and two negative). [FR_EVENT_COUNT, FR_EVENT_EFFECT]
      */
     public static GameWorld createDefault(Random random) {
         List<HiddenEvent> events = List.of(
             new PicnicBasketEvent(1200f, 400f),
             new GooseNestEvent(790f, 380f),
-            new LuckyShortcutEvent(620f, 620f),
+            new LuckyShortcutEvent(620f, 538f),
             new SlipperyPathEvent(420f, 300f)
         );
         return new GameWorld(GameMap.createCampus(), events, GameConfig.INITIAL_GEESE,
             GameConfig.GEESE_TO_DISPERSE_FOR_WIN, random);
     }
 
-    /**
-     * Creates a world. Each parameter can be swapped out, which keeps the class easy to test.
-     *
-     * @param map                   the map to play on
-     * @param events                hidden events placed on the map
-     * @param initialGeese          number of geese spawned straight away
-     * @param geeseToDisperseForWin dispersed geese needed to win; must be positive
-     * @param random                source of randomness for spawning
-     */
     public GameWorld(GameMap map, List<HiddenEvent> events, int initialGeese, int geeseToDisperseForWin,
                      Random random) {
         if (initialGeese < 0) {
@@ -104,7 +87,6 @@ public class GameWorld {
         }
     }
 
-    /** The starting inventory: two kinds of item, several of each. [FR_INITIAL_INVENTORY] */
     private static Inventory createStartingInventory() {
         Inventory inventory = new Inventory();
         for (int i = 0; i < STARTING_BREAD; i++) {
@@ -116,20 +98,11 @@ public class GameWorld {
         return inventory;
     }
 
-    // ------------------------------------------------------------------------------------------
-    // Frame update
-    // ------------------------------------------------------------------------------------------
-
     /**
-     * Advances the game by {@code delta} seconds of real time. Does nothing unless the game is
-     * {@link GameState#RUNNING}. [FR_PAUSE, QR_PAUSE_RESPONSE]
-     *
-     * <p>The timer is advanced by the exact real frame time, so it follows real time even when a
-     * frame is slow [QR_TIMER_ACCURACY]. Movement, collisions, hidden events and spawning are then
-     * simulated in steps of at most {@link GameConfig#MAX_SIMULATION_STEP_SECONDS}, so they stay
-     * stable and nothing can move far enough in one step to jump over an event or an obstacle.</p>
-     *
-     * @param delta real time since the last frame, in seconds; must not be negative
+     * Advances the world by {@code delta} seconds of real frame time when running.
+     * The countdown ticks once by the real frame delta [QR_TIMER_ACCURACY], while
+     * movement and collisions step in small chunks so fast movement cannot skip obstacles
+     * or hidden events.
      */
     public void update(float delta) {
         if (delta < 0f) {
@@ -149,7 +122,6 @@ public class GameWorld {
         updateEndConditions();
     }
 
-    /** Simulates one step of movement and interaction, following the frame-update sequence diagram. */
     private void simulateStep(float delta) {
         updateGeese(delta);
         updatePlayer(delta);
@@ -164,7 +136,7 @@ public class GameWorld {
         separateGeese();
     }
 
-    /** Pushes overlapping geese apart so they surround the player instead of stacking up. */
+    /** Pushes overlapping geese apart so they crowd around the player rather than stacking on one spot. */
     private void separateGeese() {
         float minDistance = 2f * GameConfig.GOOSE_RADIUS;
         for (int i = 0; i < geese.size(); i++) {
@@ -178,7 +150,6 @@ public class GameWorld {
                     continue;
                 }
                 if (distance < 1e-4f) {
-                    // Exactly on top of each other: pick an arbitrary direction to separate along.
                     dx = 1f;
                     dy = 0f;
                     distance = 1f;
@@ -192,7 +163,6 @@ public class GameWorld {
         }
     }
 
-    /** Geese touching the player slow them down, then the player moves. [FR_GEESE_BLOCK, FR_PLAYER_MOVE] */
     private void updatePlayer(float delta) {
         boolean mobbed = false;
         for (Goose goose : geese) {
@@ -205,7 +175,6 @@ public class GameWorld {
         player.move(playerDirection.x, playerDirection.y, delta, map);
     }
 
-    /** Fires any hidden event the player has just walked into. [FR_EVENT_TRIGGER, FR_EVENT_COUNTER] */
     private void checkHiddenEvents() {
         for (HiddenEvent event : events) {
             if (event.isTriggeredBy(player)) {
@@ -217,7 +186,6 @@ public class GameWorld {
         }
     }
 
-    /** Spawns a new goose at regular intervals, up to the active-goose limit. [FR_GEESE_SPAWN] */
     private void updateSpawning(float delta) {
         secondsUntilNextSpawn -= delta;
         while (secondsUntilNextSpawn <= 0f) {
@@ -228,12 +196,11 @@ public class GameWorld {
         }
     }
 
-    /** Checks for a win (enough geese dispersed) or a loss (timer expired). */
     private void updateEndConditions() {
         if (stats.getGeeseDispersed() >= geeseToDisperseForWin) {
-            state = GameState.WON; // [FR_WIN_CONDITION]
+            state = GameState.WON;
         } else if (timer.isExpired()) {
-            state = GameState.LOST; // [FR_TIMER_EXPIRE]
+            state = GameState.LOST;
         }
     }
 
@@ -246,13 +213,7 @@ public class GameWorld {
         }
     }
 
-    // ------------------------------------------------------------------------------------------
-    // Player commands (called by the presentation layer)
-    // ------------------------------------------------------------------------------------------
-
-    /**
-     * Switches between PAUSED and RUNNING. Has no effect once the game has ended. [FR_PAUSE]
-     */
+    /** Switches between PAUSED and RUNNING; ignored after the session has ended. [FR_PAUSE] */
     public void togglePause() {
         if (state == GameState.RUNNING) {
             state = GameState.PAUSED;
@@ -262,30 +223,20 @@ public class GameWorld {
         }
     }
 
-    /** Pauses the game if it is running (e.g. when the window loses focus). */
+    /** Pauses a running session (used when the window is minimised or loses focus). */
     public void pause() {
         if (state == GameState.RUNNING) {
             state = GameState.PAUSED;
         }
     }
 
-    /**
-     * Sets the direction the player is trying to move in. It is applied on later frames until changed.
-     *
-     * @param dirX horizontal input (-1 .. 1)
-     * @param dirY vertical input (-1 .. 1)
-     */
     public void setPlayerDirection(float dirX, float dirY) {
         playerDirection.set(dirX, dirY);
     }
 
     /**
-     * Uses the selected inventory item on every goose within its range, then removes the item and
-     * counts it as used. Follows the "use an item" sequence diagram.
-     * [FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE]
-     *
-     * @return {@code true} if an item was used; {@code false} if the game isn't running or the
-     *         inventory is empty
+     * Uses the selected item on all geese within range, removes it from the inventory
+     * and updates the counters. [FR_USE_ITEM, FR_ITEM_COUNTER, FR_GEESE_DISPERSE]
      */
     public boolean useSelectedItem() {
         if (state != GameState.RUNNING) {
@@ -312,7 +263,6 @@ public class GameWorld {
         return true;
     }
 
-    /** Selects the inventory slot at {@code index} (0-based). */
     public void selectItem(int index) {
         player.getInventory().select(index);
     }
@@ -325,16 +275,7 @@ public class GameWorld {
         player.getInventory().selectPrevious();
     }
 
-    // ------------------------------------------------------------------------------------------
-    // Operations used by hidden events
-    // ------------------------------------------------------------------------------------------
-
-    /**
-     * Adds a goose at (x, y) with random hunger. This ignores the active-goose limit; hidden events
-     * use it on purpose.
-     *
-     * @return the new goose
-     */
+    /** Spawns a goose at (x, y) with random starting hunger (used by hidden events as well). */
     public Goose spawnGooseAt(float x, float y) {
         int hungerRange = GameConfig.GOOSE_MAX_HUNGER - GameConfig.GOOSE_MIN_HUNGER + 1;
         int hunger = GameConfig.GOOSE_MIN_HUNGER + random.nextInt(hungerRange);
@@ -343,17 +284,11 @@ public class GameWorld {
         return goose;
     }
 
-    /** Shows a feedback message on the HUD for {@link GameConfig#MESSAGE_SECONDS}. */
     public void showMessage(String text, WorldMessage.Tone tone) {
         message = new WorldMessage(text, tone);
         messageSecondsLeft = GameConfig.MESSAGE_SECONDS;
     }
 
-    // ------------------------------------------------------------------------------------------
-    // Helpers
-    // ------------------------------------------------------------------------------------------
-
-    /** Spawns a goose at a random spawn point, preferring points far enough from the player. */
     private void spawnGooseAtSpawnPoint() {
         List<Vector2> points = map.getGooseSpawnPoints();
         List<Vector2> farEnough = new ArrayList<>();
@@ -367,7 +302,6 @@ public class GameWorld {
         spawnGooseAt(point.x, point.y);
     }
 
-    /** Removes dispersed geese from the map and counts them. [FR_GEESE_DISPERSE] */
     private int removeDispersedGeese() {
         int removed = 0;
         Iterator<Goose> iterator = geese.iterator();
@@ -388,16 +322,11 @@ public class GameWorld {
         String text = item.getName() + " " + item.getEffectVerb() + " " + affected
             + (affected == 1 ? " goose" : " geese");
         if (dispersed > 0) {
-            text += " - " + dispersed + " flew away!";
+            text += " (" + dispersed + " flew away!)";
         }
         return text;
     }
 
-    // ------------------------------------------------------------------------------------------
-    // Queries
-    // ------------------------------------------------------------------------------------------
-
-    /** @return a snapshot of the session for the end screen */
     public GameSummary createSummary() {
         return new GameSummary(state == GameState.WON, timer.getElapsedSeconds(), stats.getItemsUsed(),
             stats.getEventsTriggered(), stats.getGeeseDispersed(), geeseToDisperseForWin);
@@ -411,7 +340,6 @@ public class GameWorld {
         return state.isFinished();
     }
 
-    /** @return {@code true} once the player has unpaused the game for the first time */
     public boolean hasStarted() {
         return started;
     }
@@ -432,17 +360,14 @@ public class GameWorld {
         return player;
     }
 
-    /** @return read-only view of the geese currently on the map */
     public List<Goose> getGeese() {
         return Collections.unmodifiableList(geese);
     }
 
-    /** @return read-only view of all hidden events, triggered or not */
     public List<HiddenEvent> getEvents() {
         return Collections.unmodifiableList(events);
     }
 
-    /** @return the current feedback message, or {@code null} if there isn't one */
     public WorldMessage getMessage() {
         return message;
     }

@@ -12,11 +12,8 @@ import com.goosepatrol.logic.GameState;
 import com.goosepatrol.logic.GameWorld;
 
 /**
- * The in-game screen. Reads keyboard input, passes commands to the {@link GameWorld}, advances it
- * once per frame and draws it using {@link WorldRenderer} and {@link Hud}.
- *
- * <p>Controls [FR_PLAYER_MOVE, FR_USE_ITEM, FR_PAUSE]: WASD / arrow keys to move, SPACE to use the selected item, 1-9 / Q / E to choose an
- * item, P / ESC to start, pause and resume.</p>
+ * Main gameplay screen. Reads keyboard input, updates {@link GameWorld} once per frame
+ * and draws the campus and HUD.
  */
 public class GameScreen extends ScreenAdapter {
 
@@ -42,9 +39,9 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         handleInput();
-        world.update(delta); // GameWorld splits long frames into small steps itself
+        world.update(delta);
 
-        ScreenUtils.clear(0.08f, 0.08f, 0.1f, 1f);
+        ScreenUtils.clear(0.08f, 0.09f, 0.11f, 1f);
         viewport.apply();
         worldRenderer.render(world, viewport.getCamera().combined);
         hud.render(world, viewport.getCamera().combined);
@@ -55,15 +52,22 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        boolean pausePressed = Gdx.input.isKeyJustPressed(Input.Keys.P)
+            || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)
+            || (world.getState() == GameState.PAUSED && Gdx.input.isKeyJustPressed(Input.Keys.ENTER));
+        if (pausePressed) {
             world.togglePause();
+            return;
         }
         if (world.getState() != GameState.RUNNING) {
             world.setPlayerDirection(0f, 0f);
             return;
         }
-        world.setPlayerDirection(axis(Input.Keys.D, Input.Keys.RIGHT, Input.Keys.A, Input.Keys.LEFT),
-            axis(Input.Keys.W, Input.Keys.UP, Input.Keys.S, Input.Keys.DOWN));
+
+        world.setPlayerDirection(
+            axis(Input.Keys.D, Input.Keys.RIGHT, Input.Keys.A, Input.Keys.LEFT),
+            axis(Input.Keys.W, Input.Keys.UP, Input.Keys.S, Input.Keys.DOWN)
+        );
 
         for (int i = 0; i < SLOT_KEYS.length; i++) {
             if (Gdx.input.isKeyJustPressed(SLOT_KEYS[i])) {
@@ -81,7 +85,6 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    /** @return +1, -1 or 0 depending on which of the positive / negative keys are held */
     private static float axis(int positiveKey, int positiveAlt, int negativeKey, int negativeAlt) {
         float value = 0f;
         if (Gdx.input.isKeyPressed(positiveKey) || Gdx.input.isKeyPressed(positiveAlt)) {
@@ -98,7 +101,6 @@ public class GameScreen extends ScreenAdapter {
         viewport.update(width, height, true);
     }
 
-    /** Called when the window is minimised or loses focus: pause automatically. [FR_PAUSE] */
     @Override
     public void pause() {
         world.pause();

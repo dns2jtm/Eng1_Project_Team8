@@ -18,31 +18,34 @@ import com.goosepatrol.item.Item;
 import com.goosepatrol.logic.GameWorld;
 
 /**
- * Draws the campus map and everything on it, using simple shapes so no external art assets are needed.
- * Read-only: it never changes the world.
+ * Renders the 2D top-down campus map, player, geese and triggered events using
+ * libGDX shapes and text. Does not modify world state.
  */
 public class WorldRenderer {
 
-    private static final Color GRASS = new Color(0.42f, 0.66f, 0.33f, 1f);
-    private static final Color PATH = new Color(0.86f, 0.79f, 0.62f, 1f);
-    private static final Color BUILDING_WALL = new Color(0.45f, 0.42f, 0.40f, 1f);
-    private static final Color BUILDING_ROOF = new Color(0.62f, 0.58f, 0.55f, 1f);
-    private static final Color WATER_EDGE = new Color(0.20f, 0.42f, 0.75f, 1f);
-    private static final Color WATER = new Color(0.30f, 0.55f, 0.88f, 1f);
-    private static final Color LABEL = new Color(0.12f, 0.12f, 0.14f, 1f);
+    private static final Color GRASS = new Color(0.42f, 0.65f, 0.34f, 1f);
+    private static final Color BORDER = new Color(0.27f, 0.46f, 0.22f, 1f);
+    private static final Color PATH = new Color(0.85f, 0.78f, 0.62f, 1f);
+    private static final Color BUILDING_WALL = new Color(0.44f, 0.41f, 0.39f, 1f);
+    private static final Color BUILDING_ROOF = new Color(0.67f, 0.63f, 0.59f, 1f);
+    private static final Color WATER_EDGE = new Color(0.20f, 0.43f, 0.74f, 1f);
+    private static final Color WATER = new Color(0.29f, 0.56f, 0.87f, 1f);
+    private static final Color BUILDING_LABEL = new Color(0.13f, 0.13f, 0.15f, 1f);
+    private static final Color WATER_LABEL = new Color(0.94f, 0.98f, 1f, 1f);
     private static final Color SHADOW = new Color(0f, 0f, 0f, 0.22f);
-    private static final Color RANGE = new Color(1f, 1f, 1f, 0.13f);
-    private static final Color EVENT_POSITIVE = new Color(0.30f, 0.90f, 0.40f, 0.40f);
-    private static final Color EVENT_NEGATIVE = new Color(0.95f, 0.30f, 0.25f, 0.40f);
+    private static final Color RANGE_FILL = new Color(1f, 1f, 1f, 0.12f);
+    private static final Color RANGE_OUTLINE = new Color(1f, 1f, 1f, 0.32f);
+    private static final Color EVENT_POSITIVE = new Color(0.28f, 0.86f, 0.38f, 0.38f);
+    private static final Color EVENT_NEGATIVE = new Color(0.92f, 0.30f, 0.25f, 0.38f);
     private static final Color GOOSE_BODY = new Color(0.97f, 0.97f, 0.95f, 1f);
-    private static final Color GOOSE_SCARED = new Color(0.78f, 0.84f, 0.95f, 1f);
-    private static final Color GOOSE_HEAD = new Color(0.15f, 0.15f, 0.15f, 1f);
-    private static final Color GOOSE_BEAK = new Color(1f, 0.62f, 0.10f, 1f);
-    private static final Color HUNGER_PIP = new Color(0.95f, 0.45f, 0.10f, 1f);
+    private static final Color GOOSE_SCARED = new Color(0.78f, 0.85f, 0.95f, 1f);
+    private static final Color GOOSE_HEAD = new Color(0.16f, 0.16f, 0.16f, 1f);
+    private static final Color GOOSE_BEAK = new Color(1f, 0.60f, 0.10f, 1f);
+    private static final Color HUNGER_PIP = new Color(0.96f, 0.46f, 0.10f, 1f);
     private static final Color CRUMB = new Color(0.90f, 0.75f, 0.40f, 1f);
-    private static final Color PLAYER_BODY = new Color(0.36f, 0.20f, 0.60f, 1f);
-    private static final Color PLAYER_HEAD = new Color(0.98f, 0.82f, 0.68f, 1f);
-    private static final Color PLAYER_MOBBED = new Color(1f, 0.15f, 0.15f, 0.45f);
+    private static final Color PLAYER_BODY = new Color(0.35f, 0.21f, 0.62f, 1f);
+    private static final Color PLAYER_HEAD = new Color(0.97f, 0.82f, 0.68f, 1f);
+    private static final Color PLAYER_MOBBED = new Color(0.95f, 0.20f, 0.20f, 0.45f);
 
     private final ShapeRenderer shapes;
     private final SpriteBatch batch;
@@ -55,7 +58,6 @@ public class WorldRenderer {
         this.font = font;
     }
 
-    /** Draws the world using the given camera projection. */
     public void render(GameWorld world, Matrix4 projection) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -72,19 +74,36 @@ public class WorldRenderer {
         drawPlayer(world.getPlayer());
         shapes.end();
 
+        Item selected = world.getPlayer().getInventory().selected();
+        if (selected != null) {
+            shapes.begin(ShapeRenderer.ShapeType.Line);
+            shapes.setColor(RANGE_OUTLINE);
+            shapes.circle(world.getPlayer().getX(), world.getPlayer().getY(), selected.getRange(), 48);
+            shapes.end();
+        }
+
         batch.setProjectionMatrix(projection);
         batch.begin();
         drawObstacleLabels(world.getMap());
+        drawTriggeredEventLabels(world);
         batch.end();
     }
 
     private void drawGround(GameMap map) {
+        float w = map.getWidth();
+        float h = map.getHeight();
         shapes.setColor(GRASS);
-        shapes.rect(0f, 0f, map.getWidth(), map.getHeight());
+        shapes.rect(0f, 0f, w, h);
         shapes.setColor(PATH);
         for (Rectangle path : map.getPaths()) {
             shapes.rect(path.x, path.y, path.width, path.height);
         }
+        shapes.setColor(BORDER);
+        float b = 4f;
+        shapes.rect(0f, 0f, w, b);
+        shapes.rect(0f, h - b, w, b);
+        shapes.rect(0f, 0f, b, h);
+        shapes.rect(w - b, 0f, b, h);
     }
 
     private void drawObstacles(GameMap map) {
@@ -97,7 +116,7 @@ public class WorldRenderer {
                 shapes.ellipse(b.x + 8f, b.y + 8f, b.width - 16f, b.height - 16f);
             } else {
                 shapes.setColor(SHADOW);
-                shapes.rect(b.x + 6f, b.y - 6f, b.width, b.height);
+                shapes.rect(b.x + 5f, b.y - 5f, b.width, b.height);
                 shapes.setColor(BUILDING_WALL);
                 shapes.rect(b.x, b.y, b.width, b.height);
                 shapes.setColor(BUILDING_ROOF);
@@ -106,7 +125,6 @@ public class WorldRenderer {
         }
     }
 
-    /** Hidden events can't be seen until triggered. Afterwards a coloured marker shows where they were. [FR_EVENT_HIDDEN] */
     private void drawTriggeredEvents(GameWorld world) {
         for (HiddenEvent event : world.getEvents()) {
             if (event.isTriggered()) {
@@ -116,11 +134,10 @@ public class WorldRenderer {
         }
     }
 
-    /** Shows the range of the selected item, so the player can judge when to use it. [FR_USE_ITEM] */
     private void drawSelectedItemRange(Player player) {
         Item selected = player.getInventory().selected();
         if (selected != null) {
-            shapes.setColor(RANGE);
+            shapes.setColor(RANGE_FILL);
             shapes.circle(player.getX(), player.getY(), selected.getRange(), 48);
         }
     }
@@ -136,18 +153,17 @@ public class WorldRenderer {
         shapes.circle(x + 3f, y - 3f, r, 20);
         shapes.setColor(goose.isFleeing() ? GOOSE_SCARED : GOOSE_BODY);
         shapes.circle(x, y, r, 20);
-        // Black neck/head in the direction of travel, with an orange beak.
         shapes.setColor(GOOSE_HEAD);
         shapes.circle(x + fx * r * 0.9f, y + fy * r * 0.9f, r * 0.45f, 12);
         shapes.setColor(GOOSE_BEAK);
-        shapes.circle(x + fx * r * 1.4f, y + fy * r * 1.4f, r * 0.22f, 8);
+        shapes.circle(x + fx * r * 1.4f, y + fy * r * 1.4f, r * 0.24f, 8);
 
         if (goose.isDistracted() && !goose.isFleeing()) {
             shapes.setColor(CRUMB);
             shapes.circle(x + fx * r * 2f + 3f, y + fy * r * 2f, 2.5f, 6);
             shapes.circle(x + fx * r * 2f - 3f, y + fy * r * 2f + 2f, 2.5f, 6);
         }
-        // One orange pip per unit of hunger, so the player can see how much food each goose needs.
+
         shapes.setColor(HUNGER_PIP);
         float pipSpacing = 7f;
         float startX = x - (goose.getHunger() - 1) * pipSpacing / 2f;
@@ -162,7 +178,7 @@ public class WorldRenderer {
         float r = player.getRadius();
         if (player.isMobbed()) {
             shapes.setColor(PLAYER_MOBBED);
-            shapes.circle(x, y, r + 7f, 24);
+            shapes.circle(x, y, r + 6f, 24);
         }
         shapes.setColor(SHADOW);
         shapes.circle(x + 3f, y - 3f, r, 24);
@@ -173,12 +189,24 @@ public class WorldRenderer {
     }
 
     private void drawObstacleLabels(GameMap map) {
-        font.setColor(LABEL);
         for (Obstacle obstacle : map.getObstacles()) {
             Rectangle b = obstacle.getBounds();
+            font.setColor(obstacle.getType() == Obstacle.Type.WATER ? WATER_LABEL : BUILDING_LABEL);
             layout.setText(font, obstacle.getName());
             font.draw(batch, layout, b.x + (b.width - layout.width) / 2f, b.y + (b.height + layout.height) / 2f);
         }
         font.setColor(Color.WHITE);
+    }
+
+    private void drawTriggeredEventLabels(GameWorld world) {
+        font.getData().setScale(0.9f);
+        font.setColor(Color.WHITE);
+        for (HiddenEvent event : world.getEvents()) {
+            if (event.isTriggered()) {
+                layout.setText(font, event.getName());
+                font.draw(batch, layout, event.getX() - layout.width / 2f, event.getY() + layout.height / 2f);
+            }
+        }
+        font.getData().setScale(1f);
     }
 }

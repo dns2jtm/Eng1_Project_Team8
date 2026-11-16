@@ -29,7 +29,7 @@ public class Lwjgl3Launcher {
         //// useful for testing performance, but can also be very stressful to some hardware.
         //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
 
-        // The window matches the world size; the FitViewport letterboxes if the window is resized.
+        // The window matches the viewport size; the FitViewport letterboxes if the window is resized.
         configuration.setWindowedMode((int) GameConfig.WORLD_WIDTH, (int) GameConfig.WORLD_HEIGHT);
         configuration.setWindowSizeLimits(640, 360, -1, -1);
         //// You can change these files; they are in lwjgl3/src/main/resources/ .

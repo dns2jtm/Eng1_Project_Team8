@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * The (simplified) university campus the player moves around in. [UR_CAMPUS_MAP, FR_MAP_BOUNDS]
- *
- * <p>The map has hard outer limits and a set of {@link Obstacle}s. Buildings block everyone; the lake
- * blocks the player but not geese. The map also defines where the player starts and where new geese
- * may appear. Paths are decorative only.</p>
+ * Bounded 2D campus map containing buildings, water, walkways and spawn points.
+ * Buildings block everyone; water blocks the player while allowing geese across.
+ * [UR_CAMPUS_MAP, FR_MAP_BOUNDS, FR_CAMPUS_THEME]
  */
 public class GameMap {
 
@@ -26,12 +24,12 @@ public class GameMap {
     private final List<Vector2> gooseSpawnPoints;
 
     /**
-     * @param width            width of the walkable area
-     * @param height           height of the walkable area
-     * @param obstacles        obstacles on the map
-     * @param paths            decorative footpaths (drawn but don't affect movement)
-     * @param playerStart      where the player begins
-     * @param gooseSpawnPoints where geese may appear; must not be empty
+     * @param width            map width in world units; must be positive
+     * @param height           map height in world units; must be positive
+     * @param obstacles        buildings and water areas on the map
+     * @param paths            decorative walkways
+     * @param playerStart      player starting coordinates
+     * @param gooseSpawnPoints coordinates where geese can spawn; must not be empty
      */
     public GameMap(float width, float height, List<Obstacle> obstacles, List<Rectangle> paths,
                    Vector2 playerStart, List<Vector2> gooseSpawnPoints) {
@@ -50,46 +48,42 @@ public class GameMap {
     }
 
     /**
-     * Builds the default campus map used in the game. It doesn't aim to be realistic; it just needs
-     * to look like a campus and have clear limits. It has six named university-style locations
-     * (five buildings and a lake). [FR_CAMPUS_THEME]
+     * Creates the default campus map with five named university buildings, a central lake
+     * and connecting footpaths. [FR_CAMPUS_THEME]
      */
     public static GameMap createCampus() {
         List<Obstacle> obstacles = List.of(
             new Obstacle("Library", Obstacle.Type.BUILDING, 150f, 470f, 230f, 150f),
             new Obstacle("Computer Science", Obstacle.Type.BUILDING, 880f, 470f, 250f, 160f),
-            new Obstacle("Central Hall", Obstacle.Type.BUILDING, 560f, 70f, 200f, 130f),
-            new Obstacle("Students' Union", Obstacle.Type.BUILDING, 110f, 80f, 200f, 120f),
-            new Obstacle("Dining Hall", Obstacle.Type.BUILDING, 1000f, 90f, 170f, 130f),
+            new Obstacle("Central Hall", Obstacle.Type.BUILDING, 560f, 105f, 200f, 120f),
+            new Obstacle("Students' Union", Obstacle.Type.BUILDING, 110f, 105f, 200f, 115f),
+            new Obstacle("Dining Hall", Obstacle.Type.BUILDING, 1000f, 105f, 170f, 125f),
             new Obstacle("Campus Lake", Obstacle.Type.WATER, 440f, 320f, 300f, 120f)
         );
         List<Rectangle> paths = List.of(
             new Rectangle(0f, 260f, GameConfig.WORLD_WIDTH, 40f),
             new Rectangle(800f, 0f, 40f, GameConfig.WORLD_HEIGHT),
             new Rectangle(380f, 520f, 500f, 36f),
-            new Rectangle(240f, 200f, 36f, 270f)
+            new Rectangle(240f, 220f, 36f, 250f)
         );
         List<Vector2> spawns = List.of(
-            new Vector2(30f, 30f),
-            new Vector2(1250f, 30f),
-            new Vector2(30f, 690f),
-            new Vector2(1250f, 690f),
-            new Vector2(640f, 700f),
-            new Vector2(640f, 20f)
+            new Vector2(30f, 40f),
+            new Vector2(1250f, 40f),
+            new Vector2(30f, 650f),
+            new Vector2(1250f, 650f),
+            new Vector2(640f, 655f),
+            new Vector2(640f, 30f)
         );
         return new GameMap(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, obstacles, paths,
             new Vector2(300f, 280f), spawns);
     }
 
-    /**
-     * Whether the player could stand with its centre exactly on (x, y): inside the map limits and
-     * not inside an obstacle that blocks the player.
-     */
+    /** Returns true if a point (radius 0) is within the map bounds and clear of player-blocking obstacles. */
     public boolean isWalkable(float x, float y) {
         return canPlayerOccupy(x, y, 0f);
     }
 
-    /** Whether a player-sized circle of the given radius fits at (x, y). */
+    /** Returns true if the player circle of the given radius fits at (x, y). */
     public boolean canPlayerOccupy(float x, float y, float radius) {
         if (!isInsideBounds(x, y, radius)) {
             return false;
@@ -102,7 +96,7 @@ public class GameMap {
         return true;
     }
 
-    /** Whether a goose of the given radius fits at (x, y). Geese can swim, so water doesn't block them. */
+    /** Returns true if a goose circle of the given radius fits at (x, y). Geese can cross water. */
     public boolean canGooseOccupy(float x, float y, float radius) {
         if (!isInsideBounds(x, y, radius)) {
             return false;
@@ -131,17 +125,14 @@ public class GameMap {
         return obstacles;
     }
 
-    /** @return defensive copies of the decorative paths */
     public List<Rectangle> getPaths() {
         return copyRectangles(paths);
     }
 
-    /** @return a copy of the player's starting position */
     public Vector2 getPlayerStart() {
         return new Vector2(playerStart);
     }
 
-    /** @return copies of the goose spawn points */
     public List<Vector2> getGooseSpawnPoints() {
         return copyVectors(gooseSpawnPoints);
     }

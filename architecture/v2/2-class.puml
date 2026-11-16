@@ -1,8 +1,11 @@
 @startuml class
 title Goose Patrol - Class Diagram (v2, A1 implementation)
+left to right direction
 hide empty members
 skinparam classAttributeIconSize 0
-skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam nodesep 20
+skinparam ranksep 30
 
 package logic {
   enum GameState {
@@ -45,6 +48,21 @@ package logic {
   class WorldMessage <<record>>
 }
 
+package event {
+  abstract class HiddenEvent {
+    - triggered : Boolean
+    - radius : Float
+    + isTriggeredBy(player : Player) : Boolean
+    + trigger(world : GameWorld)
+    # {abstract} apply(world : GameWorld)
+    + {abstract} isPositive() : Boolean
+  }
+  class PicnicBasketEvent
+  class GooseNestEvent
+  class LuckyShortcutEvent
+  class SlipperyPathEvent
+}
+
 package entity {
   abstract class Entity {
     - x : Float
@@ -77,14 +95,14 @@ package entity {
 
   class GameMap {
     + isWalkable(x : Float, y : Float) : Boolean
-    + canPlayerOccupy(x, y, radius) : Boolean
-    + canGooseOccupy(x, y, radius) : Boolean
+    + canPlayerOccupy(x : Float, y : Float, radius : Float) : Boolean
+    + canGooseOccupy(x : Float, y : Float, radius : Float) : Boolean
     + {static} createCampus() : GameMap
   }
 
   class Obstacle {
     - type : Type
-    + overlapsCircle(x, y, radius) : Boolean
+    + overlapsCircle(x : Float, y : Float, radius : Float) : Boolean
   }
 }
 
@@ -111,21 +129,6 @@ package item {
     - scareSeconds : Float
     + {static} whistle() : ScareItem
   }
-}
-
-package event {
-  abstract class HiddenEvent {
-    - triggered : Boolean
-    - radius : Float
-    + isTriggeredBy(player : Player) : Boolean
-    + trigger(world : GameWorld)
-    # {abstract} apply(world : GameWorld)
-    + {abstract} isPositive() : Boolean
-  }
-  class PicnicBasketEvent
-  class GooseNestEvent
-  class LuckyShortcutEvent
-  class SlipperyPathEvent
 }
 
 Entity <|-- Player

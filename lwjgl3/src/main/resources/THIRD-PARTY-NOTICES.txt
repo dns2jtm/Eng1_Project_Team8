@@ -14,6 +14,10 @@ libGDX 1.14.2 (gdx, gdx-backend-   Apache License 2.0         Apache-2.0.txt
   https://libgdx.com
   Window icons (libGDX logo, from the libGDX project template) are part of libGDX.
 
+gdx-liftoff StartupHelper          Apache License 2.0         Apache-2.0.txt
+  (com.goosepatrol.lwjgl3.StartupHelper, Copyright 2020 damios)
+  https://github.com/libgdx/gdx-liftoff
+
 LWJGL 3.4.3 (lwjgl, glfw, opengl,  BSD 3-Clause               LWJGL-BSD-3-Clause.txt
   openal, jemalloc, stb bindings)
   https://www.lwjgl.org
@@ -34,6 +38,8 @@ Audio decoders used by libGDX:
 Liberation Sans font (libGDX       SIL Open Font License 1.1  OFL-1.1-LiberationSans.txt
   default font, lsans-15)
 
-The LGPL-licensed components are unmodified and are loaded as separate libraries at run
-time. You may replace them with other compatible versions; their source code is
-available at the addresses above.
+The LGPL-licensed components are unmodified. OpenAL Soft is extracted and loaded dynamically
+as a separate native shared library at run time; JLayer and JOrbis are packaged as unmodified
+Java class hierarchies inside this standard unobfuscated JAR (ZIP) archive, so any user may
+inspect and replace their class files and re-archive the JAR using standard jar/zip tools
+(LGPL v2.1 Section 6). Their source code is available at the addresses above.

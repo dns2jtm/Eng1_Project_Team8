@@ -112,4 +112,40 @@ class HeadlessGameSessionTest {
         assertTrue(summary.elapsedSeconds() <= GameConfig.GAME_DURATION_SECONDS + 1e-3f);
         assertTrue(summary.won() || finished.getTimer().isExpired());
     }
+
+    @Test
+    @DisplayName("QR_STABILITY: three consecutive full 5-minute sessions run to completion with zero crashes")
+    void threeConsecutiveFullSessionsRunWithoutError() throws Exception {
+        int completedSessions = onGdxThread(() -> {
+            int completed = 0;
+            for (int session = 0; session < 3; session++) {
+                GameWorld world = GameWorld.createDefault(new Random(500L + session));
+                world.togglePause();
+                Random input = new Random(100L + session);
+                float dirX = 0f;
+                float dirY = 1f;
+                int frame = 0;
+                while (!world.isFinished()) {
+                    if (frame % 120 == 0) {
+                        dirX = input.nextInt(3) - 1;
+                        dirY = input.nextInt(3) - 1;
+                    }
+                    world.setPlayerDirection(dirX, dirY);
+                    if (frame == 2400) {
+                        // Select Whistle (slot 4) and use it once so session plays full 5 minutes without dispersing 8 geese
+                        world.selectItem(4);
+                        world.useSelectedItem();
+                    }
+                    world.update(FRAME);
+                    frame++;
+                }
+                GameSummary summary = world.createSummary();
+                assertTrue(summary.elapsedSeconds() <= GameConfig.GAME_DURATION_SECONDS + 1e-3f);
+                assertTrue(summary.won() || world.getTimer().isExpired());
+                completed++;
+            }
+            return completed;
+        });
+        assertEquals(3, completedSessions);
+    }
 }
