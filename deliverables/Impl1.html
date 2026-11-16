@@ -7,48 +7,65 @@
 </head>
 <body>
 
-<h1>Implementation (Impl1) - Goose Patrol</h1>
-<div class="meta">
-  ENG1 (COM00019I) Assessment 1 · Cohort 2, Team 8 · Code: <a href="https://github.com/dns2jtm/Eng1_Project_Team8">github.com/dns2jtm/Eng1_Project_Team8</a> ·
-  Executable: <code>GoosePatrol.jar</code> (all dependencies included; Java 17+; <code>java -jar GoosePatrol.jar</code>) ·
-  Traceability: <a href="https://dns2jtm.github.io/Eng1_Project_Team8/traceability.html">traceability.html</a>
+<div class="title-page">
+  <div class="module-label">ENG1 (COM00019I) &ndash; Assessment 1</div>
+  <h1>Implementation (Impl1)</h1>
+  <div class="product-name">Goose Patrol</div>
+  <div class="group-heading">Cohort 2, Team 8 &ndash; Team Daniel</div>
+  <ul class="members-list">
+    <li>Soham Apte</li>
+    <li>Karthik Udaiyar</li>
+    <li>Elliott Christie</li>
+    <li>James Hammett</li>
+    <li>Dawud Kazi</li>
+    <li>Evan O'Reilly</li>
+    <li>Daniel Sawa</li>
+  </ul>
+  <div class="links-block">
+    <b>Website:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/">dns2jtm.github.io/Eng1_Project_Team8</a><br>
+    <b>Repository:</b> <a href="https://github.com/dns2jtm/Eng1_Project_Team8">github.com/dns2jtm/Eng1_Project_Team8</a><br>
+    <b>Executable JAR:</b> <code>GoosePatrol.jar</code> (Java 17+; <code>java -jar GoosePatrol.jar</code>)
+  </div>
 </div>
 
-<h2 style="margin-top:4px;">6(b) Third-party libraries and assets</h2>
-<table class="compact-table">
-  <tr><th style="width:26%;">Component</th><th style="width:12%;">Version</th><th style="width:28%;">Used for</th><th style="width:25%;">Licence</th><th style="width:9%;">In JAR</th></tr>
-  <tr><td>libGDX (core, LWJGL3 backend, natives, template icons)</td><td>1.14.2</td><td>Game loop, 2D rendering, input, window icons</td><td>Apache 2.0</td><td>Yes</td></tr>
-  <tr><td><code>StartupHelper</code> (<code>gdx-liftoff</code>, damios)</td><td>2020</td><td>macOS/Linux/Windows JVM launch helper</td><td>Apache 2.0</td><td>Yes</td></tr>
-  <tr><td>LWJGL + native GLFW, jemalloc, stb</td><td>3.4.3</td><td>Windowing, OpenGL, memory bindings</td><td>BSD-3-Clause; natives: zlib, BSD-2-Clause, MIT/PD</td><td>Yes</td></tr>
-  <tr><td>OpenAL Soft, JLayer, JOrbis</td><td>&ndash;, 1.0.1, 0.0.17</td><td>Audio runtime bundled by libGDX (unused in A1)</td><td>LGPL 2.0+ / 2.1</td><td>Yes</td></tr>
-  <tr><td>Liberation Sans (<code>lsans-15</code>)</td><td>&ndash;</td><td>libGDX built-in HUD and menu bitmap font</td><td>SIL Open Font License 1.1</td><td>Yes</td></tr>
-  <tr><td>JUnit 5; JaCoCo</td><td>5.11.4; 0.8.15</td><td>Automated unit and headless session tests; coverage</td><td>Eclipse Public License 2.0</td><td>No</td></tr>
-  <tr><td>Gradle; Construo; PlantUML</td><td>9.8; &ndash;; 1.2026</td><td>Build, packaging and UML diagram generation</td><td>Apache 2.0 / GPL (tool output unrestricted)</td><td>No</td></tr>
-</table>
-<p style="font-size:8.5pt; margin:4px 0;"><b>Assets:</b> No external sprite sheets or audio files are used in A1. Campus buildings, walkways, the lake, the player and geese are drawn with libGDX <code>ShapeRenderer</code> and the built-in Liberation Sans font, avoiding third-party asset licence issues.</p>
+<div class="page-break"></div>
 
-<h3 style="margin-top:5px;">Suitability of licences (<code>CR_LICENCES</code>)</h3>
-<ul style="font-size:8.5pt; margin:3px 0;">
-  <li><b>Commercial redistribution permitted:</b> Because the customer may market and sell the game, all bundled components must permit commercial distribution. Permissive licences (Apache 2.0, BSD-2/3-Clause, zlib, MIT, SIL OFL 1.1) allow commercial sale provided copyright and licence notices are kept; <code>GoosePatrol.jar</code> includes <code>THIRD-PARTY-NOTICES.txt</code> and full texts under <code>licenses/</code>. Apache 2.0 also grants patent rights.</li>
-  <li><b>LGPL v2.1 compliance in a single JAR:</b> OpenAL Soft is extracted and loaded dynamically as a separate native library at run time, while JLayer and JOrbis remain unmodified Java packages inside a standard unobfuscated JAR (ZIP) archive. Under LGPL v2.1 Section 6, users can inspect and replace those classes with standard <code>jar</code>/<code>zip</code> tools; <code>LGPL-2.1.txt</code> and source links are included in <code>THIRD-PARTY-NOTICES.txt</code>.</li>
-  <li><b>Build/test tools and A2 asset rule:</b> JUnit 5, JaCoCo, Gradle and PlantUML are not shipped in <code>GoosePatrol.jar</code>. Any Assessment 2 art or audio must be original work or licensed under CC0, CC BY or OFL (not GPL or CC BY-NC).</li>
+<h2 style="margin-top:0;">6(b) Third-party libraries, assets and licence suitability</h2>
+<table class="compact-table">
+  <tr><th style="width:28%;">Component</th><th style="width:11%;">Ver.</th><th style="width:27%;">Purpose</th><th style="width:25%;">Licence [1&ndash;3]</th><th style="width:9%;">In JAR</th></tr>
+  <tr><td>libGDX (core, LWJGL3, icons)</td><td>1.14.2</td><td>Game loop, 2D rendering, input</td><td>Apache 2.0</td><td>Yes</td></tr>
+  <tr><td><code>StartupHelper</code> (<code>gdx-liftoff</code>)</td><td>2020</td><td>macOS/Linux/Windows JVM launch</td><td>Apache 2.0</td><td>Yes</td></tr>
+  <tr><td>LWJGL + GLFW, jemalloc, stb</td><td>3.4.3</td><td>Windowing, OpenGL, natives</td><td>BSD-3; zlib, BSD-2, MIT/PD</td><td>Yes</td></tr>
+  <tr><td>OpenAL Soft, JLayer, JOrbis</td><td>1.0/0.0.17</td><td>Transitive libGDX audio (unused)</td><td>LGPL 2.0+ / 2.1</td><td>Yes</td></tr>
+  <tr><td>Liberation Sans (<code>lsans-15</code>)</td><td>&ndash;</td><td>Built-in HUD/menu bitmap font</td><td>SIL Open Font License 1.1</td><td>Yes</td></tr>
+  <tr><td>JUnit 5; JaCoCo; Gradle; PlantUML</td><td>5.11/9.8</td><td>Tests, coverage, build, UML</td><td>EPL 2.0 / Apache 2.0 / GPL</td><td>No</td></tr>
+</table>
+
+<ul>
+  <li><b>Assets &amp; permissive licences (<code>CR_LICENCES</code>):</b> No external sprite sheets or audio files are used; campus buildings, lake, walkways, player and geese are drawn with libGDX <code>ShapeRenderer</code> and Liberation Sans. Apache 2.0 [1], BSD, zlib, MIT and SIL OFL 1.1 [3] permit commercial sale by the customer provided notices are kept (bundled in <code>THIRD-PARTY-NOTICES.txt</code> and <code>licenses/</code> inside <code>GoosePatrol.jar</code>).</li>
+  <li><b>LGPL v2.1 compliance [2]:</b> OpenAL Soft loads dynamically as a separate native library, and JLayer/JOrbis stay unmodified inside an unobfuscated JAR (ZIP) so users can inspect or replace them under LGPL v2.1 &sect;6 (<code>LGPL-2.1.txt</code> and source links included). Build/test tools are not distributed in the JAR.</li>
 </ul>
 
-<h2 style="margin-top:6px;">6(b) Assessment 1 features not (fully) implemented</h2>
-<p style="font-size:8.6pt; margin:3px 0;"><b>All 17 functional requirements scoped to Assessment 1 in <code>Req1.pdf</code> are implemented</b> and covered by <b>88 JUnit 5 tests</b> (99.4% line coverage across the four gameplay packages; see <code>traceability.html</code>). Four A2-scoped requirements are also implemented early (<code>FR_CAMPUS_THEME</code>, <code>FR_GEESE_BLOCK</code>, <code>FR_GEESE_DISPERSE</code>, <code>FR_WIN_CONDITION</code>). Four split A1/A2 requirements have their A1 parts complete while their A2 extensions remain for Assessment 2:</p>
+<h2>6(b) Assessment 1 features not (fully) implemented</h2>
+<p><b>All 17 Assessment 1 functional requirements in <code>Req1.pdf</code> are implemented</b> and tested by <b>88 JUnit 5 tests</b> (99.4% domain line coverage; <a href="https://dns2jtm.github.io/Eng1_Project_Team8/traceability.html">traceability.html</a>), plus four early A2 items (<code>FR_CAMPUS_THEME</code>, <code>FR_GEESE_BLOCK</code>, <code>FR_GEESE_DISPERSE</code>, <code>FR_WIN_CONDITION</code>). Only Assessment 2 parts of split requirements remain:</p>
 
 <table class="compact-table">
-  <tr><th style="width:24%;">Requirement</th><th style="width:46%;">Implemented in Assessment 1</th><th style="width:30%;">Remaining for Assessment 2</th></tr>
-  <tr><td><code>FR_GEESE_SPAWN</code></td><td>Initial and periodic spawning with direct chase: 5 initial geese + 1 every 20 s up to 9 (<code>GameWorld.updateSpawning</code>, <code>Goose.chase</code>).</td><td>Wave/zone spawning paired with multiple goose sizes (<code>FR_GEESE_VARIETY</code>).</td></tr>
-  <tr><td><code>FR_INITIAL_INVENTORY</code></td><td>2 item types: Bread &times;4 (<code>FoodItem</code>) and Whistle &times;3 (<code>ScareItem</code>) in <code>GameWorld.createStartingInventory</code>.</td><td>At least 5 distinct starting or pickup item types.</td></tr>
-  <tr><td><code>FR_EVENT_COUNT</code></td><td>4 hidden events (above A1's 2-event minimum): <code>PicnicBasketEvent</code>, <code>LuckyShortcutEvent</code>, <code>GooseNestEvent</code>, <code>SlipperyPathEvent</code>.</td><td>At least 5 distinct hidden events on the map.</td></tr>
-  <tr><td><code>FR_END_SCREEN</code></td><td>Win/lose result, time played, items used, events triggered, geese dispersed and restart (<code>EndScreen</code>, <code>GameSummary</code>).</td><td>Numerical score calculation and breakdown (<code>FR_SCORE_BASE/ITEMS/EVENTS</code>).</td></tr>
+  <tr><th style="width:25%;">Requirement</th><th style="width:45%;">Implemented in Assessment 1</th><th style="width:30%;">Remaining for Assessment 2</th></tr>
+  <tr><td><code>FR_GEESE_SPAWN</code></td><td>5 initial geese + 1 every 20 s up to 9 (<code>GameWorld.updateSpawning</code>, <code>Goose.chase</code>).</td><td>Wave spawning + multiple goose sizes (<code>FR_GEESE_VARIETY</code>).</td></tr>
+  <tr><td><code>FR_INITIAL_INVENTORY</code></td><td>2 item types: Bread &times;4 (<code>FoodItem</code>), Whistle &times;3 (<code>ScareItem</code>).</td><td>&ge;5 starting items + &ge;5 map pickups (<code>FR_PICKUP_*</code>).</td></tr>
+  <tr><td><code>FR_EVENT_COUNT</code></td><td>4 hidden events: <code>PicnicBasketEvent</code>, <code>LuckyShortcutEvent</code>, <code>GooseNestEvent</code>, <code>SlipperyPathEvent</code>.</td><td>At least 5 distinct hidden events on the map.</td></tr>
+  <tr><td><code>FR_END_SCREEN</code></td><td>Win/lose result, time, item/event/dispersed counts &amp; restart (<code>EndScreen</code>, <code>GameSummary</code>).</td><td>Score calculation &amp; breakdown (<code>FR_SCORE_BASE/ITEMS/EVENTS</code>).</td></tr>
 </table>
 
-<h3>Quality and constraint verification status</h3>
-<ul style="font-size:8.7pt;">
-  <li><b>Automated and desktop runtime checks:</b> <code>CR_JAVA</code> (compiled with <code>--release 17</code>, class file version 61), <code>CR_EXECUTABLE</code> (single runnable JAR), <code>QR_TIMER_ACCURACY</code> and <code>QR_PAUSE_RESPONSE</code> are checked automatically in CI on Linux, Windows and macOS. <code>QR_STABILITY</code> passes 3 consecutive full 5-minute headless sessions in <code>HeadlessGameSessionTest</code> alongside manual desktop runs (<code>MT-01</code> to <code>MT-10</code> on <code>traceability.html</code>).</li>
-  <li><b>Planned for Assessment 2 user evaluation:</b> <code>QR_LEARNABILITY</code>, <code>QR_MAP_CLARITY</code> and <code>QR_BALANCE</code> require player testing (scheduled for Assessment 2 Section 5 User Evaluation, as set out in <code>Req1.pdf</code>), and <code>QR_SCORE_TRANSPARENCY</code> depends on the Assessment 2 scoring system.</li>
+<p><b>Quality &amp; constraints:</b> <code>CR_JAVA</code> (Java 17 bytecode v61), <code>CR_EXECUTABLE</code>, <code>QR_TIMER_ACCURACY</code>, <code>QR_PAUSE_RESPONSE</code> and <code>QR_STABILITY</code> (3&times;5-min headless sessions in <code>HeadlessGameSessionTest</code> + manual checks <code>MT-01</code>&ndash;<code>10</code>) are verified; <code>QR_LEARNABILITY</code>, <code>QR_MAP_CLARITY</code>, <code>QR_BALANCE</code> and <code>QR_SCORE_TRANSPARENCY</code> belong to Assessment 2 user evaluation and scoring.</p>
+
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">References</h2>
+<ul class="refs">
+  <li>[1] Apache Software Foundation, <i>Apache License, Version 2.0</i>, Jan. 2004. Available: https://www.apache.org/licenses/LICENSE-2.0</li>
+  <li>[2] Free Software Foundation, <i>GNU Lesser General Public License, Version 2.1</i>, Feb. 1999. Available: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</li>
+  <li>[3] SIL International, <i>SIL Open Font License (OFL), Version 1.1</i>, Feb. 2007. Available: https://openfontlicense.org</li>
 </ul>
 
 </body>

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Renders all five Assessment 1 PDF deliverables from deliverables/*.html using Headless Chrome,
-# verifies page counts against Table 1 limits (+1 bibliography page where present), and publishes
-# them into website/docs/ so both the website and submission zip use identical PDFs.
+# verifies page counts against Table 1 + Section 1.2 Formatting Requirements (1 title page +
+# content limit + 1 references page, where title page and references do not count towards limits),
+# and copies them into website/docs/ so both the website and submission zip use identical PDFs.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -37,10 +38,11 @@ render_and_check() {
   fi
 }
 
-render_and_check "Req1"  5 "4 content (1+3) + up to 1 bibliography"
-render_and_check "Arch1" 7 "6 content + up to 1 bibliography"
-render_and_check "Plan1" 6 "5 content (2+1+2) + up to 1 bibliography"
-render_and_check "Risk1" 5 "4 content (1+3) + up to 1 bibliography"
-render_and_check "Impl1" 1 "1 content page"
+# Section 1.2: 1 title page (excluded) + Table 1 content limit + 1 references page (excluded)
+render_and_check "Req1"  6 "1 title + 4 content (1+3) + 1 references"
+render_and_check "Arch1" 8 "1 title + 6 content + 1 references"
+render_and_check "Plan1" 7 "1 title + 5 content (2+1+2) + 1 references"
+render_and_check "Risk1" 6 "1 title + 4 content (1+3) + 1 references"
+render_and_check "Impl1" 3 "1 title + 1 content + 1 references"
 
 echo "All 5 deliverables rendered to deliverables/ and copied to website/docs/."

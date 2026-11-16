@@ -5,126 +5,133 @@
 <title>Plan1 - Goose Patrol - Cohort 2, Team 8</title>
 <link rel="stylesheet" href="deliverables.css">
 <style>
-  .gantt-cell { background: #5b8def; color: #fff; font-weight: 600; font-size: 7.4pt; text-align: center; }
-  .gantt-done { background: #4a3570; color: #fff; font-weight: 700; font-size: 7.4pt; text-align: center; }
+  .gantt-cell { background: #5b8def; color: #fff; font-weight: 600; font-size: 10pt; text-align: center; }
+  .gantt-done { background: #4a3570; color: #fff; font-weight: 700; font-size: 10pt; text-align: center; }
 </style>
 </head>
 <body>
 
-<h1>ENG1 Assessment 1 &ndash; Method Selection and Planning (Plan1): Goose Patrol</h1>
-<div class="meta">
-  <b>Cohort 2, Team 8:</b> Soham Apte, Elliott Christie, James Hammett, Dawud Kazi, Evan O'Reilly, Daniel Sawa, Karthik Udaiyar &middot;
-  <b>Weekly snapshots:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html">dns2jtm.github.io/Eng1_Project_Team8/planning.html</a> &middot;
-  <b>Repository:</b> <a href="https://github.com/dns2jtm/Eng1_Project_Team8">github.com/dns2jtm/Eng1_Project_Team8</a>
+<div class="title-page">
+  <div class="module-label">ENG1 (COM00019I) &ndash; Assessment 1</div>
+  <h1>Method Selection and Planning (Plan1)</h1>
+  <div class="product-name">Goose Patrol</div>
+  <div class="group-heading">Cohort 2, Team 8 &ndash; Team Daniel</div>
+  <ul class="members-list">
+    <li>Soham Apte</li>
+    <li>Karthik Udaiyar</li>
+    <li>Elliott Christie</li>
+    <li>James Hammett</li>
+    <li>Dawud Kazi</li>
+    <li>Evan O'Reilly</li>
+    <li>Daniel Sawa</li>
+  </ul>
+  <div class="links-block">
+    <b>Website:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/">dns2jtm.github.io/Eng1_Project_Team8</a><br>
+    <b>Weekly snapshots:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html">dns2jtm.github.io/Eng1_Project_Team8/planning.html</a><br>
+    <b>Repository:</b> <a href="https://github.com/dns2jtm/Eng1_Project_Team8">github.com/dns2jtm/Eng1_Project_Team8</a>
+  </div>
 </div>
 
-<h2 style="margin-top:4px;">4(a) Software engineering methods and tools</h2>
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">4(a) Software engineering methods and tools</h2>
 
 <h3>Software engineering methods</h3>
-<p>The team took a lightweight <b>Agile-inspired iterative and incremental approach</b> [1, 2] to development, breaking the project down into smaller chunks and developing the game in stages over the seven-week schedule. Once core requirements (<code>Req1</code>) and our initial package boundaries (<code>v1</code> UML) were agreed, different features and reports were developed in parallel on branches and brought together through pull requests as the game progressed. Regular automated and manual testing was vital to catch bugs early and tune gameplay feel as we went.</p>
+<p>The team took a lightweight <b>Agile-inspired iterative and incremental approach</b> [1, 2], breaking the project into weekly chunks over seven weeks. Once core requirements (<code>Req1</code>) and initial package boundaries (<code>v1</code> UML) were agreed, features and reports were built in parallel on branches and merged through pull requests, with regular testing to catch bugs early.</p>
 
 <table class="compact-table">
-  <tr><th style="width:22%;">Method</th><th style="width:32%;">Purpose</th><th style="width:46%;">Why it was selected (and process alternatives rejected)</th></tr>
+  <tr><th style="width:23%;">Method</th><th style="width:30%;">Purpose</th><th style="width:47%;">Why selected (and alternatives rejected)</th></tr>
   <tr>
-    <td><b>Agile-inspired iterative stages</b> [1]</td>
-    <td>Developing the game and reports in weekly increments.</td>
-    <td>Allows gameplay balance, collision handling and scope adjustments throughout development rather than freezing everything upfront as in strict <i>Waterfall</i> [1], which leaves integration too late.</td>
+    <td><b>Agile-inspired iterations</b> [1]</td>
+    <td>Develop game and reports in weekly stages.</td>
+    <td>Allows balance, collision and scope adjustments during coding, unlike strict <i>Waterfall</i> [1] which leaves integration too late.</td>
   </tr>
   <tr>
-    <td><b>Role-based task allocation</b> [2]</td>
-    <td>Dividing clear ownership across the seven group members.</td>
-    <td>Lets code, UML diagrams and reports progress in parallel without two people assuming the other is finishing a task; lighter than full <i>Scrum</i> [3] (daily stand-ups and story-point velocity are impractical across clashing student timetables over 6 weeks).</td>
+    <td><b>Role-based allocation</b> [2]</td>
+    <td>Divide clear ownership across 7 members.</td>
+    <td>Lets code, UML and reports run in parallel without diffused responsibility; lighter than full <i>Scrum</i> [3] (daily stand-ups/velocity do not fit clashing student timetables over 6 weeks).</td>
   </tr>
   <tr>
-    <td><b>Incremental feature branches</b></td>
-    <td>Building a basic playable loop before adding campus buildings, items and hidden events.</td>
-    <td>Gets core movement, timer and pause rules working first before adding extra events and UI polish, avoiding risky big-bang merges on <code>main</code>.</td>
+    <td><b>Incremental branches</b></td>
+    <td>Build core loop before extra events and polish.</td>
+    <td>Gets movement, timer and pause working first on feature branches before merging extra campus events into <code>main</code>.</td>
   </tr>
   <tr>
-    <td><b>Continuous testing and debugging</b></td>
-    <td>Checking movement, goose chasing, item ranges, obstacle collisions and timer accuracy.</td>
-    <td>Separating domain logic from OpenGL lets fast JUnit 5 tests run on every push alongside manual playtesting, catching regressions before Assessment 2 handover.</td>
+    <td><b>Continuous testing</b></td>
+    <td>Check movement, goose AI, items and collisions.</td>
+    <td>Headless domain packages let fast JUnit 5 tests run on every push alongside manual playtesting before Assessment 2 handover.</td>
   </tr>
 </table>
 
 <h3>Development and collaboration tools</h3>
-<p>The team used several software tools and frameworks to develop the game and support collaboration. These were selected based on compatibility with our iterative workflow, licence suitability (<code>CR_LICENCES</code>), and fitness for building a 2D top-down campus game in Java 17 (<code>CR_JAVA</code>).</p>
+<p>Tools were chosen for compatibility with our iterative workflow, permissive licensing (<code>CR_LICENCES</code>), and suitability for a 2D Java 17 campus game (<code>CR_JAVA</code>, <code>CR_EXECUTABLE</code>):</p>
 
 <table class="compact-table">
-  <tr><th style="width:20%;">Tool</th><th style="width:30%;">Purpose</th><th style="width:50%;">Why it was selected (fitness with our methods)</th></tr>
+  <tr><th style="width:22%;">Tool</th><th style="width:30%;">Purpose</th><th style="width:48%;">Fitness with our methods</th></tr>
   <tr>
-    <td><b>Git &amp; GitHub (+ Actions / Pages)</b></td>
-    <td>Sharing code, version history, 3-OS CI builds and hosting the team website.</td>
-    <td>Lets multiple members work on separate branches without overwriting each other's code, runs <code>./gradlew test lwjgl3:jar</code> automatically on Linux/Windows/macOS, and publishes live test and coverage reports to GitHub Pages.</td>
+    <td><b>Git &amp; GitHub (+ Actions/Pages)</b></td>
+    <td>Version control, 3-OS CI builds and website hosting.</td>
+    <td>Supports parallel branches without overwriting work, runs <code>./gradlew test lwjgl3:jar</code> on Linux/Windows/macOS, and publishes reports to GitHub Pages.</td>
   </tr>
   <tr>
     <td><b>Discord &amp; WhatsApp</b></td>
-    <td>Group communication, voice calls and quick daily check-ins.</td>
-    <td>Discord channels and calls supported longer design/code discussions, while our WhatsApp group handled fast day-to-day coordination and deadline reminders.</td>
+    <td>Calls, channels and quick daily check-ins.</td>
+    <td>Discord supported design/code calls while WhatsApp handled fast daily coordination and deadline reminders.</td>
   </tr>
   <tr>
-    <td><b>VS Code &amp; IntelliJ IDEA</b></td>
-    <td>Writing, refactoring and debugging Java code.</td>
-    <td>Provides Java 17 inspections, step-through debugging, JUnit test runners and Git integration across macOS and Windows.</td>
+    <td><b>VS Code &amp; IntelliJ</b></td>
+    <td>Writing, refactoring and debugging Java 17 code.</td>
+    <td>Provides Java inspections, step debugging, JUnit runners and Git integration.</td>
   </tr>
   <tr>
-    <td><b>libGDX 1.14.2</b></td>
-    <td>Main 2D game framework for rendering, game loop and input handling.</td>
-    <td>Provides <code>ShapeRenderer</code>, <code>SpriteBatch</code> and <code>gdx-backend-headless</code> for unit testing; its Apache 2.0 licence permits educational and commercial distribution.</td>
-  </tr>
-  <tr>
-    <td><b>LWJGL 3</b></td>
-    <td>Desktop OpenGL graphics, windowing and keyboard input backend.</td>
-    <td>Packages native desktop libraries so the game runs as a single standalone JAR (<code>CR_EXECUTABLE</code>) under a permissive BSD-style licence.</td>
+    <td><b>libGDX 1.14.2 &amp; LWJGL 3</b></td>
+    <td>2D rendering, game loop, input and desktop OpenGL.</td>
+    <td>Provides <code>ShapeRenderer</code>, <code>gdx-backend-headless</code> for unit tests, and cross-platform standalone JAR execution under Apache 2.0 / BSD licences.</td>
   </tr>
   <tr>
     <td><b>Gradle 9.8 Wrapper</b></td>
-    <td>Build automation, Java 17 target enforcement and fat-JAR packaging.</td>
-    <td>Integrates cleanly with libGDX (<code>gdx-liftoff</code>) and guarantees every team member and CI runner uses identical dependency versions (Apache 2.0).</td>
+    <td>Build automation and fat-JAR packaging.</td>
+    <td>Locks identical dependency versions and <code>--release 17</code> across all laptops and CI runners.</td>
   </tr>
   <tr>
-    <td><b>JUnit 5 &amp; JaCoCo + PlantUML</b></td>
-    <td>Automated unit testing, coverage tracking and text-based UML diagrams.</td>
-    <td>JUnit 5 + JaCoCo verify 88 domain tests (99.4% domain line coverage); plain-text PlantUML files sit in Git next to Java code so <code>v1</code> &rarr; <code>v2</code> diffs are easy to review.</td>
+    <td><b>JUnit 5, JaCoCo &amp; PlantUML</b></td>
+    <td>Automated unit tests, coverage and text UML.</td>
+    <td>Verifies 88 domain tests (99.4% line coverage); plain-text <code>.puml</code> files diff cleanly in pull requests.</td>
   </tr>
 </table>
 
-<div class="page-break"></div>
-
-<h3 style="margin-top:0;">Alternatives considered</h3>
-<p>Other tools and approaches were evaluated at the start of the project, but the options below were rejected in favour of tools that better matched our requirements and workflow:</p>
-
+<h3>Alternatives considered</h3>
 <table class="compact-table">
-  <tr><th style="width:27%;">Alternative considered</th><th style="width:23%;">What we used instead</th><th style="width:50%;">Why the selected option was preferred</th></tr>
+  <tr><th style="width:27%;">Alternative considered</th><th style="width:24%;">What we used instead</th><th style="width:49%;">Why the selected option was preferred</th></tr>
   <tr>
-    <td><b>Sharing zips / one chat stream only</b></td>
-    <td>GitHub + Discord &amp; WhatsApp</td>
-    <td>Passing folders manually loses change history; combining GitHub PRs with Discord channels and WhatsApp check-ins kept both code history and team messages organised.</td>
+    <td><b>Shared zips / single chat</b></td>
+    <td>GitHub + Discord/WhatsApp</td>
+    <td>Manual folders lose version history; PRs plus chat channels kept code and tasks organised.</td>
   </tr>
   <tr>
-    <td><b>Plain text editors (e.g. Notepad)</b></td>
+    <td><b>Plain text editor (Notepad)</b></td>
     <td>VS Code / IntelliJ IDEA</td>
-    <td>Java IDEs provide compile-time checks, automated refactoring, integrated JUnit runners and interactive debugging.</td>
+    <td>IDEs give compile-time checks, refactoring, JUnit runners and debugging.</td>
   </tr>
   <tr>
     <td><b>Unity / Godot</b></td>
     <td>libGDX (Java 17)</td>
-    <td>Unity and Godot violate <code>CR_JAVA</code> and add heavy scene-editor files; libGDX gives lightweight 2D rendering directly in Java 17.</td>
+    <td>Unity/Godot break <code>CR_JAVA</code> and add heavy scene binaries; libGDX stays lightweight in Java 17.</td>
   </tr>
   <tr>
-    <td><b>Manual JAR dependency management / Maven</b></td>
+    <td><b>Manual JARs / Maven</b></td>
     <td>Gradle Wrapper</td>
-    <td>Gradle's official libGDX setup automatically resolves cross-platform LWJGL natives and builds the runnable fat JAR reproducibly across team laptops.</td>
+    <td>Official <code>gdx-liftoff</code> Gradle setup resolves LWJGL natives and builds fat JARs reproducibly.</td>
   </tr>
   <tr>
-    <td><b>IDE-only launch / manual playtesting alone</b></td>
-    <td>LWJGL 3 standalone JAR + JUnit 5 headless suite</td>
-    <td>Markers and players run a standalone JAR outside an IDE (<code>CR_EXECUTABLE</code>), and JUnit 5 tests verify game rules in seconds on every commit (Section 4.6).</td>
+    <td><b>IDE-only / manual testing</b></td>
+    <td>LWJGL 3 JAR + JUnit 5</td>
+    <td>Meets <code>CR_EXECUTABLE</code> outside IDEs and checks domain rules in seconds on every push.</td>
   </tr>
   <tr>
     <td><b>Draw.io / Lucidchart / Jira</b></td>
-    <td>PlantUML in Git + GitHub Issues / weekly HTML snapshots</td>
-    <td>Manual diagramming tools produce noisy XML diffs, and Jira adds heavy setup overhead for a 6-week project [2].</td>
+    <td>PlantUML + HTML snapshots</td>
+    <td>Avoids XML diagram merge conflicts and heavy Jira admin overhead for a 6-week project [2].</td>
   </tr>
 </table>
 
@@ -132,152 +139,104 @@
 
 <h2 style="margin-top:0;">4(b) Team organisation</h2>
 
-<p>The team adopted a <b>role-based work-package approach</b> [2], assigning each of the seven members clear primary responsibilities paired with backup support so every deliverable was covered without leaving single points of failure. This helped distribute the workload fairly, maintain organisation across clashing timetable commitments, and make sure everyone understood how their part connected to the rest of the submission.</p>
+<p>The team adopted a <b>role-based work-package approach</b> [2], assigning each of the seven members clear primary responsibilities paired with backup support so every area was covered without single points of failure.</p>
 
 <table class="compact-table">
-  <tr><th style="width:20%;">Team member</th><th style="width:80%;">Role and responsibilities</th></tr>
+  <tr><th style="width:22%;">Team member</th><th style="width:78%;">Role and responsibilities</th></tr>
   <tr>
     <td><b>Elliott Christie</b></td>
-    <td>Elected team leader and Architecture lead (<code>Arch1.pdf</code>, summarised <code>v2</code> views). Organised regular meetings, allocated tasks, monitored weekly progress and coordinated final checks.</td>
+    <td>Elected team leader and Architecture lead (<code>Arch1.pdf</code>, summarised <code>v2</code> views). Organised meetings, allocated tasks, monitored progress and coordinated submission checks.</td>
   </tr>
   <tr>
     <td><b>Karthik Udaiyar</b></td>
-    <td>Main programmer alongside Daniel, responsible for developing the initial gameplay prototype and implementing hidden campus events (<code>SlipperyPathEvent</code>, <code>LuckyShortcutEvent</code>).</td>
+    <td>Main programmer alongside Daniel, developing the initial gameplay prototype and implementing hidden campus events (<code>SlipperyPathEvent</code>, <code>LuckyShortcutEvent</code>).</td>
   </tr>
   <tr>
     <td><b>Daniel Sawa</b></td>
-    <td>Main programmer working alongside Karthik on core game architecture, 2D campus rendering, JUnit 5 / JaCoCo tests, GitHub Actions CI/Pages deployment, <code>Impl1.pdf</code> and submission packaging.</td>
+    <td>Main programmer alongside Karthik on core game architecture, 2D campus rendering, JUnit 5 / JaCoCo tests, GitHub Actions CI/Pages, <code>Impl1.pdf</code> and JAR packaging.</td>
   </tr>
   <tr>
     <td><b>James Hammett</b></td>
-    <td>Method Selection &amp; Planning lead (<code>Plan1.pdf</code>, Gantt schedule), tracking deadlines and milestones, setting up the initial libGDX/Gradle starter files and running manual QA checks.</td>
+    <td>Method Selection &amp; Planning lead (<code>Plan1.pdf</code>, Gantt schedule), tracking deadlines, setting up initial libGDX/Gradle starter files and running manual QA checks.</td>
   </tr>
   <tr>
     <td><b>Evan O'Reilly</b></td>
-    <td>Responsible for the project website structure, traceability checks and supporting software architecture and requirements reviews, while staying informed on code progress.</td>
+    <td>Project website structure, traceability checks and supporting software architecture and requirements reviews while staying informed on code progress.</td>
   </tr>
   <tr>
     <td><b>Soham Apte</b></td>
-    <td>Responsible for gathering and specifying project requirements (customer interview, <code>Req1.pdf</code>), setting up the initial repository and drafting the <code>v1</code> PlantUML diagrams.</td>
+    <td>Requirements lead (customer interview, <code>Req1.pdf</code>), initial GitHub repository setup and drafting the <code>v1</code> PlantUML diagrams.</td>
   </tr>
   <tr>
     <td><b>Dawud Kazi</b></td>
-    <td>Risk Assessment &amp; Mitigation lead (<code>Risk1.pdf</code>), identifying project/product risks, maintaining the risk register and tracking mitigations across the project.</td>
+    <td>Risk Assessment &amp; Mitigation lead (<code>Risk1.pdf</code>), identifying project/product risks, maintaining the risk register and tracking mitigations.</td>
   </tr>
 </table>
 
 <h3>Justification</h3>
-<p>This was the right approach for both the team and the project because Assessment 1 requires six linked deliverables (Website, <code>Req1</code>, <code>Arch1</code>, <code>Plan1</code>, <code>Risk1</code>, and <code>Impl1</code> + Code/JAR) over a short term schedule. Having one clear owner per area avoided the "joint-responsibility trap" noted in the lectures [2] (where two leads assume the other is finishing a section), while pairing programmers (Daniel and Karthik, backed by James on starter/QA) and cross-reviewing reports (Elliott, Soham, Evan and Dawud) kept our bus factor above one.</p>
+<p>This structure suited both the team and the project because Assessment 1 requires six linked deliverables over a tight schedule. Assigning one named lead per deliverable avoided the "joint-responsibility trap" noted in the lectures [2] (where two leads assume the other is finishing a section), while pairing programmers (Daniel and Karthik, backed by James on starter/QA) and cross-reviewing reports (Elliott, Soham, Evan and Dawud) kept our bus factor above one.</p>
 
-<p>Daniel and Karthik could concentrate on getting the Java/libGDX implementation and automated tests solid, while Soham, Elliott, James, Dawud and Evan drove requirements, architecture, planning, risk management and website structure in parallel once the <code>Req1</code> IDs were fixed. Elliott's coordination through regular meetings and group check-ins kept everyone updated on code changes so the written deliverables stayed consistent with the actual game. By contrast, a <i>chief-programmer bottleneck</i> [1] would have overloaded one person in Week 6, and an <i>informal free-for-all</i> would have risked missed report sections or conflicting edits.</p>
+<p>Daniel and Karthik focused on Java/libGDX implementation and automated tests while Soham, Elliott, James, Dawud and Evan progressed requirements, architecture, planning, risk and the website in parallel once <code>Req1</code> IDs were agreed. Regular check-ins led by Elliott kept reports aligned with code changes, avoiding both a <i>chief-programmer bottleneck</i> [1] and an <i>unstructured free-for-all</i>.</p>
 
 <div class="page-break"></div>
 
 <h2 style="margin-top:0;">4(c) Project planning, Gantt chart and plan evolution</h2>
 
-<h3>Project planning and Gantt chart (29 September &ndash; 16 November 2026)</h3>
-<p>The team created a seven-week schedule and Gantt chart to organise the development of <i>Goose Patrol</i> from initial setup (29 Sep 2026) to submission (16 Nov 2026, 12:00). Tasks were assigned priorities, start/finish dates and explicit dependencies so prerequisite decisions (such as customer interview answers <code>T02</code> and <code>v1</code> package boundaries <code>T04</code>) landed before full feature integration. Weekly snapshots are published on the team website at <a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html">dns2jtm.github.io/Eng1_Project_Team8/planning.html</a>.</p>
+<p>Our seven-week schedule (29 Sep &ndash; 16 Nov 2026) sets task dates, priorities and dependencies; full weekly snapshots are published at <a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html">dns2jtm.github.io/Eng1_Project_Team8/planning.html</a>.</p>
 
 <table class="compact-table">
   <tr>
     <th style="width:6%;">ID</th>
-    <th style="width:24%;">Task</th>
-    <th style="width:14%;">Dates</th>
-    <th style="width:8%;">Priority</th>
-    <th style="width:10%;">Depends on</th>
-    <th style="width:5.4%; text-align:center;">W1</th>
-    <th style="width:5.4%; text-align:center;">W2</th>
-    <th style="width:5.4%; text-align:center;">W3</th>
-    <th style="width:5.4%; text-align:center;">W4</th>
-    <th style="width:5.4%; text-align:center;">W5</th>
-    <th style="width:5.4%; text-align:center;">W6</th>
-    <th style="width:5.6%; text-align:center;">W7</th>
+    <th style="width:27%;">Task (Lead)</th>
+    <th style="width:15%;">Dates</th>
+    <th style="width:8%;">Prio.</th>
+    <th style="width:9%;">Deps</th>
+    <th style="width:5%; text-align:center;">W1</th>
+    <th style="width:5%; text-align:center;">W2</th>
+    <th style="width:5%; text-align:center;">W3</th>
+    <th style="width:5%; text-align:center;">W4</th>
+    <th style="width:5%; text-align:center;">W5</th>
+    <th style="width:5%; text-align:center;">W6</th>
+    <th style="width:5%; text-align:center;">W7</th>
   </tr>
-  <tr>
-    <td><b>T01</b></td><td>Project planning &amp; role split (JH, EC)</td><td>29 Sep &ndash; 18 Oct</td><td><span class="badge b-high">High</span></td><td>&ndash;</td>
-    <td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td><td></td><td></td>
-  </tr>
-  <tr>
-    <td><b>T02</b></td><td>Requirements &amp; customer Q&amp;A (SA)</td><td>06 Oct &ndash; 27 Oct</td><td><span class="badge b-high">High</span></td><td>T01</td>
-    <td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td class="gantt-done">M2</td><td></td><td></td><td></td>
-  </tr>
-  <tr>
-    <td><b>T03</b></td><td>Risk assessment baseline (DK)</td><td>13 Oct &ndash; 26 Oct</td><td><span class="badge b-med">Med</span></td><td>T01</td>
-    <td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td><td></td>
-  </tr>
-  <tr>
-    <td><b>T04</b></td><td>Software architecture <code>v1</code> &rarr; <code>v2</code> (EC, SA)</td><td>20 Oct &ndash; 12 Nov</td><td><span class="badge b-high">High</span></td><td>T02</td>
-    <td></td><td></td><td class="gantt-cell">CRC</td><td class="gantt-done">M3</td><td class="gantt-cell">v2</td><td class="gantt-cell">v2</td><td></td>
-  </tr>
-  <tr>
-    <td><b>T05</b></td><td>Website &amp; Pages workflow (EO, DS)</td><td>13 Oct &ndash; 06 Nov</td><td><span class="badge b-high">High</span></td><td>T01</td>
-    <td></td><td></td><td class="gantt-cell">&bull;</td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td>
-  </tr>
-  <tr>
-    <td><b>T06</b></td><td>Git repo &amp; libGDX/Gradle setup (JH, SA)</td><td>13 Oct &ndash; 18 Oct</td><td><span class="badge b-high">High</span></td><td>T01</td>
-    <td></td><td class="gantt-done">M1</td><td class="gantt-cell">&bull;</td><td></td><td></td><td></td><td></td>
-  </tr>
-  <tr>
-    <td><b>T07</b></td><td>Player movement &amp; pause/timer (DS, KU)</td><td>20 Oct &ndash; 05 Nov</td><td><span class="badge b-high">High</span></td><td>T04, T06</td>
-    <td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td>
-  </tr>
-  <tr>
-    <td><b>T08</b></td><td>Campus map &amp; obstacle bounds (DS)</td><td>24 Oct &ndash; 06 Nov</td><td><span class="badge b-med">Med</span></td><td>T06, T07</td>
-    <td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td>
-  </tr>
-  <tr>
-    <td><b>T09</b></td><td>Items &amp; 4 hidden events (DS, KU)</td><td>01 Nov &ndash; 12 Nov</td><td><span class="badge b-high">High</span></td><td>T04, T07</td>
-    <td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td>
-  </tr>
-  <tr>
-    <td><b>T10</b></td><td>Goose AI, crowding &amp; dispersal (DS)</td><td>02 Nov &ndash; 09 Nov</td><td><span class="badge b-med">Med</span></td><td>T07, T08</td>
-    <td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td>
-  </tr>
-  <tr>
-    <td><b>T11</b></td><td>Collision &amp; 0.05 s sub-stepping (DS)</td><td>02 Nov &ndash; 12 Nov</td><td><span class="badge b-med">Med</span></td><td>T08</td>
-    <td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td>
-  </tr>
-  <tr>
-    <td><b>T12</b></td><td>Integration, 88 JUnit tests &amp; CI (DS, JH)</td><td>04 Nov &ndash; 14 Nov</td><td><span class="badge b-high">High</span></td><td>T09, T10</td>
-    <td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-done">M4</td><td></td>
-  </tr>
-  <tr>
-    <td><b>T13</b></td><td>Bug fixing, Java 17 &amp; JAR licences (DS, KU)</td><td>05 Nov &ndash; 15 Nov</td><td><span class="badge b-high">High</span></td><td>T11, T12</td>
-    <td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td>
-  </tr>
-  <tr>
-    <td><b>T14</b></td><td>Finalise 5 PDF deliverables (All leads)</td><td>09 Nov &ndash; 15 Nov</td><td><span class="badge b-high">High</span></td><td>T02..T12</td>
-    <td></td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td>
-  </tr>
-  <tr>
-    <td><b>T15</b></td><td>Final checks, <code>v1.0.0</code> release &amp; VLE zip (All)</td><td>14 Nov &ndash; 16 Nov</td><td><span class="badge b-high">High</span></td><td>T13, T14</td>
-    <td></td><td></td><td></td><td></td><td></td><td></td><td class="gantt-done">M5</td>
-  </tr>
+  <tr><td><b>T01</b></td><td>Planning &amp; roles (JH, EC)</td><td>29 Sep&ndash;18 Oct</td><td><span class="badge b-high">High</span></td><td>&ndash;</td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td><b>T02</b></td><td>Requirements &amp; Q&amp;A (SA)</td><td>06 Oct&ndash;27 Oct</td><td><span class="badge b-high">High</span></td><td>T01</td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td class="gantt-done">M2</td><td></td><td></td><td></td></tr>
+  <tr><td><b>T03</b></td><td>Risk register baseline (DK)</td><td>13 Oct&ndash;26 Oct</td><td><span class="badge b-med">Med</span></td><td>T01</td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td><td></td></tr>
+  <tr><td><b>T04</b></td><td>Architecture v1&rarr;v2 (EC, SA)</td><td>20 Oct&ndash;12 Nov</td><td><span class="badge b-high">High</span></td><td>T02</td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-done">M3</td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td></tr>
+  <tr><td><b>T05</b></td><td>Website &amp; Pages (EO, DS)</td><td>13 Oct&ndash;06 Nov</td><td><span class="badge b-high">High</span></td><td>T01</td><td></td><td></td><td class="gantt-cell">&bull;</td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td></tr>
+  <tr><td><b>T06</b></td><td>Repo &amp; libGDX setup (JH, SA)</td><td>13 Oct&ndash;18 Oct</td><td><span class="badge b-high">High</span></td><td>T01</td><td></td><td class="gantt-done">M1</td><td class="gantt-cell">&bull;</td><td></td><td></td><td></td><td></td></tr>
+  <tr><td><b>T07</b></td><td>Movement, timer, pause (DS, KU)</td><td>20 Oct&ndash;05 Nov</td><td><span class="badge b-high">High</span></td><td>T04,06</td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td></tr>
+  <tr><td><b>T08</b></td><td>Campus map &amp; bounds (DS)</td><td>24 Oct&ndash;06 Nov</td><td><span class="badge b-med">Med</span></td><td>T06,07</td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td><td></td></tr>
+  <tr><td><b>T09</b></td><td>Items &amp; 4 hidden events (DS, KU)</td><td>01 Nov&ndash;12 Nov</td><td><span class="badge b-high">High</span></td><td>T04,07</td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td></tr>
+  <tr><td><b>T10</b></td><td>Goose AI &amp; dispersal (DS)</td><td>02 Nov&ndash;09 Nov</td><td><span class="badge b-med">Med</span></td><td>T07,08</td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td></tr>
+  <tr><td><b>T11</b></td><td>Collisions &amp; 0.05s step (DS)</td><td>02 Nov&ndash;12 Nov</td><td><span class="badge b-med">Med</span></td><td>T08</td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td></td></tr>
+  <tr><td><b>T12</b></td><td>88 JUnit tests &amp; CI (DS, JH)</td><td>04 Nov&ndash;14 Nov</td><td><span class="badge b-high">High</span></td><td>T09,10</td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-done">M4</td><td></td></tr>
+  <tr><td><b>T13</b></td><td>Java 17 &amp; JAR licences (DS, KU)</td><td>05 Nov&ndash;15 Nov</td><td><span class="badge b-high">High</span></td><td>T11,12</td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td></tr>
+  <tr><td><b>T14</b></td><td>Finalise 5 PDF reports (Leads)</td><td>09 Nov&ndash;15 Nov</td><td><span class="badge b-high">High</span></td><td>T02..12</td><td></td><td></td><td></td><td></td><td></td><td class="gantt-cell">&bull;</td><td class="gantt-cell">&bull;</td></tr>
+  <tr><td><b>T15</b></td><td>v1.0.0 release &amp; VLE zip (All)</td><td>14 Nov&ndash;16 Nov</td><td><span class="badge b-high">High</span></td><td>T13,14</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="gantt-done">M5</td></tr>
 </table>
-<p style="font-size:7.9pt; color:#444;"><i>Milestones:</i> <b>M1</b> Repo &amp; Gradle starter (14 Oct) &middot; <b>M2</b> <code>Req1</code> IDs agreed (27 Oct) &middot; <b>M3</b> <code>v1</code> UML committed (31 Oct) &middot; <b>M4</b> Prototypes merged &amp; 88 tests green (12 Nov) &middot; <b>M5</b> Submission (16 Nov, 12:00).</p>
+<p><i>Milestones:</i> <b>M1</b> Repo/starter (14 Oct) &middot; <b>M2</b> <code>Req1</code> IDs (27 Oct) &middot; <b>M3</b> <code>v1</code> UML (31 Oct) &middot; <b>M4</b> Merged + 88 tests (12 Nov) &middot; <b>M5</b> Submission (16 Nov).</p>
 
 <div class="page-break"></div>
 
-<h3 style="margin-top:0;">Weekly project snapshots summary</h3>
-<p>Full week-by-week plan snapshots (Weeks 1&ndash;6) showing task status transitions and risk updates are published on the team website (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html#snapshots">planning.html#snapshots</a>) and summarised below:</p>
-
+<h3 style="margin-top:0;">Weekly project snapshots summary (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html#snapshots">planning.html#snapshots</a>)</h3>
 <table class="compact-table">
-  <tr><th style="width:11%;">Week</th><th style="width:17%;">Dates</th><th style="width:72%;">Planned vs actual focus in snapshot</th></tr>
-  <tr><td><b>Week 1</b></td><td>29 Sep &ndash; 05 Oct</td><td>Initial planning, setting up Discord/WhatsApp channels and allocating lead + backup responsibilities (<code>T01</code>).</td></tr>
-  <tr><td><b>Week 2</b></td><td>06 Oct &ndash; 12 Oct</td><td>Breaking down the product brief, drafting customer interview questions (<code>T02</code>) and preparing GitHub/Gradle setup (<code>M1</code> completed 13&ndash;14 Oct).</td></tr>
-  <tr><td><b>Week 3</b></td><td>13 Oct &ndash; 19 Oct</td><td>Customer interview answers elicited, baseline risk register drafted (<code>T03</code>), CRC cards started (<code>T04</code>) and libGDX starter verified (<code>T06</code>).</td></tr>
-  <tr><td><b>Week 4</b></td><td>20 Oct &ndash; 26 Oct</td><td>Agreed <code>Req1</code> ID scheme (<code>M2</code>), committed six <code>v1</code> PlantUML diagrams (<code>91a6bc0</code>, <code>M3</code>) and started movement/map prototypes (<code>T07</code>, <code>T08</code>).</td></tr>
-  <tr><td><b>Week 5</b></td><td>27 Oct &ndash; 02 Nov+</td><td>Core layered game logic, campus obstacles, initial hidden events, JUnit 5 headless suite, GitHub Actions CI and website scaffold completed ahead of estimate (05 Nov).</td></tr>
-  <tr><td><b>Week 6</b></td><td>03 Nov &ndash; 12 Nov</td><td>Compared prototypes on <code>review/side-by-side</code>, merged Karthik's two extra hidden events into <code>GameWorld</code> (<code>M4</code>, 88 tests), enforced Java 17 bytecode and bundled JAR licences (<code>T12</code>, <code>T13</code>).</td></tr>
-  <tr><td><b>Week 7</b></td><td>13 Nov &ndash; 16 Nov</td><td>Synced <code>v2</code> UML diagrams, checked page limits and links across all 5 PDFs, published <code>v1.0.0</code> release + GitHub Pages site and packaged the VLE zip (<code>T14</code>, <code>T15</code>, <code>M5</code>).</td></tr>
+  <tr><th style="width:12%;">Week</th><th style="width:19%;">Dates</th><th style="width:69%;">Snapshot summary</th></tr>
+  <tr><td><b>Week 1</b></td><td>29 Sep &ndash; 05 Oct</td><td>Initial plan drafted, chat channels set up and lead + backup roles assigned (<code>T01</code>).</td></tr>
+  <tr><td><b>Week 2</b></td><td>06 Oct &ndash; 12 Oct</td><td>Brief decomposed, customer interview questions prepared (<code>T02</code>), repo/starter ready (<code>M1</code>, 13&ndash;14 Oct).</td></tr>
+  <tr><td><b>Week 3</b></td><td>13 Oct &ndash; 19 Oct</td><td>Customer answers elicited, risk register drafted (<code>T03</code>), CRC cards started (<code>T04</code>), Gradle checked (<code>T06</code>).</td></tr>
+  <tr><td><b>Week 4</b></td><td>20 Oct &ndash; 26 Oct</td><td><code>Req1</code> IDs agreed (<code>M2</code>), six <code>v1</code> PlantUML diagrams committed (<code>91a6bc0</code>, <code>M3</code>), movement spikes started.</td></tr>
+  <tr><td><b>Week 5</b></td><td>27 Oct &ndash; 05 Nov</td><td>Core domain, campus map, items, headless JUnit suite, 3-OS CI and website scaffold finished ahead of estimate.</td></tr>
+  <tr><td><b>Week 6</b></td><td>06 Nov &ndash; 12 Nov</td><td>Prototypes compared on <code>review/side-by-side</code>; Karthik's 2 extra events merged (<code>M4</code>, 88 tests); Java 17 &amp; JAR licences added.</td></tr>
+  <tr><td><b>Week 7</b></td><td>13 Nov &ndash; 16 Nov</td><td><code>v2</code> UML synced, formatting/links verified across all 5 PDFs, <code>v1.0.0</code> + Pages deployed and VLE zip built (<code>M5</code>).</td></tr>
 </table>
 
 <h3>Evolution of the project plan</h3>
-<p>The first step was to clarify the project's requirements, define team roles and set up the repository and Gradle starter. In our initial Week 1&ndash;2 draft, we had expected full gameplay coding to start immediately in Week 2&ndash;3 alongside requirements gathering. After setting up the libGDX starter, we adjusted the schedule so that <code>T04</code> (<code>v1</code> architecture) waited for our customer interview outcomes (<code>M2</code>), avoiding wasted rework on classes before we knew the customer's exact rules on hidden events and goose crowding.</p>
+<p>In our initial Week 1&ndash;2 draft, we expected full gameplay coding to begin immediately in Week 2&ndash;3 alongside requirements gathering. After setting up the libGDX starter, we updated the dependencies so <code>T04</code> (<code>v1</code> architecture) waited for our customer interview answers (<code>M2</code>), avoiding rework on classes before clarifying hidden-event and goose-crowding rules.</p>
 
-<p>Once the six <code>v1</code> PlantUML diagrams were committed at the end of Week 4 (<code>91a6bc0</code>), development shifted to core gameplay mechanics (player and goose movement, campus buildings/lake boundaries, items and hidden events). Because keeping the domain classes free of OpenGL made coding and JUnit testing faster than expected in Week 5, we brought CI workflows, the project website and four straightforward Assessment 2 items (named campus locations <code>FR_CAMPUS_THEME</code>, crowding slowdown <code>FR_GEESE_BLOCK</code>, fed geese dispersing <code>FR_GEESE_DISPERSE</code>, and the 8-goose win condition <code>FR_WIN_CONDITION</code>) forward into Assessment 1 so players can complete a full win/lose session.</p>
+<p>Once the six <code>v1</code> PlantUML diagrams landed at the end of Week 4 (<code>91a6bc0</code>), focus shifted to movement, campus obstacles, items and hidden events. Keeping domain packages free of OpenGL made coding and JUnit testing faster than estimated in Week 5, letting us pull GitHub Actions CI, the website and four cohesive Assessment 2 items (<code>FR_CAMPUS_THEME</code>, <code>FR_GEESE_BLOCK</code>, <code>FR_GEESE_DISPERSE</code>, <code>FR_WIN_CONDITION</code>) forward so Assessment 1 delivers a complete win/lose loop.</p>
 
-<p>In Week 6 the plan adapted twice for integration and compliance: first, when Karthik's flat 7-class prototype (<code>88ede63</code>) and Daniel's layered branch needed combining, we added a short comparison step on <code>review/side-by-side</code> (12 Nov) and ported <code>SlipperyPathEvent</code> and <code>LuckyShortcutEvent</code> cleanly as <code>HiddenEvent</code> subclasses; second, JAR checks added explicit tasks for <code>--release 17</code> bytecode (<code>1356ffa</code>) and embedded third-party licence notices (<code>a120eda</code>). Leaving the final days specifically for report cross-checking, page-limit verification and public GitHub Pages cutover kept the submission calm and consistent.</p>
+<p>In Week 6 the plan adapted twice: first, we added a side-by-side branch comparison (12 Nov) to merge Karthik's <code>SlipperyPathEvent</code> and <code>LuckyShortcutEvent</code> from his flat prototype (<code>88ede63</code>) cleanly into the layered architecture as <code>HiddenEvent</code> subclasses; second, JAR checks added tasks for <code>--release 17</code> bytecode (<code>1356ffa</code>) and bundled licence notices (<code>a120eda</code>), leaving the final days dedicated to documentation review and submission checks.</p>
 
 <div class="page-break"></div>
 

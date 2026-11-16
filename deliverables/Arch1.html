@@ -7,13 +7,29 @@
 </head>
 <body>
 
-<h1>ENG1 Assessment 1 &ndash; Architecture (Arch1): Goose Patrol</h1>
-<div class="meta">
-  <b>Team 8 &ndash; Team Daniel:</b> Soham Apte, Karthik Udaiyar, Elliott Christie, James Hammett, Dawud Kazi, Evan O'Reilly, Daniel Sawa &middot;
-  <b>Website:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/">dns2jtm.github.io/Eng1_Project_Team8</a>
+<div class="title-page">
+  <div class="module-label">ENG1 (COM00019I) &ndash; Assessment 1</div>
+  <h1>Architecture (Arch1)</h1>
+  <div class="product-name">Goose Patrol</div>
+  <div class="group-heading">Cohort 2, Team 8 &ndash; Team Daniel</div>
+  <ul class="members-list">
+    <li>Soham Apte</li>
+    <li>Karthik Udaiyar</li>
+    <li>Elliott Christie</li>
+    <li>James Hammett</li>
+    <li>Dawud Kazi</li>
+    <li>Evan O'Reilly</li>
+    <li>Daniel Sawa</li>
+  </ul>
+  <div class="links-block">
+    <b>Website:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/">dns2jtm.github.io/Eng1_Project_Team8</a><br>
+    <b>Repository:</b> <a href="https://github.com/dns2jtm/Eng1_Project_Team8">github.com/dns2jtm/Eng1_Project_Team8</a>
+  </div>
 </div>
 
-<h2 style="margin-top:4px;">3.1 Languages and tools</h2>
+<div class="page-break"></div>
+
+<h2 style="margin-top:0;">3.1 Languages and tools</h2>
 <ul>
   <li><b>Language:</b> UML 2.5 [1], using several complementary views as in Kruchten's 4+1 model [2]. Structural views: a component-level layer diagram (Figure 1) and a class diagram (Figure 2). Behavioural views: state machines for the game session and for a goose (Figures 3 and 4) and sequence diagrams for using an item (Figure 5) and for one frame of gameplay (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/architecture.html#v2">website</a>).</li>
   <li><b>Tool:</b> PlantUML with Graphviz layout. Diagrams are text files in Git beside code (<code>architecture/v1/</code>, <code>architecture/v2/</code>), so changes show in pull request diffs and names can be checked against the Java source. draw.io and Lucidchart (manual layout, conflicting XML diffs) and StarUML or Modelio (proprietary files) were rejected.</li>
@@ -24,7 +40,7 @@
 <p>Goose Patrol uses a layered architecture [3] with dependencies pointing downwards only (Figure 1).</p>
 
 <div class="diagram-box">
-  <img src="figures/arch-fig1.png" alt="Figure 1: presentation and domain layers (v2)" style="max-height:330px;">
+  <img src="figures/arch-fig1.png" alt="Figure 1: presentation and domain layers (v2)" style="max-height:295px;">
   <div class="diagram-caption"><i>Figure 1: presentation and domain layers (v2). Full component diagram on the <a href="https://dns2jtm.github.io/Eng1_Project_Team8/architecture.html#v2">website</a>.</i></div>
 </div>
 
@@ -42,7 +58,7 @@
 <p>Figure 2 omits attributes, getters, records and presentation classes; the <a href="https://dns2jtm.github.io/Eng1_Project_Team8/architecture.html#v2">full diagram on the website</a> shows them. Notation: italics mark abstract classes and operations; <code>{leaf}</code> on <code>trigger</code> is UML for an operation subclasses cannot override (Java <code>final</code>); and the box listing four event names stands for four separate <code>HiddenEvent</code> subclasses, merged only to save space.</p>
 
 <div class="diagram-box">
-  <img src="figures/arch-fig2.png" alt="Figure 2: domain classes (v2, summary)" style="max-height:375px;">
+  <img src="figures/arch-fig2.png" alt="Figure 2: domain classes (v2, summary)" style="max-height:330px;">
   <div class="diagram-caption"><i>Figure 2: domain classes (v2, summary). Full class diagram on the <a href="https://dns2jtm.github.io/Eng1_Project_Team8/architecture.html#v2">website</a>.</i></div>
 </div>
 
@@ -57,22 +73,22 @@
 <div class="page-break"></div>
 
 <h2 style="margin-top:0;">3.4 Behaviour</h2>
-<div style="display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 12px; align-items: start;">
+<div style="display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 10px; align-items: start;">
   <div>
     <p><b>Game session (Figure 3).</b> A new <code>GameWorld</code> starts in <code>PAUSED</code> with the controls shown (<code>FR_START_PAUSED</code>, <code>QR_LEARNABILITY</code>). <code>ENTER</code>, <code>P</code> or <code>ESC</code> toggles <code>RUNNING</code>, and <code>GameScreen.pause()</code> pauses the game when the window loses focus. <code>GameWorld.update</code> does nothing unless the state is <code>RUNNING</code>, so the timer, geese and player freeze in the same frame (<code>FR_PAUSE</code>, <code>QR_PAUSE_RESPONSE</code>). Dispersing 8 geese gives <code>WON</code> (<code>FR_WIN_CONDITION</code>). <code>timer.isExpired()</code> gives <code>LOST</code> (<code>FR_TIMER_EXPIRE</code>). Both pass a <code>GameSummary</code> to <code>EndScreen</code> (<code>FR_END_SCREEN</code>), where <code>R</code> starts a new game.</p>
 
-    <p style="margin-top:8px;"><b>One Frame (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/architecture.html#v2">sequence diagram on website</a>).</b> <code>GameTimer.tick</code> uses the full real-time frame time in double precision, so the 5-minute countdown does not drift (<code>QR_TIMER_ACCURACY</code>). Movement, hidden event checks and spawning run in steps of at most <code>0.05 s</code>, so one slow frame cannot carry the player through a wall or past an event without triggering it (<code>FR_MAP_BOUNDS</code>, <code>FR_EVENT_TRIGGER</code>). A new goose arrives every 20 s, up to 9 at once (<code>FR_GEESE_SPAWN</code>).</p>
+    <p style="margin-top:6px;"><b>One Frame (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/architecture.html#v2">sequence diagram on website</a>).</b> <code>GameTimer.tick</code> uses the full real-time frame time in double precision, so the 5-minute countdown does not drift (<code>QR_TIMER_ACCURACY</code>). Movement, hidden event checks and spawning run in steps of at most <code>0.05 s</code>, so one slow frame cannot carry the player through a wall or past an event without triggering it (<code>FR_MAP_BOUNDS</code>, <code>FR_EVENT_TRIGGER</code>). A new goose arrives every 20 s, up to 9 at once (<code>FR_GEESE_SPAWN</code>).</p>
   </div>
   <div class="diagram-box" style="margin:0;">
-    <img src="figures/arch-fig3.png" alt="Figure 3: game session states (v2)" style="max-height:335px;">
+    <img src="figures/arch-fig3.png" alt="Figure 3: game session states (v2)" style="max-height:310px;">
     <div class="diagram-caption"><i>Figure 3: game session states (v2).</i></div>
   </div>
 </div>
 
-<p style="margin-top:8px;"><b>Goose behaviour (Figure 4).</b> A goose starts in <code>CHASING</code> with hunger 1 or 2 and walks towards the player; while any goose touches the player, <code>GameWorld</code> calls <code>Player.setMobbed(true)</code>, which cuts the player's speed to 45% (<code>FR_GEESE_BLOCK</code>). Feeding lowers hunger: at 0 the goose is <code>DISPERSED</code>, removed and counted (<code>FR_GEESE_DISPERSE</code>); otherwise it stops to eat for 2.5 s. Scaring it (Whistle or <code>LuckyShortcutEvent</code>) makes it flee. UML's composite state <code>Distracted {Eating, Fleeing}</code> is coded as <code>GooseState.DISTRACTED</code> plus a <code>fleeing</code> flag and one <code>distractionSecondsLeft</code> timer, because both sub-states end the same way.</p>
+<p style="margin-top:6px;"><b>Goose behaviour (Figure 4).</b> A goose starts in <code>CHASING</code> with hunger 1 or 2 and walks towards the player; while any goose touches the player, <code>GameWorld</code> calls <code>Player.setMobbed(true)</code>, which cuts the player's speed to 45% (<code>FR_GEESE_BLOCK</code>). Feeding lowers hunger: at 0 the goose is <code>DISPERSED</code>, removed and counted (<code>FR_GEESE_DISPERSE</code>); otherwise it stops to eat for 2.5 s. Scaring it (Whistle or <code>LuckyShortcutEvent</code>) makes it flee. UML's composite state <code>Distracted {Eating, Fleeing}</code> is coded as <code>GooseState.DISTRACTED</code> plus a <code>fleeing</code> flag and one <code>distractionSecondsLeft</code> timer, because both sub-states end the same way.</p>
 
 <div class="diagram-box">
-  <img src="figures/arch-fig4.png" alt="Figure 4: goose states (v2)" style="max-height:335px;">
+  <img src="figures/arch-fig4.png" alt="Figure 4: goose states (v2)" style="max-height:300px;">
   <div class="diagram-caption"><i>Figure 4: goose states (v2).</i></div>
 </div>
 
@@ -81,7 +97,7 @@
 <p style="margin-top:0;"><b>Using an item (Figure 5).</b> When <code>SPACE</code> is pressed, <code>GameScreen</code> calls <code>useSelectedItem()</code>, which acts only while <code>RUNNING</code>. The item is applied to every goose within its range (<code>FR_USE_ITEM</code>), then removed from the <code>Inventory</code> and counted, even when no goose was in range (<code>FR_ITEM_COUNTER</code>). Dispersed geese are then removed and counted, and the win condition is checked straight away.</p>
 
 <div class="diagram-box">
-  <img src="figures/arch-fig5.png" alt="Figure 5: using an item (v2)" style="max-height:330px;">
+  <img src="figures/arch-fig5.png" alt="Figure 5: using an item (v2)" style="max-height:285px;">
   <div class="diagram-caption"><i>Figure 5: using an item (v2).</i></div>
 </div>
 
@@ -177,7 +193,7 @@
   </tr>
 </table>
 
-<p style="margin-top:8px;"><b>Ready for Assessment 2.</b> More items (<code>FR_INITIAL_INVENTORY &ge; 5</code>, <code>FR_PICKUP_*</code>) are new <code>Item</code> subclasses, with map pickups calling <code>Inventory.add</code>. More events (<code>FR_EVENT_COUNT &ge; 5</code>) are new <code>HiddenEvent</code> subclasses registered in <code>GameWorld.createDefault</code>. Goose sizes (<code>FR_GEESE_VARIETY</code>) can parameterise <code>Goose</code> while keeping <code>moveBy</code> and <code>GooseState</code>. Scoring (<code>FR_SCORE_*</code>, <code>QR_SCORE_TRANSPARENCY</code>) extends <code>GameStats</code> and <code>GameSummary</code>, which the end screen already displays.</p>
+<p style="margin-top:6px;"><b>Ready for Assessment 2.</b> More items (<code>FR_INITIAL_INVENTORY &ge; 5</code>, <code>FR_PICKUP_*</code>) are new <code>Item</code> subclasses, with map pickups calling <code>Inventory.add</code>. More events (<code>FR_EVENT_COUNT &ge; 5</code>) are new <code>HiddenEvent</code> subclasses registered in <code>GameWorld.createDefault</code>. Goose sizes (<code>FR_GEESE_VARIETY</code>) can parameterise <code>Goose</code> while keeping <code>moveBy</code> and <code>GooseState</code>. Scoring (<code>FR_SCORE_*</code>, <code>QR_SCORE_TRANSPARENCY</code>) extends <code>GameStats</code> and <code>GameSummary</code>, which the end screen already displays.</p>
 
 <div class="page-break"></div>
 

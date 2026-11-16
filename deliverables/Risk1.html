@@ -7,108 +7,111 @@
 </head>
 <body>
 
-<h1>ENG1 Assessment 1 &ndash; Risk Assessment and Mitigation (Risk1): Goose Patrol</h1>
-<div class="meta">
-  <b>Cohort 2, Team 8:</b> Soham Apte, Elliott Christie, James Hammett, Dawud Kazi, Evan O'Reilly, Daniel Sawa, Karthik Udaiyar &middot;
-  <b>Project plan:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html">dns2jtm.github.io/Eng1_Project_Team8/planning.html</a> &middot;
-  <b>Traceability:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/traceability.html">traceability.html</a>
+<div class="title-page">
+  <div class="module-label">ENG1 (COM00019I) &ndash; Assessment 1</div>
+  <h1>Risk Assessment and Mitigation (Risk1)</h1>
+  <div class="product-name">Goose Patrol</div>
+  <div class="group-heading">Cohort 2, Team 8 &ndash; Team Daniel</div>
+  <ul class="members-list">
+    <li>Soham Apte</li>
+    <li>Karthik Udaiyar</li>
+    <li>Elliott Christie</li>
+    <li>James Hammett</li>
+    <li>Dawud Kazi</li>
+    <li>Evan O'Reilly</li>
+    <li>Daniel Sawa</li>
+  </ul>
+  <div class="links-block">
+    <b>Website:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/">dns2jtm.github.io/Eng1_Project_Team8</a><br>
+    <b>Project plan:</b> <a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html">dns2jtm.github.io/Eng1_Project_Team8/planning.html</a><br>
+    <b>Repository:</b> <a href="https://github.com/dns2jtm/Eng1_Project_Team8">github.com/dns2jtm/Eng1_Project_Team8</a>
+  </div>
 </div>
 
-<h2 style="margin-top:4px;">5(a) Risk management process and risk register format</h2>
+<div class="page-break"></div>
 
-<h3>Risk categories and management process</h3>
-<p>Following Sommerville [1] and the ENG1 risk lecture [2], we grouped candidate risks across <b>four main types</b> so technical, team and commercial stakeholder issues were all covered: <b>Project</b> (schedule, people, coordination), <b>Product</b> (game quality, performance, libraries), <b>Project &amp; Product</b> (overlapping schedule and quality impact), and <b>Business</b> (viability of the product for the customer who intends to market the game, plus Assessment 2 handover).</p>
+<h2 style="margin-top:0;">5(a) Risk management process and risk register format</h2>
+
+<p>Following Sommerville [1] and the ENG1 risk lecture [2], we grouped candidate risks into <b>four main types</b>: <b>Project</b> (schedule, people, coordination), <b>Product</b> (game quality, performance, libraries), <b>Project &amp; Product</b>, and <b>Business</b> (commercial marketability for the customer plus Assessment 2 handover).</p>
 
 <p>Our team followed a four-step iterative risk management process [1, 3] across Weeks 2&ndash;7:</p>
 <ol>
-  <li><b>Risk identification:</b> First, we brainstormed potential instabilities and failure points that could arise over a 6-week group project, covering people availability, misunderstood requirements, Git integration, toolchain compatibility and third-party licensing.</li>
-  <li><b>Risk analysis (simple qualitative scales):</b> Because ENG1 develops a small non-critical desktop game with no historical failure dataset, numeric probability percentages would be artificial [2]. Following the assessment guidance, we rated <b>Likelihood</b> and <b>Severity (Impact)</b> on simple three-level scales (<span class="badge b-low">Low</span>, <span class="badge b-med">Medium</span>, <span class="badge b-high">High</span>):
+  <li><b>Risk identification:</b> Brainstormed instabilities and failure points across team availability, requirements interpretation, Git integration, cross-platform Java execution and licensing.</li>
+  <li><b>Risk analysis (simple qualitative scales):</b> Because ENG1 builds non-critical software with no historical failure dataset, numeric probabilities would be guesswork [2]. We rated <b>Likelihood</b> and <b>Severity (Impact)</b> on simple three-level scales (<span class="badge b-low">Low</span>, <span class="badge b-med">Medium</span>, <span class="badge b-high">High</span>):
     <table class="compact-table" style="margin:3px 0;">
-      <tr><th style="width:18%;">Rating</th><th style="width:41%;">Likelihood</th><th style="width:41%;">Severity (impact if the risk occurs)</th></tr>
-      <tr><td><span class="badge b-low">Low</span></td><td>Unlikely during the 6-week schedule.</td><td>Minor rework (&le;0.5 day); absorbed without affecting deliverables.</td></tr>
-      <tr><td><span class="badge b-med">Medium</span></td><td>Plausible in a 7-student coursework team.</td><td>Delays a task by 1&ndash;3 days or degrades non-critical polish.</td></tr>
-      <tr><td><span class="badge b-high">High</span></td><td>Likely to happen without coordination.</td><td>Threatens submission deadlines, page limits, runnable JAR or marks.</td></tr>
+      <tr><th style="width:18%;">Rating</th><th style="width:41%;">Likelihood</th><th style="width:41%;">Severity (impact if risk occurs)</th></tr>
+      <tr><td><span class="badge b-low">Low</span></td><td>Unlikely during the 6-week schedule.</td><td>Minor rework (&le;0.5 day); absorbed cleanly.</td></tr>
+      <tr><td><span class="badge b-med">Medium</span></td><td>Plausible in a 7-student coursework team.</td><td>Delays a task by 1&ndash;3 days or trims polish.</td></tr>
+      <tr><td><span class="badge b-high">High</span></td><td>Likely without active coordination.</td><td>Threatens deadlines, page limits, JAR or marks.</td></tr>
     </table>
   </li>
-  <li><b>Risk planning (mitigation and damage control):</b> Following [1, 3] and Section 4.8, many risks (illness, clashing deadlines, OS/JVM differences) cannot simply be "prevented". For each risk we recorded practical <b>mitigation and fallback steps</b> that minimise how much the project is harmed if the issue occurs (e.g. task shadowing for bus factor, side-by-side review branches before merging, isolating OpenGL in <code>screen/</code>, and keeping all balance values in <code>GameConfig</code>).</li>
-  <li><b>Risk monitoring:</b> Throughout the project, Elliott and Dawud reviewed the register alongside our weekly plan snapshots (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html#risk-summary">planning.html</a>) so emerging issues (such as Week 6 branch integration and JAR licence bundling) were caught early and mitigated before wider repercussions developed.</li>
+  <li><b>Risk planning (mitigation and damage control):</b> Per [1, 3] and Section 4.8, risks like illness or OS quirks cannot simply be "prevented". Each mitigation specifies concrete <b>impact-reduction and fallback steps</b> if the risk occurs (task shadowing, isolated review branches, keeping OpenGL out of domain logic, tunable <code>GameConfig</code> constants).</li>
+  <li><b>Risk monitoring:</b> Elliott and Dawud reviewed the register alongside weekly plan snapshots (<a href="https://dns2jtm.github.io/Eng1_Project_Team8/planning.html#risk-summary">planning.html</a>) to act early before wider repercussions developed.</li>
 </ol>
 
 <h3>Justification of risk register format</h3>
 <ul>
-  <li><b><code>Risk ID</code> and <code>Type</code>:</b> Stable IDs (<code>R01</code>&ndash;<code>R11</code>) allow cross-referencing from weekly plan snapshots, while Sommerville's four types [1] check breadth beyond code bugs.</li>
-  <li><b><code>Description &amp; project effect</code>:</b> States both the trigger event and its consequence on deliverables or requirements (<code>Req1</code> IDs), justifying the Severity rating [2].</li>
-  <li><b>Colour-coded <code>Likelihood</code> and <code>Severity</code> (<span class="badge b-low">Low</span>, <span class="badge b-med">Medium</span>, <span class="badge b-high">High</span>):</b> Keeps prioritisation fast and readable during weekly team check-ins without over-engineered spreadsheets.</li>
-  <li><b><code>Mitigation method</code> and named <code>Ownership</code>:</b> Focuses on concrete impact-reduction actions and assigns named individuals (never "everyone") so accountability is clear [2].</li>
+  <li><b><code>Risk ID</code> &amp; <code>Type</code>:</b> Stable IDs (<code>R01</code>&ndash;<code>R11</code>) link from weekly snapshots; Sommerville's four types [1] ensure non-code risks are covered.</li>
+  <li><b><code>Description &amp; effect</code>:</b> Pairs the trigger with its effect on deliverables or <code>Req1</code> IDs to justify Severity [2].</li>
+  <li><b>Colour-coded <code>Likelihood</code> &amp; <code>Severity</code>:</b> Fast to scan in weekly meetings without complex spreadsheets.</li>
+  <li><b><code>Mitigation method</code> &amp; named <code>Ownership</code>:</b> Assigns concrete fallback steps to specific named members (never "All") for clear accountability [2].</li>
 </ul>
 
 <div class="page-break"></div>
 
 <h2 style="margin-top:0;">5(b) Project risk register</h2>
-<p style="font-size:8.2pt; color:#333; margin-bottom:4px;">Colour key: <span class="badge b-low">Low</span> = Green &middot; <span class="badge b-med">Medium</span> = Amber/Yellow &middot; <span class="badge b-high">High</span> = Red.</p>
+<p>Colour key: <span class="badge b-low">Low</span> = Green &middot; <span class="badge b-med">Medium</span> = Amber/Yellow &middot; <span class="badge b-high">High</span> = Red.</p>
 
 <table class="compact-table">
   <tr>
-    <th style="width:6%;">Risk ID</th>
-    <th style="width:12%;">Type</th>
+    <th style="width:7%;">ID</th>
+    <th style="width:13%;">Type</th>
     <th style="width:25%;">Description &amp; effect</th>
-    <th style="width:9%;">Likelihood</th>
+    <th style="width:10%;">Likelihood</th>
     <th style="width:9%;">Severity</th>
-    <th style="width:28%;">Mitigation method (impact reduction)</th>
+    <th style="width:25%;">Mitigation method</th>
     <th style="width:11%;">Ownership</th>
   </tr>
   <tr>
-    <td><b>R01</b></td>
-    <td>Project</td>
-    <td>Missing or unavailable team member due to illness or overlapping coursework deadlines stalls an assigned deliverable.</td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td>Minimise bus factor by pairing each work package with a second member (shadowing/review) and keeping all work in Git/shared Drive so another member can step in immediately; escalate extended absence early per Section 4.11.</td>
+    <td><b>R01</b></td><td>Project</td>
+    <td>Missing/ill team member or clashing coursework deadlines stall an assigned section.</td>
+    <td><span class="badge b-med">Medium</span></td><td><span class="badge b-med">Medium</span></td>
+    <td>Pair every task with a backup reviewer (shadowing) and keep drafts/code in Git &amp; shared Drive; escalate extended absence early (Section 4.11).</td>
     <td>Elliott Christie</td>
   </tr>
   <tr>
-    <td><b>R02</b></td>
-    <td>Project</td>
-    <td>Uneven workload across the 7-person team leaves programmers or report leads overloaded near Week 6.</td>
-    <td><span class="badge b-high">High</span></td>
-    <td><span class="badge b-low">Low</span></td>
-    <td>Review task progress in weekly meetings and redistribute remaining testing, diagramming and proofreading tasks across available members before bottlenecks build up.</td>
+    <td><b>R02</b></td><td>Project</td>
+    <td>Uneven workload across the 7-person group overloads programmers or leads near Week 6.</td>
+    <td><span class="badge b-high">High</span></td><td><span class="badge b-low">Low</span></td>
+    <td>Check progress weekly and redistribute testing, diagramming and proofreading across available members early.</td>
     <td>Elliott Christie</td>
   </tr>
   <tr>
-    <td><b>R03</b></td>
-    <td>Product &amp; Project</td>
-    <td>Misunderstood brief or customer requirements lead to building the wrong scope (e.g. missing A1 rules or over-building A2 features).</td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td><span class="badge b-high">High</span></td>
-    <td>Clarify ambiguities directly with the customer stakeholder in Week 3, tag every requirement explicitly as <code>A1</code> or <code>A2</code> in <code>Req1.pdf</code>, and cross-check deliverables against <code>traceability.html</code>.</td>
-    <td>Evan O'Reilly (with Soham)</td>
+    <td><b>R03</b></td><td>Product &amp; Project</td>
+    <td>Misunderstood brief/requirements cause missing A1 features or unneeded A2 scope creep.</td>
+    <td><span class="badge b-med">Medium</span></td><td><span class="badge b-high">High</span></td>
+    <td>Interview customer in Week 3, tag every requirement <code>A1</code>/<code>A2</code> in <code>Req1.pdf</code>, and check coverage on <code>traceability.html</code>.</td>
+    <td>Evan O'Reilly, Soham Apte</td>
   </tr>
   <tr>
-    <td><b>R04</b></td>
-    <td>Project</td>
-    <td>Git merge conflicts or diverging prototypes when multiple people work on game classes at the same time.</td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td>Use feature branches and pull requests; when two prototypes diverged in Week 6, evaluate them on an isolated <code>review/side-by-side</code> branch and port new events cleanly as <code>HiddenEvent</code> subclasses rather than force-merging onto <code>main</code>.</td>
-    <td>Daniel Sawa (with Soham)</td>
+    <td><b>R04</b></td><td>Project</td>
+    <td>Git merge conflicts or diverging prototypes when multiple members code simultaneously.</td>
+    <td><span class="badge b-med">Medium</span></td><td><span class="badge b-med">Medium</span></td>
+    <td>Use feature branches and PRs; compare diverging prototypes on <code>review/side-by-side</code> and port events cleanly as <code>HiddenEvent</code> subclasses.</td>
+    <td>Daniel Sawa, Soham Apte</td>
   </tr>
   <tr>
-    <td><b>R05</b></td>
-    <td>Project</td>
-    <td>Loss of work or code due to unsaved local files, corrupted exports or laptop issues close to submission.</td>
-    <td><span class="badge b-low">Low</span></td>
-    <td><span class="badge b-high">High</span></td>
-    <td>Push code, PlantUML sources, website pages and HTML report sources regularly to GitHub with automated CI checks, keeping shared backups in Google Drive.</td>
-    <td>Karthik Udaiyar (with Soham)</td>
+    <td><b>R05</b></td><td>Project</td>
+    <td>Loss of work/code from unsaved local files or device failure near deadline.</td>
+    <td><span class="badge b-low">Low</span></td><td><span class="badge b-high">High</span></td>
+    <td>Push code, PlantUML, website and HTML report sources regularly to GitHub with CI checks plus shared Drive backups.</td>
+    <td>Karthik Udaiyar, Soham Apte</td>
   </tr>
   <tr>
-    <td><b>R06</b></td>
-    <td>Business &amp; Product</td>
-    <td>Third-party libraries or assets carry non-commercial or incompatible licences that stop the customer marketing the game (<code>CR_LICENCES</code>).</td>
-    <td><span class="badge b-low">Low</span></td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td>Draw the 2D campus and entities with libGDX <code>ShapeRenderer</code> (avoiding unverified web art), audit all Gradle dependencies in Week 6, and bundle <code>THIRD-PARTY-NOTICES.txt</code> plus full licence files inside <code>GoosePatrol.jar</code> (<code>Impl1.pdf</code>).</td>
+    <td><b>R06</b></td><td>Business &amp; Product</td>
+    <td>Third-party libraries or assets carry non-commercial or incompatible licences (<code>CR_LICENCES</code>).</td>
+    <td><span class="badge b-low">Low</span></td><td><span class="badge b-med">Medium</span></td>
+    <td>Render 2D shapes via libGDX <code>ShapeRenderer</code> (zero unverified web art) and bundle <code>THIRD-PARTY-NOTICES.txt</code> + <code>licenses/</code> in JAR.</td>
     <td>Soham Apte</td>
   </tr>
 </table>
@@ -117,63 +120,52 @@
 
 <table class="compact-table" style="margin-top:0;">
   <tr>
-    <th style="width:6%;">Risk ID</th>
-    <th style="width:12%;">Type</th>
+    <th style="width:7%;">ID</th>
+    <th style="width:13%;">Type</th>
     <th style="width:25%;">Description &amp; effect</th>
-    <th style="width:9%;">Likelihood</th>
+    <th style="width:10%;">Likelihood</th>
     <th style="width:9%;">Severity</th>
-    <th style="width:28%;">Mitigation method (impact reduction)</th>
+    <th style="width:25%;">Mitigation method</th>
     <th style="width:11%;">Ownership</th>
   </tr>
   <tr>
-    <td><b>R07</b></td>
-    <td>Project</td>
-    <td>Working behind schedule if coding or bug fixing overruns into the final days needed for the five PDF reports.</td>
-    <td><span class="badge b-high">High</span></td>
-    <td><span class="badge b-low">Low</span></td>
-    <td>Include contingency buffer in Weeks 6&ndash;7, keep GUI visuals simple (Section 4.5 notes small credit for GUI), freeze gameplay features 48 h before the deadline, and assign extra reviewers to lengthier tasks.</td>
+    <td><b>R07</b></td><td>Project</td>
+    <td>Working behind schedule if coding overruns into final report-writing days.</td>
+    <td><span class="badge b-high">High</span></td><td><span class="badge b-low">Low</span></td>
+    <td>Keep Weeks 6&ndash;7 buffer, keep GUI visuals simple (Section 4.5), freeze features 48 h early and assign extra reviewers.</td>
     <td>Elliott Christie</td>
   </tr>
   <tr>
-    <td><b>R08</b></td>
-    <td>Product</td>
-    <td>Executable JAR fails to launch on Windows/Linux/macOS or University CS lab Java 17 machines (<code>CR_JAVA</code>, <code>CR_EXECUTABLE</code>).</td>
-    <td><span class="badge b-low">Low</span></td>
-    <td><span class="badge b-high">High</span></td>
-    <td>Enforce <code>--release 17</code> bytecode in Gradle, include LWJGL 3 cross-platform natives and macOS <code>StartupHelper</code>, and verify builds automatically across Ubuntu, Windows and macOS in GitHub Actions CI.</td>
+    <td><b>R08</b></td><td>Product</td>
+    <td>Executable JAR fails on Windows/Linux/macOS or CS lab Java 17 PCs (<code>CR_JAVA</code>, <code>CR_EXECUTABLE</code>).</td>
+    <td><span class="badge b-low">Low</span></td><td><span class="badge b-high">High</span></td>
+    <td>Enforce <code>--release 17</code> bytecode, bundle LWJGL 3 natives + <code>StartupHelper</code>, and run 3-OS CI builds on every push.</td>
     <td>James Hammett</td>
   </tr>
   <tr>
-    <td><b>R09</b></td>
-    <td>Product</td>
-    <td>Frame-rate drops or OS hitches cause 5-minute timer drift (&gt;1 s) or allow entities to tunnel past walls and hidden events (<code>QR_TIMER_ACCURACY</code>, <code>FR_MAP_BOUNDS</code>).</td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td>Track countdown time in double-precision real delta seconds in <code>GameTimer</code> while stepping movement, wall-sliding and event checks in capped <code>0.05 s</code> increments inside <code>GameWorld.update</code>.</td>
+    <td><b>R09</b></td><td>Product</td>
+    <td>Slow frames cause timer drift (&gt;1 s) or wall/event tunnelling (<code>QR_TIMER_ACCURACY</code>, <code>FR_MAP_BOUNDS</code>).</td>
+    <td><span class="badge b-med">Medium</span></td><td><span class="badge b-med">Medium</span></td>
+    <td>Tick <code>GameTimer</code> in double-precision real time while stepping movement and collisions in capped <code>0.05 s</code> increments.</td>
     <td>Daniel Sawa</td>
   </tr>
   <tr>
-    <td><b>R10</b></td>
-    <td>Business &amp; Product</td>
-    <td>Tightly coupling game rules to OpenGL prevents automated JUnit testing and deters other teams from selecting our product in Assessment 2 (<code>QR_STABILITY</code>, <code>QR_EXTENSIBILITY</code>).</td>
-    <td><span class="badge b-low">Low</span></td>
-    <td><span class="badge b-high">High</span></td>
-    <td>Keep <code>logic</code>, <code>entity</code>, <code>item</code> and <code>event</code> free of OpenGL/input imports so 88 headless JUnit 5 tests verify domain rules and new Assessment 2 items/events only require small subclasses.</td>
+    <td><b>R10</b></td><td>Business &amp; Product</td>
+    <td>Coupling game logic to OpenGL blocks JUnit testing and deters Assessment 2 selection (<code>QR_STABILITY</code>, <code>QR_EXTENSIBILITY</code>).</td>
+    <td><span class="badge b-low">Low</span></td><td><span class="badge b-high">High</span></td>
+    <td>Keep domain packages free of OpenGL/input imports so 88 headless JUnit tests pass and new items/events are small subclasses.</td>
     <td>Daniel Sawa</td>
   </tr>
   <tr>
-    <td><b>R11</b></td>
-    <td>Project &amp; Product</td>
-    <td>Deliverables overrun strict page limits (unmarked overflow pages) or website/JAR links break at submission cutover.</td>
-    <td><span class="badge b-med">Medium</span></td>
-    <td><span class="badge b-high">High</span></td>
-    <td>Use compact document headers instead of blank cover sheets, check exact page limits automatically with <code>pdfinfo</code> in <code>build-deliverables.sh</code>, and run an automated link/JAR check in <code>package-submission.sh</code>.</td>
-    <td>Dawud Kazi (with Evan)</td>
+    <td><b>R11</b></td><td>Project &amp; Product</td>
+    <td>Formatting/page-limit overruns or broken website/JAR links at submission cutover.</td>
+    <td><span class="badge b-med">Medium</span></td><td><span class="badge b-high">High</span></td>
+    <td>Enforce Section 1.2 CSS rules, check page counts via <code>pdfinfo</code> in <code>build-deliverables.sh</code>, and verify links in <code>package-submission.sh</code>.</td>
+    <td>Dawud Kazi, Evan O'Reilly</td>
   </tr>
 </table>
 
-<h3>Monitoring summary at Assessment 1 submission</h3>
-<p>Active weekly monitoring caught four risks when they arose in Weeks 5&ndash;6: <code>R04</code> (two prototype branches reconciled cleanly via <code>review/side-by-side</code>), <code>R06</code> (transitive LGPL audio libraries documented with notices bundled inside <code>GoosePatrol.jar</code>), <code>R09</code> (<code>0.05 s</code> simulation sub-stepping added), and <code>R11</code> (standalone cover pages replaced by compact headers and URLs updated when repository ownership moved to <code>dns2jtm</code>). All mitigations worked without delaying submission.</p>
+<p style="margin-top:6px;"><b>Monitoring outcome:</b> Four tracked risks triggered in Weeks 5&ndash;6 (<code>R04</code> branch reconciliation via <code>review/side-by-side</code>, <code>R06</code> LGPL audio notices bundled in JAR, <code>R09</code> <code>0.05 s</code> sub-stepping, and <code>R11</code> Section 1.2 formatting &amp; URL updates after repo transfer) and were resolved on schedule using the mitigations above.</p>
 
 <div class="page-break"></div>
 
